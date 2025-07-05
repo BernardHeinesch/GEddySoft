@@ -1,0 +1,12 @@
+
+{
+	"config" : "ABSTEMP OFF ANAIP DDDDDD AOPFSD 30 ASCTERM CRLF AVERAGE 2 BAUD 115200 CTONE ON ALIGNUVW SPAR ECHO ON MSGMODE CONT SOSREP SONICTEMP C STRFMT ASCII PAD WINDREP UVW CAL POLARWRAP 360 INST ON",
+	"incline" : "-00.18,-02.13",
+	"instrument" : "R3 50Hz Research Anemometer Version 3.01 2076_301 Feb 10 2003 11:12:52",
+	"output_rate" : "50",
+	"serial_number" : "H000222",
+	"software_version" : "3.01",
+	"sonic_type" : "hs_50"
+}
+
+

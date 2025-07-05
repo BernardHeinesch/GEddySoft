@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: "Heinesch"
+    given-names: "Bernard"
+    orcid: "0000-0001-7594-6341"
+    affiliation: "University of Liege, Gembloux Agro-Bio Tech Faculty"
+title: "GEddySoft"
+version: 4.0.0
+date-released: "2025-07-04"
+url: "https://github.com/BernardHeinesch/GEddySoft"
+repository-code: "https://github.com/BernardHeinesch/GEddySoft"
+license: Apache-2.0
+type: software
+keywords:
+  - eddy-covariance
+  - flux-computation
+  - PTR-TOF-MS
+  - BVOC
+  - micrometeorology
+abstract: >
+  GEddySoft (Gembloux Eddy-covariance Software) is a Python package for surface 
+  eddy-flux computation, with a specific focus on BVOCs from PTR-TOF-MS. Initially 
+  inspired by InnFLUX (doi: 10.5194/amt-13-1447-2020), it has been enhanced with features including multithreading 
+  support, improved time lag search, improved spike detection and data quality control, etc.
+references:
+  - authors:
+      - family-names: ""
+        given-names: "M"
+      - family-names: ""
+    title: ""
+    type: article
+    journal: "Atmospheric Measurement Techniques"
+    volume: xx
+    year: 2025
+    doi: ""

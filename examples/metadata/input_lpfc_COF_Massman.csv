@@ -1,0 +1,13 @@
+all,,
+name,value,comment
+cof,0.07,"half-power cut-off frequency of the total transfer function (Hz), computed using sqrt(H) according to Peltola 2021"
+unstable,,
+name,value,comment
+A0,3.8269,normalization_factor for Massman model
+kf0,0.1964,frequency_at_which_cospectrum_attains_highest_value for Massman model
+mu,0.2494,broadness_factor for Massman model
+stable,,
+name,value,comment
+A0,4.4546,normalization_factor for Massman model
+kf0,0.3714,frequency_at_which_cospectrum_attains_highest_value for Massman model
+mu,0.2461,broadness_factor for Massman model
