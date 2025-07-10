@@ -23,7 +23,7 @@ extensions = [
     'sphinx.ext.duration',
     'sphinx.ext.doctest',
     'sphinx.ext.autosummary',
-    'sphinxcontrib.mermaid',  # Mermaid diagrams
+    # 'sphinxcontrib.mermaid',  # Mermaid diagrams
 ]
 
 # Napoleon settings
@@ -78,5 +78,4 @@ myst_enable_extensions = [
     "smartquotes",
     "substitution",
     "tasklist",
-    "mermaid",
 ]
