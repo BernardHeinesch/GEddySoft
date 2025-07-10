@@ -14,11 +14,11 @@ Get started with GEddySoft in a few simple steps.
      ```python
      ini = 'path/to/your/config.ini'
      ```
-   - Replace the path with the full path to your INI file. Example INI files can be found in the `input/metadata` directory (e.g., `GEddySoft_parameters_IRGA.ini` for GHG data). This is the only modification you need to make to the code.
+   - Replace the path with the full path to your INI file. Example INI files can be found in the `examples/metadata` directory (e.g., `GEddySoft_parameters_IRGA.ini` for GHG data). This is the only modification you need to make to the code.
    - Run `GEddySoft_start.py` using Python:
      ```bash
      python GEddySoft_start.py
      ```
    - The script will read your INI file, process the data according to your configuration, and generate output files in the specified directory.
 
-For more detailed information about each step, refer to the relevant sections in the User Guide.
+For more detailed information about each step, refer to the Implementation Details and API Reference sections.

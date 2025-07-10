@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.abspath('../../src'))
 # -- Project information -----------------------------------------------------
 
 project = 'GEddySoft'
-copyright = '2024, Bernard Heinesch'
+copyright = '2025, Bernard Heinesch'
 author = 'Bernard Heinesch'
 release = '4.0.0'
 

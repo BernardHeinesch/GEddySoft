@@ -4,10 +4,12 @@ GEddySoft (Gembloux Eddy-covariance Software) is a Python package for computing 
 
 ## Documentation
 
-The complete documentation is available in the `docs/build/html/index.html` file. To view the documentation:
+The complete documentation will be available online at https://bernardheinesch.github.io/GEddySoft/
 
-1. Navigate to the `docs/build/html` directory
-2. Open `index.html` in your web browser
+For local development:
+1. Install the package and its documentation dependencies
+2. Run `python build_docs.py` to build the documentation
+3. The documentation will be available in `docs/build/html`
 
 The documentation includes:
 - Installation instructions

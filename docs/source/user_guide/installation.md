@@ -2,10 +2,25 @@
 
 ## Requirements
 
-GEddySoft requires Python 3.11.7 or higher and the following packages:
-- hdfdict
-- diptest
-- Other dependencies listed in requirements.txt:
+GEddySoft requires Python 3.11.7 or higher and the following dependencies:
+
+### Core Dependencies
+All core dependencies are listed in requirements.txt and will be automatically installed:
+- numpy: For numerical computations
+- pandas: For data handling and time series operations
+- scipy: For signal processing and statistical functions
+- matplotlib: For plotting routines
+- h5py: For HDF5 file operations
+- hdfdict: For HDF5 dictionary operations
+- diptest: For statistical tests
+
+### Documentation Dependencies
+These are only needed if you want to build the documentation locally:
+- sphinx
+- myst-parser
+- sphinx-rtd-theme
+
+All dependencies with their version requirements are listed in requirements.txt:
 
 ```{include} ../../../requirements.txt
 :code: text
