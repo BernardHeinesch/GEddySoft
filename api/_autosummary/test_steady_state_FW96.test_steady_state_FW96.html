@@ -1,0 +1,233 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>test_steady_state_FW96.test_steady_state_FW96 &mdash; GEddySoft 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="test_steady_state_M98" href="test_steady_state_M98.html" />
+    <link rel="prev" title="test_steady_state_FW96" href="test_steady_state_FW96.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            GEddySoft
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../version.html">Version History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation Details</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/software_architecture.html">Software Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#core-modules">Core Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="GEddySoft_main.html">GEddySoft_main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEddySoft_start.html">GEddySoft_start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flux_uncertainties.html">flux_uncertainties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cospectrum.html">cospectrum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flux_unit_conversion.html">flux_unit_conversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spike_detection_vickers97.html">spike_detection_vickers97</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="test_steady_state_FW96.html">test_steady_state_FW96</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">test_steady_state_FW96.test_steady_state_FW96</a></li>
+<li class="toctree-l4"><a class="reference internal" href="test_steady_state_FW96.html#test_steady_state_FW96.test_steady_state_FW96"><code class="docutils literal notranslate"><span class="pre">test_steady_state_FW96()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="test_steady_state_M98.html">test_steady_state_M98</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_steady_state_D99.html">test_steady_state_D99</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_ITC.html">test_ITC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="find_covariance_peak.html">find_covariance_peak</a></li>
+<li class="toctree-l3"><a class="reference internal" href="correction_factor_lpf.html">correction_factor_lpf</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GEddySoft</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="test_steady_state_FW96.html">test_steady_state_FW96</a></li>
+      <li class="breadcrumb-item active">test_steady_state_FW96.test_steady_state_FW96</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/_autosummary/test_steady_state_FW96.test_steady_state_FW96.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="test-steady-state-fw96-test-steady-state-fw96">
+<h1>test_steady_state_FW96.test_steady_state_FW96<a class="headerlink" href="#test-steady-state-fw96-test-steady-state-fw96" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="test_steady_state_FW96.test_steady_state_FW96">
+<span class="sig-prename descclassname"><span class="pre">test_steady_state_FW96.</span></span><span class="sig-name descname"><span class="pre">test_steady_state_FW96</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">w_prime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_prime</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/test_steady_state_FW96.html#test_steady_state_FW96"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#test_steady_state_FW96.test_steady_state_FW96" title="Link to this definition"></a></dt>
+<dd><p>Test for stationarity of turbulent fluxes using the Foken &amp; Wichura (1996) method.</p>
+<p>This function implements the steady state test for vertical fluxes by comparing
+the covariance calculated over the entire averaging period to the mean of
+covariances calculated over shorter subintervals. The test is particularly
+important for eddy covariance measurements where stationarity is a key assumption.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>w_prime</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – High-frequency fluctuations of vertical wind velocity [m s⁻¹]</p></li>
+<li><p><strong>c_prime</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – High-frequency fluctuations of scalar quantity
+(e.g., CO₂, H₂O, temperature)
+Units depend on scalar: [ppm], [ppb], [g m⁻³], or [K]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>S_FW96</strong> – Non-stationarity parameter, calculated as:
+S_FW96 = <a href="#id3"><span class="problematic" id="id4">|(&lt;w'c'&gt;_5 - &lt;w'c'&gt;_1) / &lt;w'c'&gt;_1|</span></a>
+where:
+- &lt;w’c’&gt;_5 is mean covariance from five 6-min subintervals
+- &lt;w’c’&gt;_1 is covariance over full 30-min interval</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The stationarity test follows these steps:
+1. Divide the 30-min period into 5 equal subintervals
+2. Calculate covariance for each subinterval
+3. Calculate covariance for the full period
+4. Compare mean of subinterval covariances to full period</p>
+<p>Quality classes based on S_FW96:
+- 0-30%: High quality data
+- 30-50%: Moderate quality, usable for general analysis
+- 50-100%: Low quality, not recommended for fundamental research
+- &gt;100%: Data should be rejected</p>
+<p class="rubric">References</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Foken, T. and Wichura, B. (1996). Tools for quality assessment of
+surface-based flux measurements. Agricultural and Forest Meteorology,
+78(1-2), 83-105.</p>
+</aside>
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Lee, X., Massman, W., and Law, B. (2004). Handbook of
+Micrometeorology: A Guide for Surface Flux Measurement and Analysis.
+Chapter 9. Kluwer Academic Publishers.</p>
+</aside>
+</aside>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="test_steady_state_M98.html#module-test_steady_state_M98" title="test_steady_state_M98"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_steady_state_M98</span></code></a></dt><dd><p>Alternative steady state test by Mahrt (1998)</p>
+</dd>
+<dt><a class="reference internal" href="test_ITC.html#module-test_ITC" title="test_ITC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_ITC</span></code></a></dt><dd><p>Test for developed turbulent conditions</p>
+</dd>
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">xcov</span></code></dt><dd><p>Cross-covariance calculation used internally</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Test stationarity of vertical CO2 flux</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate sample data (30 min at 10 Hz)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">18000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">co2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">18000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Add a trend to make it non-stationary</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">co2</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">18000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">test_steady_state_FW96</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">co2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Non-stationarity: </span><span class="si">{</span><span class="n">s</span><span class="o">*</span><span class="mi">100</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">%&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="author">
+<h2>Author<a class="headerlink" href="#author" title="Link to this heading"></a></h2>
+<p>Written by Bernard Heinesch (October 2022)
+University of Liege, Gembloux Agro-Bio Tech</p>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="test_steady_state_FW96.html" class="btn btn-neutral float-left" title="test_steady_state_FW96" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="test_steady_state_M98.html" class="btn btn-neutral float-right" title="test_steady_state_M98" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Bernard Heinesch.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

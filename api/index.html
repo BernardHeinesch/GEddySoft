@@ -1,0 +1,260 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Reference &mdash; GEddySoft 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="GEddySoft_main" href="_autosummary/GEddySoft_main.html" />
+    <link rel="prev" title="Software Architecture" href="../theory/software_architecture.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            GEddySoft
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/performance.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Running on Example Dataset</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../version.html">Version History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation Details</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/software_architecture.html">Software Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#core-modules">Core Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/GEddySoft_main.html">GEddySoft_main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/GEddySoft_start.html">GEddySoft_start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/flux_uncertainties.html">flux_uncertainties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/cospectrum.html">cospectrum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/flux_unit_conversion.html">flux_unit_conversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/spike_detection_vickers97.html">spike_detection_vickers97</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/test_steady_state_FW96.html">test_steady_state_FW96</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/test_steady_state_M98.html">test_steady_state_M98</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/test_steady_state_D99.html">test_steady_state_D99</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/test_ITC.html">test_ITC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/find_covariance_peak.html">find_covariance_peak</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/correction_factor_lpf.html">correction_factor_lpf</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#utility-functions">Utility Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/add_attributes.html">add_attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/clean_results.html">clean_results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/compute_wind_direction.html">compute_wind_direction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/get_closest_value.html">get_closest_value</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/get_ini.html">get_ini</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/get_list_input_files.html">get_list_input_files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/logBinSpectrum.html">logBinSpectrum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/map_sonic2tracer.html">map_sonic2tracer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/nandetrend.html">nandetrend</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/nanlinfit.html">nanlinfit</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/prepare_output.html">prepare_output</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/print_progress.html">print_progress</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/read_GHG.html">read_GHG</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/read_main_inputs.html">read_main_inputs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/read_metadata_files.html">read_metadata_files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="_autosummary/reformat_date.html">reformat_date</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">GEddySoft</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/index.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h1>
+<p>This section contains the detailed API documentation for GEddySoft.</p>
+<section id="core-modules">
+<h2>Core Modules<a class="headerlink" href="#core-modules" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/GEddySoft_main.html#module-GEddySoft_main" title="GEddySoft_main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GEddySoft_main</span></code></a></p></td>
+<td><p>GEddySoft: A Python Package for Eddy Covariance Processing</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/GEddySoft_start.html#module-GEddySoft_start" title="GEddySoft_start"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GEddySoft_start</span></code></a></p></td>
+<td><p>Main entry point for running GEddySoft eddy covariance processing software.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/flux_uncertainties.html#module-flux_uncertainties" title="flux_uncertainties"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flux_uncertainties</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/cospectrum.html#module-cospectrum" title="cospectrum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cospectrum</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/flux_unit_conversion.html#module-flux_unit_conversion" title="flux_unit_conversion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flux_unit_conversion</span></code></a></p></td>
+<td><p>Module for converting eddy covariance flux units.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/spike_detection_vickers97.html#module-spike_detection_vickers97" title="spike_detection_vickers97"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spike_detection_vickers97</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/test_steady_state_FW96.html#module-test_steady_state_FW96" title="test_steady_state_FW96"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_steady_state_FW96</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/test_steady_state_M98.html#module-test_steady_state_M98" title="test_steady_state_M98"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_steady_state_M98</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/test_steady_state_D99.html#module-test_steady_state_D99" title="test_steady_state_D99"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_steady_state_D99</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/test_ITC.html#module-test_ITC" title="test_ITC"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_ITC</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/find_covariance_peak.html#module-find_covariance_peak" title="find_covariance_peak"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_covariance_peak</span></code></a></p></td>
+<td><p>Module for determining time lags between correlated atmospheric signals.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/correction_factor_lpf.html#module-correction_factor_lpf" title="correction_factor_lpf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">correction_factor_lpf</span></code></a></p></td>
+<td><p>Module for computing low-pass filtering correction factors in eddy covariance.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="utility-functions">
+<h2>Utility Functions<a class="headerlink" href="#utility-functions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/add_attributes.html#module-add_attributes" title="add_attributes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_attributes</span></code></a></p></td>
+<td><p>Module for adding standardized metadata to GEddySoft HDF5 output files.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/clean_results.html#module-clean_results" title="clean_results"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clean_results</span></code></a></p></td>
+<td><p>Module for cleaning and filtering eddy covariance results data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/compute_wind_direction.html#module-compute_wind_direction" title="compute_wind_direction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_wind_direction</span></code></a></p></td>
+<td><p>Module for computing wind direction from sonic anemometer measurements.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/get_closest_value.html#module-get_closest_value" title="get_closest_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_closest_value</span></code></a></p></td>
+<td><p>Module for robust time series value interpolation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/get_ini.html#module-get_ini" title="get_ini"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_ini</span></code></a></p></td>
+<td><p>Module for intelligent INI file parsing with automatic type conversion.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/get_list_input_files.html#module-get_list_input_files" title="get_list_input_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_list_input_files</span></code></a></p></td>
+<td><p>Module for locating and listing input files.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/logBinSpectrum.html#module-logBinSpectrum" title="logBinSpectrum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logBinSpectrum</span></code></a></p></td>
+<td><p>Module for logarithmic binning of spectral data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/map_sonic2tracer.html#module-map_sonic2tracer" title="map_sonic2tracer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">map_sonic2tracer</span></code></a></p></td>
+<td><p>Module for synchronizing sonic anemometer and tracer gas analyzer files.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/nandetrend.html#module-nandetrend" title="nandetrend"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nandetrend</span></code></a></p></td>
+<td><p>Module for detrending data arrays containing NaN values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/nanlinfit.html#module-nanlinfit" title="nanlinfit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nanlinfit</span></code></a></p></td>
+<td><p>Module for linear regression with NaN handling.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/prepare_output.html#module-prepare_output" title="prepare_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_output</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/print_progress.html#module-print_progress" title="print_progress"><code class="xref py py-obj docutils literal notranslate"><span class="pre">print_progress</span></code></a></p></td>
+<td><p>Created on Wed Jun  1 14:00:54 2022</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/read_GHG.html#module-read_GHG" title="read_GHG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_GHG</span></code></a></p></td>
+<td><p>Functions for reading and processing LI-COR GHG high-frequency data files.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/read_main_inputs.html#module-read_main_inputs" title="read_main_inputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_main_inputs</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/read_metadata_files.html#module-read_metadata_files" title="read_metadata_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_metadata_files</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/reformat_date.html#module-reformat_date" title="reformat_date"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reformat_date</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../theory/software_architecture.html" class="btn btn-neutral float-left" title="Software Architecture" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="_autosummary/GEddySoft_main.html" class="btn btn-neutral float-right" title="GEddySoft_main" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Bernard Heinesch.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

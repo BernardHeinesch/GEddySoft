@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GEddySoft_start &mdash; GEddySoft 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            GEddySoft
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/performance.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Running on Example Dataset</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../version.html">Version History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation Details</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/software_architecture.html">Software Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">GEddySoft</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">GEddySoft_start</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for GEddySoft_start</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Main entry point for running GEddySoft eddy covariance processing software.</span>
+
+<span class="sd">This module serves as the primary entry point for GEddySoft, handling:</span>
+
+<span class="sd">1. Configuration loading from INI files</span>
+<span class="sd">2. Input file discovery and mapping</span>
+<span class="sd">3. Processing mode selection:</span>
+<span class="sd">   - Single-process mode for testing/debugging</span>
+<span class="sd">   - Multi-process mode for production runs (one process per day)</span>
+<span class="sd">4. Execution monitoring and logging</span>
+<span class="sd">5. Error handling and automatic retry for failed days</span>
+
+<span class="sd">The module implements a robust parallel processing strategy with:</span>
+<span class="sd">- Automatic CPU core detection</span>
+<span class="sd">- stdout redirection for clean logging</span>
+<span class="sd">- Progress tracking and reporting</span>
+<span class="sd">- Automatic retry of failed processing days</span>
+
+<span class="sd">Typical usage:</span>
+<span class="sd">    python GEddySoft_start.py</span>
+
+<span class="sd">Author</span>
+<span class="sd">------</span>
+<span class="sd">B. Heinesch</span>
+<span class="sd">University of Liege, Gembloux Agro-Bio Tech</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">multiprocessing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">GEddySoft_main</span><span class="w"> </span><span class="kn">import</span> <span class="n">GEddySoft_main</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">get_ini</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_ini</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">get_list_input_files</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_list_input_files</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">check_missing_dates_parallel_processing</span><span class="w"> </span><span class="kn">import</span> <span class="n">check_missing_dates_parallel_processing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">map_sonic2tracer</span><span class="w"> </span><span class="kn">import</span> <span class="n">map_sonic2tracer</span>
+
+
+<span class="c1"># %% parallel processing routine</span>
+<div class="viewcode-block" id="run_pool">
+<a class="viewcode-back" href="../api/_autosummary/GEddySoft_start.run_pool.html#GEddySoft_start.run_pool">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_pool</span><span class="p">(</span><span class="n">days_to_process</span><span class="p">,</span> <span class="n">log_filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute parallel processing of multiple days using a multiprocessing pool.</span>
+
+<span class="sd">    This function manages a pool of worker processes to handle eddy covariance</span>
+<span class="sd">    data processing for multiple days simultaneously. It includes robust error</span>
+<span class="sd">    handling and logging capabilities.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    days_to_process : list of str</span>
+<span class="sd">        List of days to process in YYYY_MM_DD format</span>
+<span class="sd">    log_filename : str</span>
+<span class="sd">        Path to the log file for recording processing status and errors</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The function implements several key features:</span>
+<span class="sd">    1. Stdout redirection to prevent cluttered output</span>
+<span class="sd">    2. Exception handling with proper resource cleanup</span>
+<span class="sd">    3. Automatic process pool management</span>
+<span class="sd">    4. Logging of both successful and failed processing</span>
+
+<span class="sd">    Global Variables</span>
+<span class="sd">    ---------------</span>
+<span class="sd">    cpu : int</span>
+<span class="sd">        Number of CPU cores to use (set in __main__)</span>
+<span class="sd">    ini : dict</span>
+<span class="sd">        Configuration parameters (set in __main__)</span>
+<span class="sd">    OF : file object</span>
+<span class="sd">        Open log file handle (set in __main__)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">cpu</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Save original stdout before redirecting</span>
+            <span class="n">original_stdout</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+            <span class="c1"># Redirect stdout to devnull for all processes</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">devnull</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="n">pool</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="n">GEddySoft_main</span><span class="p">,</span> <span class="p">[(</span><span class="n">day</span><span class="p">,</span> <span class="n">ini</span><span class="p">,</span> <span class="n">log_filename</span><span class="p">)</span> <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">days_to_process</span><span class="p">])</span>
+            <span class="c1"># Restore stdout</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">__stdout__</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;processed days: </span><span class="si">{</span><span class="n">results</span><span class="si">}</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">OF</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;successfully processed days: </span><span class="si">{</span><span class="n">results</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># Make sure to restore stdout even if there&#39;s an error</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">original_stdout</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;error during processing: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">OF</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;error during processing: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;pool closed&#39;</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># %% main</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="c1"># -------------------------------------------------------------------------------------------------------</span>
+    <span class="c1"># user choices</span>
+    <span class="c1"># ini_filename = &#39;D:\OneDrive - Universite de Liege\Documents\Science\Programmation\Projets Python\GEddySoft\GEddySoft_v4.0\input\metadata\GEddySoft_parameters_IRGA.ini&#39;</span>
+    <span class="n">ini_filename</span> <span class="o">=</span> <span class="s1">&#39;..\examples\metadata\GEddySoft_parameters_IRGA.ini&#39;</span>
+    <span class="c1"># -------------------------------------------------------------------------------------------------------</span>
+
+    <span class="c1"># store current time</span>
+    <span class="n">proc_start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;run started at &#39;</span> <span class="o">+</span> <span class="n">proc_start_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%Y %H:%M:%S&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># get ini information</span>
+    <span class="n">ini</span> <span class="o">=</span> <span class="n">get_ini</span><span class="p">(</span><span class="n">ini_filename</span><span class="p">)</span>
+
+    <span class="c1"># Open logfile in write mode, and close it afterwards</span>
+    <span class="c1"># start_timestamp = proc_start_time.strftime(&quot;%Y%m%d_%H%M%S&quot;)</span>
+    <span class="c1"># log_filename = f&quot;{ini[&#39;files&#39;][&#39;log_filepath&#39;]}\\logfile_{start_timestamp}.csv&quot;</span>
+    <span class="n">log_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">ini</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">][</span><span class="s1">&#39;log_filepath&#39;</span><span class="p">]</span><span class="si">}</span><span class="se">\\</span><span class="s2">logfile.csv&quot;</span>
+    <span class="n">OF</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">log_filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">OF</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">--- New Processing Session ---</span><span class="se">\n\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">OF</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;run started at &#39;</span> <span class="o">+</span> <span class="n">proc_start_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%Y %H:%M:%S&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;*************** reading metadata ***************&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">OF</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;*************** reading metadata ***************&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">OF</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+    <span class="n">OF</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c1"># Open logfile in append mode instead of write mode</span>
+    <span class="n">OF</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">log_filename</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ini</span><span class="p">[</span><span class="s1">&#39;run_param&#39;</span><span class="p">][</span><span class="s1">&#39;MULTIPROCESSING&#39;</span><span class="p">]:</span>
+
+        <span class="c1"># run in multiprocessing mode</span>
+
+        <span class="c1"># get list of sonic and tracer input files</span>
+        <span class="n">all_sonic_files_list</span><span class="p">,</span> <span class="n">all_tracer_files_list</span> <span class="o">=</span> <span class="n">get_list_input_files</span><span class="p">(</span><span class="n">ini</span><span class="p">)</span>
+
+        <span class="c1"># map sonic file list to tracer file list if asked for</span>
+        <span class="k">if</span> <span class="n">ini</span><span class="p">[</span><span class="s1">&#39;run_param&#39;</span><span class="p">][</span><span class="s1">&#39;MAP_SONIC2TRACER&#39;</span><span class="p">]:</span>
+            <span class="n">all_sonic_files_list</span> <span class="o">=</span> <span class="n">map_sonic2tracer</span><span class="p">(</span><span class="n">all_sonic_files_list</span><span class="p">,</span> <span class="n">all_tracer_files_list</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;sonic files mapped to tracer files</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;*************** processing data ***************&#39;</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="c1"># get uniques yyyy_mm_dd in the sonic file list</span>
+        <span class="n">unique_days</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">ini</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">][</span><span class="s1">&#39;sonic_files_prefix&#39;</span><span class="p">]):</span><span class="nb">len</span><span class="p">(</span><span class="n">ini</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">][</span><span class="s1">&#39;sonic_files_prefix&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="mi">10</span><span class="p">],</span> <span class="n">all_sonic_files_list</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]))))</span>
+        <span class="n">unique_days</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+        <span class="n">cpu</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;running in multithread mode with &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cpu</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; CPUs... (console muted)</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">OF</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;running in multithread mode with </span><span class="si">{</span><span class="n">cpu</span><span class="si">}</span><span class="s1"> CPUs</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="c1"># First attempt with all days</span>
+        <span class="n">run_pool</span><span class="p">(</span><span class="n">unique_days</span><span class="p">,</span> <span class="n">log_filename</span><span class="p">)</span>
+
+        <span class="c1"># Check for missing dates</span>
+        <span class="n">missing_dates</span> <span class="o">=</span> <span class="n">check_missing_dates_parallel_processing</span><span class="p">(</span>
+            <span class="n">ini</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">][</span><span class="s1">&#39;output_folder&#39;</span><span class="p">],</span>
+            <span class="n">ini</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">][</span><span class="s1">&#39;output_files_prefix&#39;</span><span class="p">],</span>
+            <span class="n">unique_days</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">missing_dates</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;First pass: Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">missing_dates</span><span class="p">)</span><span class="si">}</span><span class="s2"> missing dates:&quot;</span><span class="p">)</span>
+            <span class="n">OF</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;First pass: Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">missing_dates</span><span class="p">)</span><span class="si">}</span><span class="s2"> missing dates:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">missing_dates</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2">,&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">)</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Retrying missing dates...&quot;</span><span class="p">)</span>
+            <span class="n">OF</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Retrying missing dates...</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="c1"># Second attempt with missing dates only</span>
+            <span class="n">run_pool</span><span class="p">(</span><span class="n">missing_dates</span><span class="p">,</span> <span class="n">log_filename</span><span class="p">)</span>
+
+            <span class="c1"># Check again after retry</span>
+            <span class="n">final_missing_dates</span> <span class="o">=</span> <span class="n">check_missing_dates_parallel_processing</span><span class="p">(</span>
+                <span class="n">ini</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">][</span><span class="s1">&#39;output_folder&#39;</span><span class="p">],</span>
+                <span class="n">ini</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">][</span><span class="s1">&#39;output_files_prefix&#39;</span><span class="p">],</span>
+                <span class="n">unique_days</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">final_missing_dates</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;WARNING: After retry, still found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">final_missing_dates</span><span class="p">)</span><span class="si">}</span><span class="s2"> unprocessed dates:&quot;</span><span class="p">)</span>
+                <span class="n">OF</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;WARNING: After retry, still found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">final_missing_dates</span><span class="p">)</span><span class="si">}</span><span class="s2"> unprocessed dates:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">date</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">final_missing_dates</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  - </span><span class="si">{</span><span class="n">date</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Consider investigating these dates manually.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All dates successfully processed after retry!&quot;</span><span class="p">)</span>
+                <span class="n">OF</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;All dates successfully processed after retry!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No missing dates found - all files were processed successfully!&quot;</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+
+        <span class="c1"># run in normal mode</span>
+        <span class="n">GEddySoft_main</span><span class="p">(</span><span class="s1">&#39;no_multithread&#39;</span><span class="p">,</span> <span class="n">ini</span><span class="p">,</span> <span class="n">log_filename</span><span class="p">)</span>
+
+    <span class="c1"># display time needed</span>
+    <span class="n">proc_end_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;finished at &#39;</span> <span class="o">+</span> <span class="n">proc_end_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%Y %H:%M:%S&quot;</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;run took &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="n">proc_end_time</span> <span class="o">-</span> <span class="n">proc_start_time</span><span class="p">)))</span>
+    <span class="n">OF</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;finished at &#39;</span> <span class="o">+</span> <span class="n">proc_end_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">/%m/%Y %H:%M:%S&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">OF</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;. run took &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">((</span><span class="n">proc_end_time</span> <span class="o">-</span> <span class="n">proc_start_time</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># permanent closure of the log file</span>
+    <span class="n">OF</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Bernard Heinesch.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

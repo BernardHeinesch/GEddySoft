@@ -1,0 +1,237 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>flux_unit_conversion &mdash; GEddySoft 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="flux_unit_conversion.flux_unit_conversion" href="flux_unit_conversion.flux_unit_conversion.html" />
+    <link rel="prev" title="cospectrum.cospectrum" href="cospectrum.cospectrum.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            GEddySoft
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../version.html">Version History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation Details</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/software_architecture.html">Software Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#core-modules">Core Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="GEddySoft_main.html">GEddySoft_main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEddySoft_start.html">GEddySoft_start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flux_uncertainties.html">flux_uncertainties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cospectrum.html">cospectrum</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">flux_unit_conversion</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#author">Author</a></li>
+<li class="toctree-l4"><a class="reference internal" href="flux_unit_conversion.flux_unit_conversion.html">flux_unit_conversion.flux_unit_conversion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#flux_unit_conversion.flux_unit_conversion"><code class="docutils literal notranslate"><span class="pre">flux_unit_conversion()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="spike_detection_vickers97.html">spike_detection_vickers97</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_steady_state_FW96.html">test_steady_state_FW96</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_steady_state_M98.html">test_steady_state_M98</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_steady_state_D99.html">test_steady_state_D99</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_ITC.html">test_ITC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="find_covariance_peak.html">find_covariance_peak</a></li>
+<li class="toctree-l3"><a class="reference internal" href="correction_factor_lpf.html">correction_factor_lpf</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GEddySoft</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
+      <li class="breadcrumb-item active">flux_unit_conversion</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/_autosummary/flux_unit_conversion.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-flux_unit_conversion">
+<span id="flux-unit-conversion"></span><h1>flux_unit_conversion<a class="headerlink" href="#module-flux_unit_conversion" title="Link to this heading"></a></h1>
+<p>Module for converting eddy covariance flux units.</p>
+<p>This module provides functionality to convert kinematic flux units (w’c’)
+to final physical units (e.g., μg m⁻² s⁻¹ or μmol m⁻² s⁻¹) in eddy
+covariance measurements. The conversions account for air density and,
+when needed, molecular mass of the measured scalar.</p>
+<p>The module assumes standard units for input variables:
+- Vertical wind (w): m s⁻¹
+- IRGA concentrations: ppm (μmol mol⁻¹)
+- TRACER concentrations: ppb (nmol mol⁻¹)</p>
+<section id="author">
+<h2>Author<a class="headerlink" href="#author" title="Link to this heading"></a></h2>
+<p>B. Heinesch
+University of Liege, Gembloux Agro-Bio Tech</p>
+</section>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="flux_unit_conversion.flux_unit_conversion.html#flux_unit_conversion.flux_unit_conversion" title="flux_unit_conversion.flux_unit_conversion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flux_unit_conversion</span></code></a></p></td>
+<td><p>Convert eddy covariance flux and uncertainty estimates to physical units.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="flux_unit_conversion.flux_unit_conversion">
+<span class="sig-prename descclassname"><span class="pre">flux_unit_conversion.</span></span><span class="sig-name descname"><span class="pre">flux_unit_conversion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flux_individual</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flux_noise_mean</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flux_noise_std</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flux_noise_rmse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_error_FS</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_flux</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_error_noise</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conv_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">air_mol_conc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MM</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">nan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/flux_unit_conversion.html#flux_unit_conversion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flux_unit_conversion.flux_unit_conversion" title="Link to this definition"></a></dt>
+<dd><p>Convert eddy covariance flux and uncertainty estimates to physical units.</p>
+<p>This function converts kinematic fluxes (w’c’) and their associated
+uncertainty metrics from raw covariance units to physical flux units.
+The conversion requires air molar concentration and, for mass-based
+units, the molecular mass of the measured scalar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>flux_individual</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">array_like</span></code>) – Individual flux values [raw kinematic units]</p></li>
+<li><p><strong>flux_noise_mean</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">array_like</span></code>) – Mean of covariance noise [raw kinematic units]</p></li>
+<li><p><strong>flux_noise_std</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">array_like</span></code>) – Standard deviation of covariance noise [raw kinematic units]</p></li>
+<li><p><strong>flux_noise_rmse</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">array_like</span></code>) – RMSE of covariance noise [raw kinematic units]</p></li>
+<li><p><strong>random_error_FS</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">array_like</span></code>) – Random error from Finkelstein &amp; Sims method [raw kinematic units]</p></li>
+<li><p><strong>random_flux</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">array_like</span></code>) – Random error from flux randomization [raw kinematic units]</p></li>
+<li><p><strong>random_error_noise</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">array_like</span></code>) – Random error from white noise [raw kinematic units]</p></li>
+<li><p><strong>conv_type</strong> (<code class="docutils literal notranslate"><span class="pre">{'to</span> <span class="pre">ug</span> <span class="pre">m-2</span> <span class="pre">s-1',</span> <span class="pre">'to</span> <span class="pre">umol</span> <span class="pre">m-2</span> <span class="pre">s-1'}</span></code>) – Type of unit conversion to perform:
+- ‘to ug m-2 s-1’: Convert to micrograms per square meter per second
+- ‘to umol m-2 s-1’: Convert to micromoles per square meter per second</p></li>
+<li><p><strong>air_mol_conc</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Air molar concentration [mol m⁻³]</p></li>
+<li><p><strong>MM</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <em>optional</em>) – Molar mass of measured scalar [g mol⁻¹]
+Required only for mass-based conversions (μg m⁻² s⁻¹)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>7-element tuple containing the converted values in the same order
+as the input parameters, now in physical units [μg m⁻² s⁻¹ or
+μmol m⁻² s⁻¹]</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The conversion factors are:
+1. For molar fluxes (μmol m⁻² s⁻¹):</p>
+<blockquote>
+<div><p>flux * air_mol_conc</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>For mass fluxes (μg m⁻² s⁻¹):
+flux * air_mol_conc * MM / 1000</p></li>
+</ol>
+<p>The division by 1000 in the mass flux conversion accounts for the
+conversion from ng to μg.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Convert CO₂ flux to μmol m⁻² s⁻¹</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">flux_conv</span> <span class="o">=</span> <span class="n">flux_unit_conversion</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.015</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;to umol m-2 s-1&#39;</span><span class="p">,</span> <span class="mf">41.6</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Converted flux: </span><span class="si">{</span><span class="n">flux_conv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> μmol m⁻² s⁻¹&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Convert CH₄ flux to μg m⁻² s⁻¹</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">flux_conv</span> <span class="o">=</span> <span class="n">flux_unit_conversion</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.015</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;to ug m-2 s-1&#39;</span><span class="p">,</span> <span class="mf">41.6</span><span class="p">,</span> <span class="n">MM</span><span class="o">=</span><span class="mf">16.04</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Converted flux: </span><span class="si">{</span><span class="n">flux_conv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> μg m⁻² s⁻¹&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cospectrum.cospectrum.html" class="btn btn-neutral float-left" title="cospectrum.cospectrum" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="flux_unit_conversion.flux_unit_conversion.html" class="btn btn-neutral float-right" title="flux_unit_conversion.flux_unit_conversion" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Bernard Heinesch.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

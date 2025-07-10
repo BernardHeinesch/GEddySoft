@@ -1,0 +1,228 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>flux_unit_conversion &mdash; GEddySoft 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            GEddySoft
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/performance.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Running on Example Dataset</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../version.html">Version History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation Details</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/software_architecture.html">Software Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">GEddySoft</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">flux_unit_conversion</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for flux_unit_conversion</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Module for converting eddy covariance flux units.</span>
+
+<span class="sd">This module provides functionality to convert kinematic flux units (w&#39;c&#39;)</span>
+<span class="sd">to final physical units (e.g., μg m⁻² s⁻¹ or μmol m⁻² s⁻¹) in eddy</span>
+<span class="sd">covariance measurements. The conversions account for air density and,</span>
+<span class="sd">when needed, molecular mass of the measured scalar.</span>
+
+<span class="sd">The module assumes standard units for input variables:</span>
+<span class="sd">- Vertical wind (w): m s⁻¹</span>
+<span class="sd">- IRGA concentrations: ppm (μmol mol⁻¹)</span>
+<span class="sd">- TRACER concentrations: ppb (nmol mol⁻¹)</span>
+
+<span class="sd">Author</span>
+<span class="sd">------</span>
+<span class="sd">B. Heinesch</span>
+<span class="sd">University of Liege, Gembloux Agro-Bio Tech</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+
+<div class="viewcode-block" id="flux_unit_conversion">
+<a class="viewcode-back" href="../api/_autosummary/flux_unit_conversion.flux_unit_conversion.html#flux_unit_conversion.flux_unit_conversion">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">flux_unit_conversion</span><span class="p">(</span><span class="n">flux_individual</span><span class="p">,</span> <span class="n">flux_noise_mean</span><span class="p">,</span> <span class="n">flux_noise_std</span><span class="p">,</span> <span class="n">flux_noise_rmse</span><span class="p">,</span> <span class="n">random_error_FS</span><span class="p">,</span> <span class="n">random_flux</span><span class="p">,</span> <span class="n">random_error_noise</span><span class="p">,</span>
+                         <span class="n">conv_type</span><span class="p">,</span> <span class="n">air_mol_conc</span><span class="p">,</span> <span class="n">MM</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert eddy covariance flux and uncertainty estimates to physical units.</span>
+
+<span class="sd">    This function converts kinematic fluxes (w&#39;c&#39;) and their associated</span>
+<span class="sd">    uncertainty metrics from raw covariance units to physical flux units.</span>
+<span class="sd">    The conversion requires air molar concentration and, for mass-based</span>
+<span class="sd">    units, the molecular mass of the measured scalar.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    flux_individual : float or array_like</span>
+<span class="sd">        Individual flux values [raw kinematic units]</span>
+<span class="sd">    flux_noise_mean : float or array_like</span>
+<span class="sd">        Mean of covariance noise [raw kinematic units]</span>
+<span class="sd">    flux_noise_std : float or array_like</span>
+<span class="sd">        Standard deviation of covariance noise [raw kinematic units]</span>
+<span class="sd">    flux_noise_rmse : float or array_like</span>
+<span class="sd">        RMSE of covariance noise [raw kinematic units]</span>
+<span class="sd">    random_error_FS : float or array_like</span>
+<span class="sd">        Random error from Finkelstein &amp; Sims method [raw kinematic units]</span>
+<span class="sd">    random_flux : float or array_like</span>
+<span class="sd">        Random error from flux randomization [raw kinematic units]</span>
+<span class="sd">    random_error_noise : float or array_like</span>
+<span class="sd">        Random error from white noise [raw kinematic units]</span>
+<span class="sd">    conv_type : {&#39;to ug m-2 s-1&#39;, &#39;to umol m-2 s-1&#39;}</span>
+<span class="sd">        Type of unit conversion to perform:</span>
+<span class="sd">        - &#39;to ug m-2 s-1&#39;: Convert to micrograms per square meter per second</span>
+<span class="sd">        - &#39;to umol m-2 s-1&#39;: Convert to micromoles per square meter per second</span>
+<span class="sd">    air_mol_conc : float</span>
+<span class="sd">        Air molar concentration [mol m⁻³]</span>
+<span class="sd">    MM : float, optional</span>
+<span class="sd">        Molar mass of measured scalar [g mol⁻¹]</span>
+<span class="sd">        Required only for mass-based conversions (μg m⁻² s⁻¹)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    tuple</span>
+<span class="sd">        7-element tuple containing the converted values in the same order</span>
+<span class="sd">        as the input parameters, now in physical units [μg m⁻² s⁻¹ or</span>
+<span class="sd">        μmol m⁻² s⁻¹]</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The conversion factors are:</span>
+<span class="sd">    1. For molar fluxes (μmol m⁻² s⁻¹):</span>
+<span class="sd">       flux * air_mol_conc</span>
+<span class="sd">    2. For mass fluxes (μg m⁻² s⁻¹):</span>
+<span class="sd">       flux * air_mol_conc * MM / 1000</span>
+
+<span class="sd">    The division by 1000 in the mass flux conversion accounts for the</span>
+<span class="sd">    conversion from ng to μg.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; # Convert CO₂ flux to μmol m⁻² s⁻¹</span>
+<span class="sd">    &gt;&gt;&gt; flux_conv = flux_unit_conversion(</span>
+<span class="sd">    ...     0.1, 0.01, 0.02, 0.015, 0.03, 0.025, 0.02,</span>
+<span class="sd">    ...     &#39;to umol m-2 s-1&#39;, 41.6</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; print(f&#39;Converted flux: {flux_conv[0]:.2f} μmol m⁻² s⁻¹&#39;)</span>
+
+<span class="sd">    &gt;&gt;&gt; # Convert CH₄ flux to μg m⁻² s⁻¹</span>
+<span class="sd">    &gt;&gt;&gt; flux_conv = flux_unit_conversion(</span>
+<span class="sd">    ...     0.1, 0.01, 0.02, 0.015, 0.03, 0.025, 0.02,</span>
+<span class="sd">    ...     &#39;to ug m-2 s-1&#39;, 41.6, MM=16.04</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; print(f&#39;Converted flux: {flux_conv[0]:.2f} μg m⁻² s⁻¹&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">conv_type</span> <span class="o">==</span> <span class="s1">&#39;to ug m-2 s-1&#39;</span><span class="p">:</span>
+        <span class="n">factor</span> <span class="o">=</span> <span class="n">air_mol_conc</span> <span class="o">*</span> <span class="n">MM</span> <span class="o">/</span> <span class="mf">1000.</span>
+    <span class="k">elif</span> <span class="n">conv_type</span> <span class="o">==</span> <span class="s1">&#39;to umol m-2 s-1&#39;</span><span class="p">:</span>
+        <span class="n">factor</span> <span class="o">=</span> <span class="n">air_mol_conc</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">&#39;this flux unit conversion is not allowed&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="n">flux_individual</span> <span class="o">*</span> <span class="n">factor</span><span class="p">,</span>
+        <span class="n">flux_noise_mean</span> <span class="o">*</span> <span class="n">factor</span><span class="p">,</span>
+        <span class="n">flux_noise_std</span> <span class="o">*</span> <span class="n">factor</span><span class="p">,</span>
+        <span class="n">flux_noise_rmse</span> <span class="o">*</span> <span class="n">factor</span><span class="p">,</span>
+        <span class="n">random_error_FS</span> <span class="o">*</span> <span class="n">factor</span><span class="p">,</span>
+        <span class="n">random_flux</span> <span class="o">*</span> <span class="n">factor</span><span class="p">,</span>
+        <span class="n">random_error_noise</span> <span class="o">*</span> <span class="n">factor</span>
+    <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Bernard Heinesch.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

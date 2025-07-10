@@ -1,0 +1,229 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuration &mdash; GEddySoft 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Performance" href="performance.html" />
+    <link rel="prev" title="Quick Start" href="quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            GEddySoft
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#ini-file-structure">INI File Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#key-settings">Key Settings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#concentration-type">Concentration Type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multiprocessing">Multiprocessing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#other-important-settings">Other Important Settings</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#time-window">Time Window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running_example.html">Running on Example Dataset</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../version.html">Version History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation Details</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/software_architecture.html">Software Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">GEddySoft</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Configuration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/user_guide/configuration.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h1>
+<p>GEddySoft is configured through an INI file that controls all aspects of the processing. This guide focuses on the most important settings you’ll need to adjust.</p>
+<section id="ini-file-structure">
+<h2>INI File Structure<a class="headerlink" href="#ini-file-structure" title="Link to this heading"></a></h2>
+<p>The INI file is organized into sections:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[version]</span>
+<span class="c1"># Version information</span>
+
+<span class="k">[files]</span>
+<span class="c1"># Input/output file paths and settings</span>
+
+<span class="k">[sonic]</span>
+<span class="c1"># Sonic anemometer configuration</span>
+
+<span class="k">[irga]</span>
+<span class="c1"># IRGA data configuration</span>
+
+<span class="k">[tracer]</span>
+<span class="c1"># Tracer data configuration</span>
+
+<span class="k">[meteo]</span>
+<span class="c1"># Meteorological data configuration</span>
+
+<span class="k">[param]</span>
+<span class="c1"># Processing parameters</span>
+
+<span class="k">[run_param]</span>
+<span class="c1"># Runtime configuration</span>
+</pre></div>
+</div>
+</section>
+<section id="key-settings">
+<h2>Key Settings<a class="headerlink" href="#key-settings" title="Link to this heading"></a></h2>
+<section id="concentration-type">
+<h3>Concentration Type<a class="headerlink" href="#concentration-type" title="Link to this heading"></a></h3>
+<p>In the <code class="docutils literal notranslate"><span class="pre">[run_param]</span></code> section, <code class="docutils literal notranslate"><span class="pre">CONCENTRATION_TYPE</span></code> determines which type of concentration data to process:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[run_param]</span>
+<span class="c1"># Choice of concentration files to be processed</span>
+<span class="c1"># 0 for GHG (IRGA)</span>
+<span class="c1"># 1 for VOCs (TRACER)</span>
+<span class="na">CONCENTRATION_TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">0</span>
+</pre></div>
+</div>
+</section>
+<section id="multiprocessing">
+<h3>Multiprocessing<a class="headerlink" href="#multiprocessing" title="Link to this heading"></a></h3>
+<p>In the <code class="docutils literal notranslate"><span class="pre">[run_param]</span></code> section, <code class="docutils literal notranslate"><span class="pre">MULTIPROCESSING</span></code> controls parallel processing:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[run_param]</span>
+<span class="c1"># Run in multiprocessing mode, one process per day of data</span>
+<span class="c1"># 0 for conventional processing</span>
+<span class="c1"># 1 for multiprocessing</span>
+<span class="na">MULTIPROCESSING</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">0</span>
+</pre></div>
+</div>
+<p><strong>Important Notes about Multiprocessing:</strong></p>
+<ul class="simple">
+<li><p>Multiprocessing runs one thread per day of data</p></li>
+<li><p>Console output is muted when multiprocessing is enabled</p></li>
+<li><p><strong>Recommended Workflow:</strong></p>
+<ol class="arabic simple">
+<li><p>First test with <code class="docutils literal notranslate"><span class="pre">MULTIPROCESSING</span> <span class="pre">=</span> <span class="pre">0</span></code> to verify everything works</p></li>
+<li><p>Once confirmed working, stop the process</p></li>
+<li><p>Enable multiprocessing by setting to <code class="docutils literal notranslate"><span class="pre">1</span></code> for faster processing of multiple days</p></li>
+<li><p>Re-run the processing</p></li>
+</ol>
+</li>
+</ul>
+</section>
+</section>
+<section id="other-important-settings">
+<h2>Other Important Settings<a class="headerlink" href="#other-important-settings" title="Link to this heading"></a></h2>
+<p>In addition to the basic settings above, there are several other important configuration options:</p>
+<p>Optional metadata input files can be activated in the .ini:</p>
+<ul class="simple">
+<li><p>meteo (air pressure, air temperature) for a more precise computation of air molar concentration</p></li>
+<li><p>tilt_correction for an application of the Planar-Fit rotation method</p></li>
+<li><p>lag clock-drift to correct for a computer/datalogger clock drift in tha acquisition of TRACER data</p></li>
+<li><p>lag prescribed for the use of a user-defined lag for each time interval</p></li>
+<li><p>lag-air relative humidity relation to correct for lag-RH dependency</p></li>
+<li><p>low-pass filter correction</p></li>
+</ul>
+<section id="time-window">
+<h3>Time Window<a class="headerlink" href="#time-window" title="Link to this heading"></a></h3>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="k">[files]</span>
+<span class="c1"># (start date, end date), use format yyyy_mm_dd__hh_mm_ss</span>
+<span class="c1"># Only files within this time range will be processed</span>
+<span class="c1"># Leave empty if no selection to be applied</span>
+<span class="na">date_files_selection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">(&#39;2023_06_12__00_00_00&#39;,&#39;2023_06_14__23_30_00&#39;)</span>
+</pre></div>
+</div>
+<p>For a complete list of all available settings and their descriptions, refer to the example INI files provided in the <code class="docutils literal notranslate"><span class="pre">input/metadata</span></code> directory.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quick Start" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="performance.html" class="btn btn-neutral float-right" title="Performance" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Bernard Heinesch.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

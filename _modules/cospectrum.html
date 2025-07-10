@@ -1,0 +1,295 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cospectrum &mdash; GEddySoft 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            GEddySoft
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/performance.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Running on Example Dataset</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../version.html">Version History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation Details</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/software_architecture.html">Software Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">GEddySoft</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">cospectrum</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for cospectrum</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">logBinSpectrum</span><span class="w"> </span><span class="kn">import</span> <span class="n">logBinSpectrum</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">theor_cosp_Kaimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Kaimal_cosp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+
+<div class="viewcode-block" id="cospectrum">
+<a class="viewcode-back" href="../api/_autosummary/cospectrum.cospectrum.html#cospectrum.cospectrum">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cospectrum</span><span class="p">(</span><span class="n">ini</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">mean_wind_speed</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">spectrum_type</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute power spectrum or co-spectrum of atmospheric time series.</span>
+
+<span class="sd">    This function calculates either the power spectrum (when x=y) or the co-spectrum</span>
+<span class="sd">    (when x≠y) of atmospheric time series data. It implements standard eddy covariance</span>
+<span class="sd">    spectral analysis techniques, including normalization and scaling according to</span>
+<span class="sd">    Kaimal et al. (1972) conventions.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ini : dict</span>
+<span class="sd">        Initialization dictionary containing:</span>
+
+<span class="sd">        - param.WINDOW_LENGTH : float</span>
+<span class="sd">            Length of the averaging window in seconds</span>
+<span class="sd">        - param.SAMPLING_RATE_FINAL : float</span>
+<span class="sd">            Final sampling rate in Hz</span>
+<span class="sd">        - param.NUM_FREQ_BINS : int</span>
+<span class="sd">            Number of frequency bins for log-averaging</span>
+<span class="sd">        - param.SENSOR_HEIGHT : float</span>
+<span class="sd">            Height of the sensor above ground [m]</span>
+<span class="sd">    x : numpy.ndarray</span>
+<span class="sd">        Fluctuations of the first time series. For power spectrum,</span>
+<span class="sd">        this is the only relevant time series.</span>
+<span class="sd">        Units: Variable-specific (e.g., m s⁻¹ for wind, ppb for concentrations)</span>
+<span class="sd">    y : numpy.ndarray</span>
+<span class="sd">        Fluctuations of the second time series. For power spectrum,</span>
+<span class="sd">        should be identical to x.</span>
+<span class="sd">        Units: Variable-specific</span>
+<span class="sd">    f : numpy.ndarray</span>
+<span class="sd">        Frequency axis of spectra [Hz]</span>
+<span class="sd">    mean_wind_speed : float</span>
+<span class="sd">        Mean wind speed used for normalization [m s⁻¹]</span>
+<span class="sd">    plot : bool, optional</span>
+<span class="sd">        If True, creates diagnostic plots of the (co)spectra</span>
+<span class="sd">    filename : str, optional</span>
+<span class="sd">        Name of the file being processed, used in plot titles</span>
+<span class="sd">    spectrum_type : {&#39;spec&#39;, &#39;cospec&#39;}, optional</span>
+<span class="sd">        Type of analysis being performed:</span>
+<span class="sd">        - &#39;spec&#39;: power spectrum</span>
+<span class="sd">        - &#39;cospec&#39;: co-spectrum</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    cospec_xy : numpy.ndarray</span>
+<span class="sd">        Log-bin averaged (co)spectrum Co(x&#39;,y&#39;,f)</span>
+<span class="sd">        Units: Product of input variable units per Hz</span>
+<span class="sd">    cospec_xy_scaled : numpy.ndarray</span>
+<span class="sd">        Normalized and frequency-scaled (co)spectrum f·Co(x&#39;,y&#39;,f)/xy</span>
+<span class="sd">        Units: Dimensionless</span>
+<span class="sd">    cospec_xy_integral : float</span>
+<span class="sd">        Integral of the (co)spectrum, equals covariance for co-spectrum</span>
+<span class="sd">        or variance for power spectrum</span>
+<span class="sd">        Units: Product of input variable units</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The function follows standard procedures for spectral analysis in</span>
+<span class="sd">    micrometeorology:</span>
+<span class="sd">    </span>
+<span class="sd">    1. Computes two-sided spectrum using FFT</span>
+<span class="sd">    2. Extracts and scales the one-sided spectrum</span>
+<span class="sd">    3. Log-bins the results for clearer visualization</span>
+<span class="sd">    4. Normalizes by integral and scales by frequency</span>
+<span class="sd">    </span>
+<span class="sd">    For co-spectra, the results can be compared to the Kaimal formulations</span>
+<span class="sd">    for unstable conditions when properly normalized.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    logBinSpectrum : Log-binning of spectral data</span>
+<span class="sd">    theor_cosp_Kaimal : Theoretical Kaimal co-spectrum</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    .. [1] Kaimal, J. C., et al. (1972). Spectral characteristics of surface‐layer</span>
+<span class="sd">           turbulence. Q.J.R. Meteorol. Soc., 98: 563-589.</span>
+<span class="sd">    .. [2] Stull, R. B. (1988). An Introduction to Boundary Layer Meteorology.</span>
+<span class="sd">           Kluwer Academic Publishers.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; # Calculate power spectrum of vertical wind speed</span>
+<span class="sd">    &gt;&gt;&gt; w = np.random.randn(18000)  # 30 minutes at 10 Hz</span>
+<span class="sd">    &gt;&gt;&gt; f = np.fft.fftfreq(18000, d=0.1)[:9000]  # Positive frequencies only</span>
+<span class="sd">    &gt;&gt;&gt; ini = {&#39;param&#39;: {</span>
+<span class="sd">    ...     &#39;WINDOW_LENGTH&#39;: 1800,</span>
+<span class="sd">    ...     &#39;SAMPLING_RATE_FINAL&#39;: 10,</span>
+<span class="sd">    ...     &#39;NUM_FREQ_BINS&#39;: 50,</span>
+<span class="sd">    ...     &#39;SENSOR_HEIGHT&#39;: 23.5</span>
+<span class="sd">    ... }}</span>
+<span class="sd">    &gt;&gt;&gt; spec, spec_scaled, variance = cospectrum(</span>
+<span class="sd">    ...     ini, w, w, f, 2.5, plot=True,</span>
+<span class="sd">    ...     spectrum_type=&#39;spec&#39;</span>
+<span class="sd">    ... )</span>
+
+<span class="sd">    Author</span>
+<span class="sd">    ------</span>
+<span class="sd">    Written by Bernard Heinesch (December 2022)</span>
+<span class="sd">    University of Liege, Gembloux Agro-Bio Tech</span>
+<span class="sd">    Updated July 2024: Added power spectrum functionality</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># two-sided cospec</span>
+    <span class="n">cospec2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">/</span><span class="p">(</span><span class="n">ini</span><span class="p">[</span><span class="s1">&#39;param&#39;</span><span class="p">][</span><span class="s1">&#39;WINDOW_LENGTH&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">ini</span><span class="p">[</span><span class="s1">&#39;param&#39;</span><span class="p">][</span><span class="s1">&#39;SAMPLING_RATE_FINAL&#39;</span><span class="p">])</span> <span class="o">*</span>
+                      <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">ini</span><span class="p">[</span><span class="s1">&#39;param&#39;</span><span class="p">][</span><span class="s1">&#39;WINDOW_LENGTH&#39;</span><span class="p">]</span><span class="o">*</span><span class="n">ini</span><span class="p">[</span><span class="s1">&#39;param&#39;</span><span class="p">][</span><span class="s1">&#39;SAMPLING_RATE_FINAL&#39;</span><span class="p">]))</span>
+    <span class="c1"># extract the lower ~1/2 of the spec</span>
+    <span class="n">cospec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">cospec2</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">f</span><span class="p">)])</span>
+    <span class="c1"># multiply all but the first and the last spectral entry by 2</span>
+    <span class="n">cospec</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">cospec</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">cospec</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="nb">len</span><span class="p">(</span><span class="n">cospec</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+    <span class="c1"># scale by delta_f</span>
+    <span class="n">cospec</span> <span class="o">=</span> <span class="n">cospec</span> <span class="o">/</span> <span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="c1"># compute integral (for normalisation purposes)</span>
+    <span class="n">cospec_xy_integral</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">trapz</span><span class="p">(</span><span class="n">cospec</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="c1"># cospectrum log-bin-averaged in regular f domain</span>
+    <span class="n">f_bin</span><span class="p">,</span> <span class="n">cospec_xy</span> <span class="o">=</span> <span class="n">logBinSpectrum</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">cospec</span><span class="p">,</span> <span class="n">ini</span><span class="p">[</span><span class="s1">&#39;param&#39;</span><span class="p">][</span><span class="s1">&#39;NUM_FREQ_BINS&#39;</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">f</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="c1"># normalized, f-scaled log-bin-averaged cospectrum</span>
+    <span class="n">cospec_xy_scaled</span> <span class="o">=</span> <span class="n">f_bin</span><span class="o">*</span><span class="n">cospec_xy</span><span class="o">/</span><span class="n">cospec_xy_integral</span>
+
+    <span class="c1"># additional comments:</span>
+    <span class="c1"># - first value of cospec2 is the mean. In this case =zero because fluctuations are provided as input</span>
+    <span class="c1"># - multiplication by 2 is done for retreiving the energy content (Parsival theorem)</span>
+    <span class="c1"># - with a discrete approach, the covariance can also be calculated as the</span>
+    <span class="c1">#   sum of cospec2 and the sum of cospec before scaling by delta f)</span>
+
+    <span class="c1"># plot results if requested</span>
+    <span class="k">if</span> <span class="n">plot</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+        <span class="c1"># plot f*cospec in log-log scales</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">cospec</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">f_bin</span><span class="p">,</span> <span class="n">f_bin</span><span class="o">*</span><span class="n">cospec_xy</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;binned&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;f*</span><span class="si">{</span><span class="n">spectrum_type</span><span class="si">}</span><span class="s1"> (uncal units)&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;natural f [Hz]&#39;</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">spectrum_type</span><span class="si">}</span><span class="s1"> for file :&#39;</span> <span class="o">+</span> <span class="n">filename</span><span class="p">)</span>
+
+        <span class="c1"># creation of the normalized frequency scale, for ploting purposes only</span>
+        <span class="n">fnorm</span> <span class="o">=</span> <span class="n">f</span><span class="o">*</span><span class="n">ini</span><span class="p">[</span><span class="s1">&#39;param&#39;</span><span class="p">][</span><span class="s1">&#39;SENSOR_HEIGHT&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">mean_wind_speed</span>
+        <span class="n">fnorm_bin</span> <span class="o">=</span> <span class="n">f_bin</span><span class="o">*</span><span class="n">ini</span><span class="p">[</span><span class="s1">&#39;param&#39;</span><span class="p">][</span><span class="s1">&#39;SENSOR_HEIGHT&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">mean_wind_speed</span>
+
+        <span class="c1"># plot f*(co)spec/cov in normalized frequency scale and log-log scales</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">fnorm</span><span class="p">,</span> <span class="n">f</span><span class="o">*</span><span class="n">cospec</span><span class="o">/</span><span class="n">cospec_xy_integral</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fnorm_bin</span><span class="p">,</span> <span class="n">cospec_xy_scaled</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;binned&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">spectrum_type</span> <span class="o">==</span> <span class="s1">&#39;cospec&#39;</span><span class="p">:</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;f*</span><span class="si">{</span><span class="n">spectrum_type</span><span class="si">}</span><span class="s1">/cov (uncal units)&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;f*</span><span class="si">{</span><span class="n">spectrum_type</span><span class="si">}</span><span class="s1">/var (uncal units)&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;normalized f [-]&#39;</span><span class="p">)</span>
+
+        <span class="c1"># add (unstable) Kaimal in case of cospectrum</span>
+        <span class="k">if</span> <span class="n">spectrum_type</span> <span class="o">==</span> <span class="s1">&#39;cospec&#39;</span><span class="p">:</span>
+            <span class="c1"># compute and plot Kaimal cospectrum</span>
+            <span class="n">kaimal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">f_bin</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">f_bin</span><span class="p">)):</span>
+                <span class="n">kaimal</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">=</span> <span class="n">Kaimal_cosp</span><span class="p">(</span><span class="n">f_bin</span><span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="n">f_bin</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">*</span><span class="n">ini</span><span class="p">[</span><span class="s1">&#39;param&#39;</span><span class="p">][</span><span class="s1">&#39;SENSOR_HEIGHT&#39;</span><span class="p">]</span><span class="o">/</span><span class="n">mean_wind_speed</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.001</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fnorm_bin</span><span class="p">,</span> <span class="n">f_bin</span><span class="o">*</span><span class="n">kaimal</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Kaimal)&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="n">cospec_xy</span><span class="p">,</span> <span class="n">cospec_xy_scaled</span><span class="p">,</span> <span class="n">cospec_xy_integral</span><span class="p">]</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Bernard Heinesch.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

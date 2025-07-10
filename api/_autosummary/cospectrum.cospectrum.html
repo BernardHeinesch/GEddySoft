@@ -1,0 +1,269 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cospectrum.cospectrum &mdash; GEddySoft 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="flux_unit_conversion" href="flux_unit_conversion.html" />
+    <link rel="prev" title="cospectrum" href="cospectrum.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            GEddySoft
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../version.html">Version History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation Details</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/software_architecture.html">Software Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#core-modules">Core Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="GEddySoft_main.html">GEddySoft_main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEddySoft_start.html">GEddySoft_start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flux_uncertainties.html">flux_uncertainties</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="cospectrum.html">cospectrum</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">cospectrum.cospectrum</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cospectrum.html#cospectrum.cospectrum"><code class="docutils literal notranslate"><span class="pre">cospectrum()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="flux_unit_conversion.html">flux_unit_conversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spike_detection_vickers97.html">spike_detection_vickers97</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_steady_state_FW96.html">test_steady_state_FW96</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_steady_state_M98.html">test_steady_state_M98</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_steady_state_D99.html">test_steady_state_D99</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_ITC.html">test_ITC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="find_covariance_peak.html">find_covariance_peak</a></li>
+<li class="toctree-l3"><a class="reference internal" href="correction_factor_lpf.html">correction_factor_lpf</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GEddySoft</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="cospectrum.html">cospectrum</a></li>
+      <li class="breadcrumb-item active">cospectrum.cospectrum</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/_autosummary/cospectrum.cospectrum.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cospectrum-cospectrum">
+<h1>cospectrum.cospectrum<a class="headerlink" href="#cospectrum-cospectrum" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="cospectrum.cospectrum">
+<span class="sig-prename descclassname"><span class="pre">cospectrum.</span></span><span class="sig-name descname"><span class="pre">cospectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ini</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean_wind_speed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectrum_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/cospectrum.html#cospectrum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cospectrum.cospectrum" title="Link to this definition"></a></dt>
+<dd><p>Compute power spectrum or co-spectrum of atmospheric time series.</p>
+<p>This function calculates either the power spectrum (when x=y) or the co-spectrum
+(when x≠y) of atmospheric time series data. It implements standard eddy covariance
+spectral analysis techniques, including normalization and scaling according to
+Kaimal et al. (1972) conventions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ini</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – <p>Initialization dictionary containing:</p>
+<ul>
+<li><dl class="simple">
+<dt>param.WINDOW_LENGTH<span class="classifier">float</span></dt><dd><p>Length of the averaging window in seconds</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>param.SAMPLING_RATE_FINAL<span class="classifier">float</span></dt><dd><p>Final sampling rate in Hz</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>param.NUM_FREQ_BINS<span class="classifier">int</span></dt><dd><p>Number of frequency bins for log-averaging</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>param.SENSOR_HEIGHT<span class="classifier">float</span></dt><dd><p>Height of the sensor above ground [m]</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p></li>
+<li><p><strong>x</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Fluctuations of the first time series. For power spectrum,
+this is the only relevant time series.
+Units: Variable-specific (e.g., m s⁻¹ for wind, ppb for concentrations)</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Fluctuations of the second time series. For power spectrum,
+should be identical to x.
+Units: Variable-specific</p></li>
+<li><p><strong>f</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Frequency axis of spectra [Hz]</p></li>
+<li><p><strong>mean_wind_speed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Mean wind speed used for normalization [m s⁻¹]</p></li>
+<li><p><strong>plot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <em>optional</em>) – If True, creates diagnostic plots of the (co)spectra</p></li>
+<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <em>optional</em>) – Name of the file being processed, used in plot titles</p></li>
+<li><p><strong>spectrum_type</strong> (<code class="docutils literal notranslate"><span class="pre">{'spec',</span> <span class="pre">'cospec'}</span></code>, <em>optional</em>) – Type of analysis being performed:
+- ‘spec’: power spectrum
+- ‘cospec’: co-spectrum</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>cospec_xy</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Log-bin averaged (co)spectrum Co(x’,y’,f)
+Units: Product of input variable units per Hz</p></li>
+<li><p><strong>cospec_xy_scaled</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Normalized and frequency-scaled (co)spectrum f·Co(x’,y’,f)/xy
+Units: Dimensionless</p></li>
+<li><p><strong>cospec_xy_integral</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Integral of the (co)spectrum, equals covariance for co-spectrum
+or variance for power spectrum
+Units: Product of input variable units</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The function follows standard procedures for spectral analysis in
+micrometeorology:</p>
+<ol class="arabic simple">
+<li><p>Computes two-sided spectrum using FFT</p></li>
+<li><p>Extracts and scales the one-sided spectrum</p></li>
+<li><p>Log-bins the results for clearer visualization</p></li>
+<li><p>Normalizes by integral and scales by frequency</p></li>
+</ol>
+<p>For co-spectra, the results can be compared to the Kaimal formulations
+for unstable conditions when properly normalized.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="logBinSpectrum.html#module-logBinSpectrum" title="logBinSpectrum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logBinSpectrum</span></code></a></dt><dd><p>Log-binning of spectral data</p>
+</dd>
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">theor_cosp_Kaimal</span></code></dt><dd><p>Theoretical Kaimal co-spectrum</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">References</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Kaimal, J. C., et al. (1972). Spectral characteristics of surface‐layer
+turbulence. Q.J.R. Meteorol. Soc., 98: 563-589.</p>
+</aside>
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Stull, R. B. (1988). An Introduction to Boundary Layer Meteorology.
+Kluwer Academic Publishers.</p>
+</aside>
+</aside>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Calculate power spectrum of vertical wind speed</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">18000</span><span class="p">)</span>  <span class="c1"># 30 minutes at 10 Hz</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">fftfreq</span><span class="p">(</span><span class="mi">18000</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)[:</span><span class="mi">9000</span><span class="p">]</span>  <span class="c1"># Positive frequencies only</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ini</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;param&#39;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s1">&#39;WINDOW_LENGTH&#39;</span><span class="p">:</span> <span class="mi">1800</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;SAMPLING_RATE_FINAL&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;NUM_FREQ_BINS&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;SENSOR_HEIGHT&#39;</span><span class="p">:</span> <span class="mf">23.5</span>
+<span class="gp">... </span><span class="p">}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spec</span><span class="p">,</span> <span class="n">spec_scaled</span><span class="p">,</span> <span class="n">variance</span> <span class="o">=</span> <span class="n">cospectrum</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">ini</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">spectrum_type</span><span class="o">=</span><span class="s1">&#39;spec&#39;</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="author">
+<h2>Author<a class="headerlink" href="#author" title="Link to this heading"></a></h2>
+<p>Written by Bernard Heinesch (December 2022)
+University of Liege, Gembloux Agro-Bio Tech
+Updated July 2024: Added power spectrum functionality</p>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="cospectrum.html" class="btn btn-neutral float-left" title="cospectrum" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="flux_unit_conversion.html" class="btn btn-neutral float-right" title="flux_unit_conversion" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Bernard Heinesch.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,205 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spike_detection_vickers97.linear_interpolate_spikes &mdash; GEddySoft 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="spike_detection_vickers97.spike_detection_vickers97" href="spike_detection_vickers97.spike_detection_vickers97.html" />
+    <link rel="prev" title="spike_detection_vickers97" href="spike_detection_vickers97.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            GEddySoft
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../version.html">Version History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation Details</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/software_architecture.html">Software Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#core-modules">Core Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="GEddySoft_main.html">GEddySoft_main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEddySoft_start.html">GEddySoft_start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flux_uncertainties.html">flux_uncertainties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cospectrum.html">cospectrum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flux_unit_conversion.html">flux_unit_conversion</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="spike_detection_vickers97.html">spike_detection_vickers97</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">spike_detection_vickers97.linear_interpolate_spikes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spike_detection_vickers97.spike_detection_vickers97.html">spike_detection_vickers97.spike_detection_vickers97</a></li>
+<li class="toctree-l4"><a class="reference internal" href="spike_detection_vickers97.html#spike_detection_vickers97.linear_interpolate_spikes"><code class="docutils literal notranslate"><span class="pre">linear_interpolate_spikes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="spike_detection_vickers97.html#spike_detection_vickers97.spike_detection_vickers97"><code class="docutils literal notranslate"><span class="pre">spike_detection_vickers97()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="test_steady_state_FW96.html">test_steady_state_FW96</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_steady_state_M98.html">test_steady_state_M98</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_steady_state_D99.html">test_steady_state_D99</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_ITC.html">test_ITC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="find_covariance_peak.html">find_covariance_peak</a></li>
+<li class="toctree-l3"><a class="reference internal" href="correction_factor_lpf.html">correction_factor_lpf</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GEddySoft</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="spike_detection_vickers97.html">spike_detection_vickers97</a></li>
+      <li class="breadcrumb-item active">spike_detection_vickers97.linear_interpolate_spikes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/_autosummary/spike_detection_vickers97.linear_interpolate_spikes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="spike-detection-vickers97-linear-interpolate-spikes">
+<h1>spike_detection_vickers97.linear_interpolate_spikes<a class="headerlink" href="#spike-detection-vickers97-linear-interpolate-spikes" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="spike_detection_vickers97.linear_interpolate_spikes">
+<span class="sig-prename descclassname"><span class="pre">spike_detection_vickers97.</span></span><span class="sig-name descname"><span class="pre">linear_interpolate_spikes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_spike</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></span><a class="reference internal" href="../../_modules/spike_detection_vickers97.html#linear_interpolate_spikes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spike_detection_vickers97.linear_interpolate_spikes" title="Link to this definition"></a></dt>
+<dd><p>Replace detected spikes with linear interpolation.</p>
+<p>This function replaces spike values in a time series with linearly interpolated
+values using valid neighboring points. It handles both isolated spikes and
+consecutive sequences of spikes, as well as error values in the data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Input data array containing the original time series with spikes</p></li>
+<li><p><strong>is_spike</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Boolean array of same length as data, True where spikes were detected</p></li>
+<li><p><strong>error_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Special value indicating invalid or missing data points
+These points are skipped when finding valid neighbors for interpolation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Copy of input data with spikes replaced by linear interpolation</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The interpolation strategy is:
+1. For each sequence of spikes, find valid (non-spike, non-error) points</p>
+<blockquote>
+<div><p>before and after the sequence</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>If both points exist: perform linear interpolation</p></li>
+<li><p>If only one exists: use that value (nearest neighbor)</p></li>
+<li><p>If neither exists: spikes remain unchanged</p></li>
+</ol>
+<p>This implementation follows the EddyPro software’s approach but is
+vectorized for better performance in Python.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="spike_detection_vickers97.html#module-spike_detection_vickers97" title="spike_detection_vickers97"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spike_detection_vickers97</span></code></a></dt><dd><p>Main spike detection algorithm</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Create sample data with spikes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">spikes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cleaned</span> <span class="o">=</span> <span class="n">linear_interpolate_spikes</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">spikes</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">cleaned</span><span class="p">)</span>  <span class="c1"># [1.0, 1.05, 1.1, nan, 1.2]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="spike_detection_vickers97.html" class="btn btn-neutral float-left" title="spike_detection_vickers97" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="spike_detection_vickers97.spike_detection_vickers97.html" class="btn btn-neutral float-right" title="spike_detection_vickers97.spike_detection_vickers97" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Bernard Heinesch.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

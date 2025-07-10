@@ -1,0 +1,277 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Software Architecture &mdash; GEddySoft 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GEddySoft
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/performance.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/running_example.html">Running on Example Dataset</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="version.html">Version History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation Details</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="theory/software_architecture.html">Software Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GEddySoft</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Software Architecture</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/software_architecture.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="software-architecture">
+<h1>Software Architecture<a class="headerlink" href="#software-architecture" title="Link to this heading"></a></h1>
+<section class="tex2jax_ignore mathjax_ignore" id="software-architecture">
+<h2>Software Architecture<a class="headerlink" href="#software-architecture" title="Link to this heading"></a></h2>
+<p>GEddySoft follows a modular architecture designed for efficient eddy covariance data processing. The software is organized into core processing modules and utility functions, with a clear data flow between components.</p>
+<section id="processing-flow">
+<h3>Processing Flow<a class="headerlink" href="#processing-flow" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">GEddySoft_start</span>
+    <span class="o">|</span>
+    <span class="n">v</span>
+<span class="n">GEddySoft_main</span>
+    <span class="o">|</span>
+    <span class="o">|-&gt;</span> <span class="n">Input</span> <span class="n">Processing</span>
+    <span class="o">|</span>     <span class="o">|-</span> <span class="n">read_main_inputs</span>
+    <span class="o">|</span>     <span class="o">|-</span> <span class="n">read_metadata_files</span>
+    <span class="o">|</span>     <span class="o">|-</span> <span class="n">get_list_input_files</span>
+    <span class="o">|</span>          <span class="o">|</span>
+    <span class="o">|</span>          <span class="n">v</span>
+    <span class="o">|-&gt;</span> <span class="n">Raw</span> <span class="n">Data</span> <span class="n">Loading</span>
+    <span class="o">|</span>     <span class="o">|-</span> <span class="n">read_sonic</span> <span class="o">-&gt;</span> <span class="n">check_raw_timestamps</span>
+    <span class="o">|</span>     <span class="o">|-</span> <span class="n">read_GHG</span> <span class="o">-&gt;</span> <span class="n">map_sonic2tracer</span>
+    <span class="o">|</span>          <span class="o">|</span>
+    <span class="o">|</span>          <span class="n">v</span>
+    <span class="o">|-&gt;</span> <span class="n">Quality</span> <span class="n">Control</span>
+    <span class="o">|</span>     <span class="o">|-</span> <span class="n">spike_detection_vickers97</span>
+    <span class="o">|</span>     <span class="o">|-</span> <span class="n">inst_prob_test</span>
+    <span class="o">|</span>     <span class="o">|-</span> <span class="n">test_steady_state_FW96</span>
+    <span class="o">|</span>     <span class="o">|-</span> <span class="n">test_ITC</span>
+    <span class="o">|</span>          <span class="o">|</span>
+    <span class="o">|</span>          <span class="n">v</span>
+    <span class="o">|-&gt;</span> <span class="n">Flux</span> <span class="n">Calculation</span>
+    <span class="o">|</span>     <span class="o">|-</span> <span class="n">wind_rotations</span>
+    <span class="o">|</span>     <span class="o">|-</span> <span class="n">xcov</span>
+    <span class="o">|</span>     <span class="o">|-</span> <span class="n">find_covariance_peak</span>
+    <span class="o">|</span>     <span class="o">|-</span> <span class="n">flux_unit_conversion</span>
+    <span class="o">|</span>          <span class="o">|</span>
+    <span class="o">|</span>          <span class="n">v</span>
+    <span class="o">|-&gt;</span> <span class="n">Analysis</span> <span class="o">&amp;</span> <span class="n">Corrections</span>
+    <span class="o">|</span>     <span class="o">|-</span> <span class="n">cospectrum</span>
+    <span class="o">|</span>     <span class="o">|-</span> <span class="n">correction_factor_lpf</span>
+    <span class="o">|</span>     <span class="o">|-</span> <span class="n">flux_uncertainties</span>
+    <span class="o">|</span>          <span class="o">|</span>
+    <span class="o">|</span>          <span class="n">v</span>
+    <span class="o">|-&gt;</span> <span class="n">Output</span> <span class="n">Generation</span>
+          <span class="o">|-</span> <span class="n">prepare_output</span>
+          <span class="o">|-</span> <span class="n">clean_results</span>
+          <span class="o">|-</span> <span class="n">add_attributes</span>
+</pre></div>
+</div>
+</section>
+<section id="module-categories">
+<h3>Module Categories<a class="headerlink" href="#module-categories" title="Link to this heading"></a></h3>
+<section id="core-processing-modules">
+<h4>Core Processing Modules<a class="headerlink" href="#core-processing-modules" title="Link to this heading"></a></h4>
+<p>These modules implement essential eddy covariance algorithms and scientific calculations:</p>
+<ol class="arabic simple">
+<li><p><strong>Main Processing</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">GEddySoft_main</span></code>: Central processing workflow</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">flux_uncertainties</span></code>: Uncertainty calculations</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cospectrum</span></code>: Spectral analysis</p></li>
+</ul>
+</li>
+<li><p><strong>Quality Control</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">spike_detection_vickers97</span></code>: Despiking algorithm</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_steady_state_FW96</span></code>: Stationarity test</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_steady_state_M98</span></code>: Alternative stationarity test</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_steady_state_D99</span></code>: Alternative stationarity test</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">test_ITC</span></code>: Integral turbulence characteristics</p></li>
+</ul>
+</li>
+<li><p><strong>Flux Processing</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">flux_unit_conversion</span></code>: Unit conversions</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wind_rotations</span></code>: Coordinate rotations</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">correction_factor_lpf</span></code>: Low-pass filtering corrections</p></li>
+</ul>
+</li>
+</ol>
+</section>
+<section id="utility-functions">
+<h4>Utility Functions<a class="headerlink" href="#utility-functions" title="Link to this heading"></a></h4>
+<p>These modules provide supporting functionality:</p>
+<ol class="arabic simple">
+<li><p><strong>Data Handling</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">clean_results</span></code>: Result filtering</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_closest_value</span></code>: Value interpolation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nandetrend</span></code>: NaN-aware detrending</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nanlinfit</span></code>: NaN-aware linear fitting</p></li>
+</ul>
+</li>
+<li><p><strong>File Operations</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">get_ini</span></code>: Configuration parsing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_list_input_files</span></code>: File discovery</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">read_GHG</span></code>: Gas analyzer data reading</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">read_main_inputs</span></code>: Input file parsing</p></li>
+</ul>
+</li>
+<li><p><strong>Data Transformations</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">compute_wind_direction</span></code>: Wind vector processing</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">correction_factor_lpf</span></code>: Spectral corrections</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">logBinSpectrum</span></code>: Spectral binning</p></li>
+</ul>
+</li>
+<li><p><strong>Metadata Handling</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">add_attributes</span></code>: HDF5 attribute management</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">read_metadata_files</span></code>: Metadata parsing</p></li>
+</ul>
+</li>
+<li><p><strong>Support Functions</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">prepare_output</span></code>: Output formatting</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">print_progress</span></code>: Progress reporting</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reformat_date</span></code>: Date string handling</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section id="data-flow">
+<h3>Data Flow<a class="headerlink" href="#data-flow" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p><strong>Input Stage</strong></p>
+<ul class="simple">
+<li><p>Configuration loading</p></li>
+<li><p>File discovery</p></li>
+<li><p>Raw data reading</p></li>
+</ul>
+</li>
+<li><p><strong>Preprocessing Stage</strong></p>
+<ul class="simple">
+<li><p>Timestamp validation</p></li>
+<li><p>Data synchronization</p></li>
+<li><p>Quality control</p></li>
+</ul>
+</li>
+<li><p><strong>Processing Stage</strong></p>
+<ul class="simple">
+<li><p>Coordinate rotations</p></li>
+<li><p>Covariance calculation</p></li>
+<li><p>Spectral corrections</p></li>
+<li><p>Uncertainty estimation</p></li>
+</ul>
+</li>
+<li><p><strong>Output Stage</strong></p>
+<ul class="simple">
+<li><p>Result cleaning</p></li>
+<li><p>Metadata addition</p></li>
+<li><p>HDF5 file generation</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Bernard Heinesch.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

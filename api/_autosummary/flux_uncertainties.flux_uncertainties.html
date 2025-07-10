@@ -1,0 +1,253 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>flux_uncertainties.flux_uncertainties &mdash; GEddySoft 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="cospectrum" href="cospectrum.html" />
+    <link rel="prev" title="flux_uncertainties" href="flux_uncertainties.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            GEddySoft
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../version.html">Version History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation Details</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/software_architecture.html">Software Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#core-modules">Core Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="GEddySoft_main.html">GEddySoft_main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEddySoft_start.html">GEddySoft_start</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="flux_uncertainties.html">flux_uncertainties</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">flux_uncertainties.flux_uncertainties</a></li>
+<li class="toctree-l4"><a class="reference internal" href="flux_uncertainties.html#flux_uncertainties.flux_uncertainties"><code class="docutils literal notranslate"><span class="pre">flux_uncertainties()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cospectrum.html">cospectrum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flux_unit_conversion.html">flux_unit_conversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spike_detection_vickers97.html">spike_detection_vickers97</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_steady_state_FW96.html">test_steady_state_FW96</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_steady_state_M98.html">test_steady_state_M98</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_steady_state_D99.html">test_steady_state_D99</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_ITC.html">test_ITC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="find_covariance_peak.html">find_covariance_peak</a></li>
+<li class="toctree-l3"><a class="reference internal" href="correction_factor_lpf.html">correction_factor_lpf</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GEddySoft</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="flux_uncertainties.html">flux_uncertainties</a></li>
+      <li class="breadcrumb-item active">flux_uncertainties.flux_uncertainties</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/_autosummary/flux_uncertainties.flux_uncertainties.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="flux-uncertainties-flux-uncertainties">
+<h1>flux_uncertainties.flux_uncertainties<a class="headerlink" href="#flux-uncertainties-flux-uncertainties" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="flux_uncertainties.flux_uncertainties">
+<span class="sig-prename descclassname"><span class="pre">flux_uncertainties.</span></span><span class="sig-name descname"><span class="pre">flux_uncertainties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ini</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w_prime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c_prime</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/flux_uncertainties.html#flux_uncertainties"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#flux_uncertainties.flux_uncertainties" title="Link to this definition"></a></dt>
+<dd><p>Computes different forms of turbulent flux uncertainties.</p>
+<p>This function implements various methods to estimate flux uncertainties and detection limits
+in eddy covariance measurements, including methods from Spirig et al. (2005),
+Finkelstein and Sims (2001), and others.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ini</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – <p>Initialization dictionary containing:</p>
+<ul>
+<li><dl class="simple">
+<dt>param.SAMPLING_RATE_FINAL<span class="classifier">float</span></dt><dd><p>Final sampling rate in Hz</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>param.WINDOW_LENGTH<span class="classifier">float</span></dt><dd><p>Length of the averaging window in seconds</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p></li>
+<li><p><strong>w_prime</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – 1D array of high-frequency fluctuations of vertical wind component (W)
+Units: m s⁻¹</p></li>
+<li><p><strong>c_prime</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – 1D array of high-frequency fluctuations of scalar atmospheric variable
+(e.g., CO₂, CH₄, or VOCs)
+Units: Dependent on the scalar (e.g., ppb for VOCs)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>flux_noise_mean</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Flux detection limit using mean of covariance between ±160-180s.
+Method from Spirig et al. (2005)</p></li>
+<li><p><strong>flux_noise_std</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Flux detection limit using standard deviation of covariance
+between ±160-180s. Method from Spirig et al. (2005)</p></li>
+<li><p><strong>flux_noise_rmse</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Flux detection limit using RMSE of covariance between ±160-180s</p></li>
+<li><p><strong>random_error_FS</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Random error calculated using the Finkelstein and Sims (2001) method</p></li>
+<li><p><strong>random_flux</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Flux detection limit using random shuffle method from Billesbach (2011)</p></li>
+<li><p><strong>random_error_noise</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Random error from white noise using autocovariance methods from
+Lenschow (2000), Mauder (2013), and Langford (2015)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The white noise computation uses sqrt(difference) instead of difference(sqrt)
+as described in Langford (2015) pp. 4200-4201. This differs from the MATLAB
+InnFLUX implementation where interpolated variance at zero lag could be negative,
+leading to imaginary numbers in the MATLAB sqrt function.</p>
+<p class="rubric">References</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id1" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Spirig, C., et al. (2005). Eddy covariance flux measurements of
+biogenic VOCs during ECHO 2003 using proton transfer reaction mass
+spectrometry. Atmospheric Chemistry and Physics, 5(2), 465-481.</p>
+</aside>
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
+<p>Finkelstein, P. L., &amp; Sims, P. F. (2001). Sampling error in eddy
+correlation flux measurements. Journal of Geophysical Research:
+Atmospheres, 106(D4), 3503-3509.</p>
+</aside>
+<aside class="footnote brackets" id="id3" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></span>
+<p>Billesbach, D. P. (2011). Estimating uncertainties in individual eddy
+covariance flux measurements: A comparison of methods and a proposed new
+method. Agricultural and Forest Meteorology, 151(3), 394-405.</p>
+</aside>
+<aside class="footnote brackets" id="id4" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></span>
+<p>Langford, B., et al. (2015). Eddy-covariance data with low signal-to-noise
+ratio: time-lag determination, uncertainties and limit of detection.
+Atmospheric Measurement Techniques, 8(10), 4197-4213.</p>
+</aside>
+</aside>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">xcov</span></code></dt><dd><p>Cross-covariance calculation</p>
+</dd>
+<dt><a class="reference internal" href="cospectrum.html#module-cospectrum" title="cospectrum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cospectrum</span></code></a></dt><dd><p>Co-spectrum analysis</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Setup example data (30 minutes at 10 Hz)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ini</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;param&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;SAMPLING_RATE_FINAL&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;WINDOW_LENGTH&#39;</span><span class="p">:</span> <span class="mi">1800</span><span class="p">}}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">18000</span><span class="p">)</span>  <span class="c1"># Vertical wind fluctuations</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">18000</span><span class="p">)</span>  <span class="c1"># Scalar concentration fluctuations</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">flux_uncertainties</span><span class="p">(</span><span class="n">ini</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Random error (FS method): </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">:</span><span class="s1">.2e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="author">
+<h2>Author<a class="headerlink" href="#author" title="Link to this heading"></a></h2>
+<p>Written by Bernard Heinesch
+University of Liege, Gembloux Agro-Bio Tech</p>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="flux_uncertainties.html" class="btn btn-neutral float-left" title="flux_uncertainties" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="cospectrum.html" class="btn btn-neutral float-right" title="cospectrum" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Bernard Heinesch.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

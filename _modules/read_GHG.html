@@ -1,0 +1,454 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>read_GHG &mdash; GEddySoft 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            GEddySoft
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/performance.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Running on Example Dataset</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../version.html">Version History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation Details</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/software_architecture.html">Software Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">GEddySoft</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">read_GHG</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for read_GHG</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Functions for reading and processing LI-COR GHG high-frequency data files.</span>
+
+<span class="sd">This module provides functionality to read and process high-frequency data from LI-COR GHG files,</span>
+<span class="sd">specifically focusing on the SMARTFLUX system output. It includes tools for:</span>
+
+<span class="sd">* Reading and extracting data from zipped GHG files</span>
+<span class="sd">* Processing diagnostic values from LI-7200 gas analyzer</span>
+<span class="sd">* Handling AGC (Automatic Gain Control) values and other diagnostic flags</span>
+
+<span class="sd">Author: Ariane Faures</span>
+<span class="sd">Created: October 5, 2021</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">zipfile</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># %% List of functions</span>
+<div class="viewcode-block" id="read_GHG">
+<a class="viewcode-back" href="../api/_autosummary/read_GHG.read_GHG.html#read_GHG.read_GHG">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_GHG</span> <span class="p">(</span><span class="n">raw_file</span><span class="p">,</span> <span class="n">raw_format</span><span class="o">=</span><span class="s1">&#39;ghg&#39;</span><span class="p">,</span> <span class="n">unzip_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read and extract high-frequency data from LI-COR SMARTFLUX GHG files.</span>
+
+<span class="sd">    This function handles the reading of high-frequency eddy covariance data from</span>
+<span class="sd">    LI-COR SMARTFLUX GHG files. It extracts both data and metadata from zipped GHG</span>
+<span class="sd">    files and returns them as pandas DataFrames.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    raw_file : str</span>
+<span class="sd">        Path to the GHG file to process</span>
+<span class="sd">    raw_format : str, optional</span>
+<span class="sd">        Format of the raw data file, currently only &#39;ghg&#39; is supported</span>
+<span class="sd">    unzip_path : str, optional</span>
+<span class="sd">        Directory where the GHG file should be temporarily extracted. If None,</span>
+<span class="sd">        uses the same directory as the GHG file</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        A list containing:</span>
+
+<span class="sd">        - file_header : pandas.DataFrame</span>
+<span class="sd">          Header information from the data file (first 6 lines)</span>
+<span class="sd">        - file_data : pandas.DataFrame</span>
+<span class="sd">          High frequency data with variable names as columns</span>
+<span class="sd">        - data_name : str</span>
+<span class="sd">          Path to the extracted data file</span>
+<span class="sd">        - metadata_name : str</span>
+<span class="sd">          Path to the extracted metadata file</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The function automatically cleans up extracted files after reading them.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Read the header (first 7 lines of the file)</span>
+    <span class="c1"># And afterwards read the many body (with variable names as columns)</span>
+    <span class="k">if</span> <span class="n">raw_format</span> <span class="o">==</span> <span class="s1">&#39;ghg&#39;</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">raw_file</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_ref</span><span class="p">:</span>
+            <span class="n">zip_ref</span><span class="o">.</span><span class="n">extractall</span><span class="p">(</span><span class="n">unzip_path</span><span class="p">)</span>
+
+        <span class="n">data_name</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">unzip_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span><span class="s1">&#39;*.data&#39;</span><span class="p">)</span>
+        <span class="n">metadata_name</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">unzip_path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="s1">&#39;*.metadata&#39;</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_name</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+            <span class="n">file_header</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">nrows</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">header</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_name</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>    
+            <span class="n">file_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">header</span> <span class="o">=</span> <span class="mi">7</span><span class="p">)</span>
+
+    <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">data_name</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">metadata_name</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>    
+
+    <span class="k">return</span><span class="p">([</span><span class="n">file_header</span><span class="p">,</span><span class="n">file_data</span><span class="p">,</span><span class="n">data_name</span><span class="p">,</span> <span class="n">metadata_name</span><span class="p">])</span></div>
+
+
+
+
+<span class="c1"># Legacy version of read_diag_val with additional debugging output</span>
+<span class="c1"># Currently unused - the production version is defined below</span>
+<span class="c1"># def read_diag_val(data, data_name_short):</span>
+<span class="c1">#     &quot;&quot;&quot;Process diagnostic values from LI-7200 gas analyzer data.</span>
+<span class="c1"># </span>
+<span class="c1">#     This function processes the diagnostic values from LI-7200 gas analyzer data,</span>
+<span class="c1">#     converting binary diagnostic flags into meaningful status indicators for various</span>
+<span class="c1">#     instrument components.</span>
+<span class="c1"># </span>
+<span class="c1">#     Parameters</span>
+<span class="c1">#     ----------</span>
+<span class="c1">#     data : pandas.DataFrame</span>
+<span class="c1">#         DataFrame containing the raw data with a &#39;Diagnostic Value&#39; column</span>
+<span class="c1">#     data_name_short : str</span>
+<span class="c1">#         Short identifier for the data file being processed</span>
+<span class="c1"># </span>
+<span class="c1">#     Returns</span>
+<span class="c1">#     -------</span>
+<span class="c1">#     pandas.DataFrame</span>
+<span class="c1">#         DataFrame containing diagnostic counts/values for:</span>
+<span class="c1">#         - AGC (Automatic Gain Control)</span>
+<span class="c1">#         - Sync</span>
+<span class="c1">#         - PLL</span>
+<span class="c1">#         - Detector</span>
+<span class="c1">#         - Chopper</span>
+<span class="c1">#         - DeltaPressure</span>
+<span class="c1">#         - Aux_input</span>
+<span class="c1">#         - Tinlet</span>
+<span class="c1">#         - Toutlet</span>
+<span class="c1">#         - Head detect</span>
+<span class="c1">#         - Anemometer Diagnostics</span>
+<span class="c1"># </span>
+<span class="c1">#     Notes</span>
+<span class="c1">#     -----</span>
+<span class="c1">#     AGC values are compared against a reference of 100.05 and stored as means.</span>
+<span class="c1">#     Other diagnostic flags are counted when they indicate an issue (value != 1).</span>
+<span class="c1">#     &quot;&quot;&quot;</span>
+<span class="c1">#     print(&#39;Reading diagnostic data of files&#39;)</span>
+<span class="c1">#     diag_val = data.loc[:,&#39;Diagnostic Value&#39;].copy() # Copy of the initial column: change!!!</span>
+<span class="c1"># </span>
+<span class="c1">#     print(&#39;Starting to count the number of times a flag was raised&#39;)</span>
+<span class="c1"># </span>
+<span class="c1">#     def int_to_binary_vectorized(arr):</span>
+<span class="c1">#         &quot;&quot;&quot;Convert integer array to binary strings with leading zeros.</span>
+<span class="c1"># </span>
+<span class="c1">#         Parameters</span>
+<span class="c1">#         ----------</span>
+<span class="c1">#         arr : numpy.ndarray</span>
+<span class="c1">#             Array of integers to convert</span>
+<span class="c1"># </span>
+<span class="c1">#         Returns</span>
+<span class="c1">#         -------</span>
+<span class="c1">#         numpy.ndarray</span>
+<span class="c1">#             Array of binary strings, each padded to 7 digits</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         int2binary = np.vectorize(lambda x: &#39;000&#39; + format(x, &#39;b&#39;))</span>
+<span class="c1">#         return int2binary(arr)</span>
+<span class="c1">#     </span>
+<span class="c1">#     # Example usage</span>
+<span class="c1">#     arr = diag_val.to_numpy()</span>
+<span class="c1">#     diag_val = int_to_binary_vectorized(arr)</span>
+<span class="c1">#     </span>
+<span class="c1">#     </span>
+<span class="c1">#     def split_bin_diag_vectorized(diag_val,data_name_short):</span>
+<span class="c1">#         &quot;&quot;&quot;Process binary diagnostic values into component-specific flags.</span>
+<span class="c1"># </span>
+<span class="c1">#         Parameters</span>
+<span class="c1">#         ----------</span>
+<span class="c1">#         diag_val : numpy.ndarray</span>
+<span class="c1">#             Array of binary strings representing diagnostic values</span>
+<span class="c1">#         data_name_short : str</span>
+<span class="c1">#             Short identifier for the data file being processed</span>
+<span class="c1"># </span>
+<span class="c1">#         Returns</span>
+<span class="c1">#         -------</span>
+<span class="c1">#         pandas.DataFrame</span>
+<span class="c1">#             DataFrame containing diagnostic counts for each component</span>
+<span class="c1">#         &quot;&quot;&quot;</span>
+<span class="c1">#         # Create the binary array from the input series</span>
+<span class="c1">#         binary_array = np.array([list(x) for x in diag_val.astype(str)])</span>
+<span class="c1">#         </span>
+<span class="c1">#         # Create a mask for the AGC columns: 4 last bits, so columns of the array</span>
+<span class="c1">#         agc_mask = binary_array[:,-4:].astype(int)</span>
+<span class="c1">#         num_rows, num_cols = agc_mask.shape</span>
+<span class="c1">#         # Use the bitwise left shit operator (&lt;&lt;) to comnbine the binary digits</span>
+<span class="c1">#         # and get one number per row without looping over all the records</span>
+<span class="c1">#         result = np.zeros(num_rows, dtype=np.int)</span>
+<span class="c1">#         for i in range(num_cols):</span>
+<span class="c1">#             result = result &lt;&lt; 1</span>
+<span class="c1">#             result = result | agc_mask[:, i]</span>
+<span class="c1">#             </span>
+<span class="c1">#         # Convert the agc diagnostic into its real value to compare it to the</span>
+<span class="c1">#         # reference value (*6.67 according to the manual)</span>
+<span class="c1">#         agc_column = (result * 6.67).astype(float) </span>
+<span class="c1">#         # Count the number of times it isn&#39;t the reference value (100.05) with</span>
+<span class="c1">#         # a limit of tolerance</span>
+<span class="c1">#         # agc_count = (~np.isclose(agc_column, 100.05)).sum()</span>
+<span class="c1">#         agc_count = np.mean(agc_column) # put the mean value instead of the count</span>
+<span class="c1">#         </span>
+<span class="c1">#         # Create a mask for the remaining columns</span>
+<span class="c1">#         other_mask = binary_array[:,3:-4].astype(int)</span>
+<span class="c1">#         other_count = (~(other_mask == 1)).sum(axis=0)</span>
+<span class="c1">#         </span>
+<span class="c1">#         # Create the count dataframe from the counts. First are the agc counts</span>
+<span class="c1">#         # and then the other counts but flipped since the bits must be read</span>
+<span class="c1">#         # right to left to correspond to the variable names</span>
+<span class="c1">#         diag_count = pd.DataFrame([agc_count] + list(np.flip(other_count)),</span>
+<span class="c1">#                                   columns = [data_name_short[:-9]])</span>
+<span class="c1">#         diag_count = diag_count.T</span>
+<span class="c1">#         diag_count.columns = [&#39;AGC&#39;, &#39;Sync&#39;, &#39;PLL&#39;, &#39;Detector&#39;, </span>
+<span class="c1">#                                            &#39;Chopper&#39;, &#39;DeltaPressure&#39;,</span>
+<span class="c1">#                                            &#39;Aux_input&#39;, &#39;Tinlet&#39;, &#39;Toutlet&#39;, </span>
+<span class="c1">#                                            &#39;Head detect&#39;]</span>
+<span class="c1">#         </span>
+<span class="c1">#         return diag_count</span>
+<span class="c1"># </span>
+<span class="c1">#     diag_count = split_bin_diag_vectorized(diag_val,data_name_short)</span>
+<span class="c1">#     diag_count[&#39;Anemometer Diagnostics&#39;] = data.loc[:,&#39;Anemometer Diagnostics&#39;].sum()</span>
+<span class="c1">#         </span>
+<span class="c1">#         # print_progress(k, diag_val)</span>
+<span class="c1">#     agc = pd.Series(((diag_count.iloc[:,0])&lt;100).any())</span>
+<span class="c1">#     agc.index= [&#39;AGC&#39;]</span>
+<span class="c1">#     diag_flag = pd.concat([agc,((diag_count.iloc[:,1:])!=0).any()])</span>
+<span class="c1">#     if not((diag_count.loc[:,diag_flag]).empty):     </span>
+<span class="c1">#         print(&#39;File &#39; + data_name_short)</span>
+<span class="c1">#         print(&#39;Number and type of LI7200 diagnostic flags raised:&#39;)</span>
+<span class="c1">#         print(diag_count.loc[:,diag_flag])</span>
+<span class="c1">#    </span>
+<span class="c1">#     return(diag_count)</span>
+
+
+
+
+
+
+
+<div class="viewcode-block" id="read_diag_val">
+<a class="viewcode-back" href="../api/_autosummary/read_GHG.read_diag_val.html#read_GHG.read_diag_val">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_diag_val</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process LI-7200 gas analyzer diagnostic values.</span>
+
+<span class="sd">    This function processes diagnostic values from a LI-7200 gas analyzer,</span>
+<span class="sd">    converting binary diagnostic flags into meaningful status indicators.</span>
+<span class="sd">    Each diagnostic value is a binary number where specific bits indicate</span>
+<span class="sd">    the status of different analyzer components.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : pandas.Series or numpy.ndarray</span>
+<span class="sd">        Series or array of diagnostic values from the analyzer</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pandas.DataFrame</span>
+<span class="sd">        DataFrame containing diagnostic information for each component:</span>
+
+<span class="sd">        AGC : float</span>
+<span class="sd">            Mean AGC value (Automatic Gain Control, scaled by 6.67)</span>
+<span class="sd">        Sync : int</span>
+<span class="sd">            Count of synchronization issues</span>
+<span class="sd">        PLL : int</span>
+<span class="sd">            Count of Phase-Locked Loop issues</span>
+<span class="sd">        Detector : int</span>
+<span class="sd">            Count of detector issues</span>
+<span class="sd">        Chopper : int</span>
+<span class="sd">            Count of chopper wheel issues</span>
+<span class="sd">        DeltaPressure : int</span>
+<span class="sd">            Count of pressure differential issues</span>
+<span class="sd">        Aux_input : int</span>
+<span class="sd">            Count of auxiliary input issues</span>
+<span class="sd">        Tinlet : int</span>
+<span class="sd">            Count of inlet temperature issues</span>
+<span class="sd">        Toutlet : int</span>
+<span class="sd">            Count of outlet temperature issues</span>
+<span class="sd">        Head detect : int</span>
+<span class="sd">            Count of head detection issues</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">diag_val</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">int_to_binary_vectorized</span><span class="p">(</span><span class="n">arr</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert integer array to binary strings with leading zeros.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        arr : numpy.ndarray</span>
+<span class="sd">            Array of integers to convert</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            Array of binary strings, each padded with leading zeros</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">int2binary</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vectorize</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s1">&#39;000&#39;</span> <span class="o">+</span> <span class="nb">format</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">int2binary</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+
+    <span class="n">diag_val</span> <span class="o">=</span> <span class="n">int_to_binary_vectorized</span><span class="p">(</span><span class="n">diag_val</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">split_bin_diag_vectorized</span><span class="p">(</span><span class="n">diag_val</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process binary diagnostic values into component-specific flags.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        diag_val : numpy.ndarray</span>
+<span class="sd">            Array of binary strings representing diagnostic values</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        pandas.DataFrame</span>
+<span class="sd">            DataFrame containing diagnostic counts/means for each component</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create the binary array from the input series</span>
+        <span class="n">binary_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">list</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">diag_val</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)])</span>
+        
+        <span class="c1"># Create a mask for the AGC columns: 4 last bits, so columns of the array</span>
+        <span class="n">agc_mask</span> <span class="o">=</span> <span class="n">binary_array</span><span class="p">[:,</span><span class="o">-</span><span class="mi">4</span><span class="p">:]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span> <span class="o">=</span> <span class="n">agc_mask</span><span class="o">.</span><span class="n">shape</span>
+        <span class="c1"># Use the bitwise left shit operator (&lt;&lt;) to comnbine the binary digits</span>
+        <span class="c1"># and get one number per row without looping over all the records</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_rows</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_cols</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">result</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">result</span> <span class="o">|</span> <span class="n">agc_mask</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+            
+        <span class="c1"># Convert the agc diagnostic into its real value to compare it to the</span>
+        <span class="c1"># reference value (*6.67 according to the manual)</span>
+        <span class="n">agc_column</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span> <span class="o">*</span> <span class="mf">6.67</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> 
+        <span class="c1"># store the mean value</span>
+        <span class="n">agc_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">agc_column</span><span class="p">)</span>
+        
+        <span class="c1"># Create a mask for the remaining columns</span>
+        <span class="n">other_mask</span> <span class="o">=</span> <span class="n">binary_array</span><span class="p">[:,</span><span class="mi">3</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">other_count</span> <span class="o">=</span> <span class="p">(</span><span class="o">~</span><span class="p">(</span><span class="n">other_mask</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        
+        <span class="c1"># Create the count dataframe from the counts. First are the agc counts</span>
+        <span class="c1"># and then the other counts but flipped since the bits must be read</span>
+        <span class="c1"># right to left to correspond to the variable names</span>
+        <span class="n">diag_count</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">agc_count</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">other_count</span><span class="p">)))</span>  <span class="c1">#,columns = [data_name_short[:-9]]</span>
+        <span class="n">diag_count</span> <span class="o">=</span> <span class="n">diag_count</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">diag_count</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AGC&#39;</span><span class="p">,</span> <span class="s1">&#39;Sync&#39;</span><span class="p">,</span> <span class="s1">&#39;PLL&#39;</span><span class="p">,</span> <span class="s1">&#39;Detector&#39;</span><span class="p">,</span> 
+                                           <span class="s1">&#39;Chopper&#39;</span><span class="p">,</span> <span class="s1">&#39;DeltaPressure&#39;</span><span class="p">,</span>
+                                           <span class="s1">&#39;Aux_input&#39;</span><span class="p">,</span> <span class="s1">&#39;Tinlet&#39;</span><span class="p">,</span> <span class="s1">&#39;Toutlet&#39;</span><span class="p">,</span> 
+                                           <span class="s1">&#39;Head detect&#39;</span><span class="p">]</span>
+        
+        <span class="k">return</span> <span class="n">diag_count</span>
+
+    <span class="n">diag_count</span> <span class="o">=</span> <span class="n">split_bin_diag_vectorized</span><span class="p">(</span><span class="n">diag_val</span><span class="p">)</span>
+
+    <span class="c1"># print(&#39;Number and type of LI7200 diagnostic flags raised:&#39;)</span>
+    <span class="c1"># print(diag_count.loc[:,(diag_count!=0).any()])</span>
+   
+    <span class="k">return</span><span class="p">(</span><span class="n">diag_count</span><span class="p">)</span></div>
+
+    
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Bernard Heinesch.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

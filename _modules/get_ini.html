@@ -1,0 +1,228 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>get_ini &mdash; GEddySoft 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            GEddySoft
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/performance.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Running on Example Dataset</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../version.html">Version History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation Details</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../theory/software_architecture.html">Software Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">GEddySoft</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">get_ini</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for get_ini</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Module for intelligent INI file parsing with automatic type conversion.</span>
+
+<span class="sd">This module extends Python&#39;s configparser to provide automatic type inference</span>
+<span class="sd">for configuration values. It supports:</span>
+
+<span class="sd">- Standard INI file parsing</span>
+<span class="sd">- Automatic conversion of strings to appropriate Python types</span>
+<span class="sd">- Safe evaluation of complex data structures (lists, dicts, etc.)</span>
+<span class="sd">- Fallback to string values when type conversion fails</span>
+
+<span class="sd">Author</span>
+<span class="sd">------</span>
+<span class="sd">B. Heinesch</span>
+<span class="sd">University of Liege, Gembloux Agro-Bio Tech</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">configparser</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ast</span>
+
+
+<div class="viewcode-block" id="MyConfigParser">
+<a class="viewcode-back" href="../api/_autosummary/get_ini.MyConfigParser.html#get_ini.MyConfigParser">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MyConfigParser</span><span class="p">(</span><span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enhanced ConfigParser with automatic type inference.</span>
+
+<span class="sd">    This class extends the standard ConfigParser to automatically convert</span>
+<span class="sd">    string values to appropriate Python types using ast.literal_eval.</span>
+<span class="sd">    It safely handles both simple types (int, float, bool) and complex</span>
+<span class="sd">    types (lists, dicts, tuples).</span>
+
+<span class="sd">    The conversion is attempted using ast.literal_eval, which safely</span>
+<span class="sd">    evaluates strings containing Python literals. If conversion fails,</span>
+<span class="sd">    the original string value is returned unchanged.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="MyConfigParser.get">
+<a class="viewcode-back" href="../api/_autosummary/get_ini.MyConfigParser.html#get_ini.MyConfigParser.get">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">section</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="n">configparser</span><span class="o">.</span><span class="n">_UNSET</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get an option value with automatic type conversion.</span>
+
+<span class="sd">        This method extends the standard ConfigParser.get() by attempting</span>
+<span class="sd">        to convert string values to appropriate Python types.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        section : str</span>
+<span class="sd">            Section name in the configuration</span>
+<span class="sd">        option : str</span>
+<span class="sd">            Option name in the specified section</span>
+<span class="sd">        raw : bool, optional</span>
+<span class="sd">            If True, no interpolation is performed</span>
+<span class="sd">        vars : dict, optional</span>
+<span class="sd">            Dictionary of substitution variables</span>
+<span class="sd">        fallback : any, optional</span>
+<span class="sd">            Value to return if the option is not found</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        any</span>
+<span class="sd">            The option value converted to its appropriate Python type,</span>
+<span class="sd">            or the original string if conversion fails</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">section</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="n">raw</span><span class="p">,</span> <span class="nb">vars</span><span class="o">=</span><span class="nb">vars</span><span class="p">,</span> <span class="n">fallback</span><span class="o">=</span><span class="n">fallback</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Try to safely evaluate the value using ast.literal_eval</span>
+            <span class="k">return</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">SyntaxError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+            <span class="c1"># If evaluation fails, return the original string</span>
+            <span class="k">return</span> <span class="n">value</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="get_ini">
+<a class="viewcode-back" href="../api/_autosummary/get_ini.get_ini.html#get_ini.get_ini">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_ini</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Read and parse an INI file with automatic type conversion.</span>
+
+<span class="sd">    This function reads an INI configuration file and returns a parser</span>
+<span class="sd">    that automatically converts values to appropriate Python types.</span>
+<span class="sd">    It uses MyConfigParser to handle type inference, making it ideal</span>
+<span class="sd">    for scientific applications with complex configuration needs.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Path to the INI configuration file</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    MyConfigParser</span>
+<span class="sd">        Configured parser instance with loaded and type-converted values</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The function supports all standard INI file features plus:</span>
+<span class="sd">    - Section-based organization</span>
+<span class="sd">    - Key-value pairs with automatic type conversion</span>
+<span class="sd">    - Complex data structures (lists, dicts, etc.)</span>
+<span class="sd">    - Fallback to string values when conversion fails</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+    <span class="c1"># Create an instance of the custom ConfigParser</span>
+    <span class="n">ini</span> <span class="o">=</span> <span class="n">MyConfigParser</span><span class="p">()</span>
+
+    <span class="c1"># Read the INI file</span>
+    <span class="n">ini</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="c1"># Return the MyConfigParser instance</span>
+    <span class="k">return</span> <span class="n">ini</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Bernard Heinesch.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

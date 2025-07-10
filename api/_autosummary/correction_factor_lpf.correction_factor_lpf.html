@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>correction_factor_lpf.correction_factor_lpf &mdash; GEddySoft 4.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="correction_factor_lpf.theor_cospectra_massman" href="correction_factor_lpf.theor_cospectra_massman.html" />
+    <link rel="prev" title="correction_factor_lpf" href="correction_factor_lpf.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            GEddySoft
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../version.html">Version History</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Implementation Details</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../theory/software_architecture.html">Software Architecture</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#core-modules">Core Modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="GEddySoft_main.html">GEddySoft_main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="GEddySoft_start.html">GEddySoft_start</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flux_uncertainties.html">flux_uncertainties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cospectrum.html">cospectrum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="flux_unit_conversion.html">flux_unit_conversion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="spike_detection_vickers97.html">spike_detection_vickers97</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_steady_state_FW96.html">test_steady_state_FW96</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_steady_state_M98.html">test_steady_state_M98</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_steady_state_D99.html">test_steady_state_D99</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_ITC.html">test_ITC</a></li>
+<li class="toctree-l3"><a class="reference internal" href="find_covariance_peak.html">find_covariance_peak</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="correction_factor_lpf.html">correction_factor_lpf</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="correction_factor_lpf.html#author">Author</a></li>
+<li class="toctree-l4"><a class="reference internal" href="correction_factor_lpf.html#created">Created</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">correction_factor_lpf.correction_factor_lpf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="correction_factor_lpf.theor_cospectra_massman.html">correction_factor_lpf.theor_cospectra_massman</a></li>
+<li class="toctree-l4"><a class="reference internal" href="correction_factor_lpf.html#correction_factor_lpf.theor_cospectra_massman"><code class="docutils literal notranslate"><span class="pre">theor_cospectra_massman()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="correction_factor_lpf.html#correction_factor_lpf.correction_factor_lpf"><code class="docutils literal notranslate"><span class="pre">correction_factor_lpf()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#utility-functions">Utility Functions</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">GEddySoft</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="correction_factor_lpf.html">correction_factor_lpf</a></li>
+      <li class="breadcrumb-item active">correction_factor_lpf.correction_factor_lpf</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/api/_autosummary/correction_factor_lpf.correction_factor_lpf.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="correction-factor-lpf-correction-factor-lpf">
+<h1>correction_factor_lpf.correction_factor_lpf<a class="headerlink" href="#correction-factor-lpf-correction-factor-lpf" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="correction_factor_lpf.correction_factor_lpf">
+<span class="sig-prename descclassname"><span class="pre">correction_factor_lpf.</span></span><span class="sig-name descname"><span class="pre">correction_factor_lpf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ini</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df_lpfc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctrplot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/correction_factor_lpf.html#correction_factor_lpf"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#correction_factor_lpf.correction_factor_lpf" title="Link to this definition"></a></dt>
+<dd><p>Calculate correction factors for high-frequency flux losses.</p>
+<p>This function implements two methods to correct for high-frequency losses
+in eddy covariance measurements:</p>
+<ol class="arabic simple">
+<li><p>Theoretical approach (ini[‘param’][‘LPFC’]=1):
+Uses Massman model cospectra and a transfer function based on
+half-power cutoff frequency.</p></li>
+<li><p>Empirical approach (ini[‘param’][‘LPFC’]=2):
+Uses pre-calculated correction factors based on wind speed
+and atmospheric stability class.</p></li>
+</ol>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>u</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array_like</span></code>) – Wind speed [m s⁻¹]</p></li>
+<li><p><strong>zoL</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array_like</span></code>) – Stability parameter (z-d)/L [-]</p></li>
+<li><p><strong>ini</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – <p>Configuration dictionary containing:
+- param.LPFC : int</p>
+<blockquote>
+<div><p>Method selection (1 or 2)</p>
+</div></blockquote>
+<ul>
+<li><dl class="simple">
+<dt>param.SAMPLING_RATE_TRACER<span class="classifier">float</span></dt><dd><p>Sampling frequency [Hz]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>param.SENSOR_HEIGHT<span class="classifier">float</span></dt><dd><p>Measurement height [m]</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p></li>
+<li><p><strong>df_lpfc</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>, <em>optional</em>) – <p>Lookup table for correction factors containing columns:
+- stability_class : str</p>
+<blockquote>
+<div><p>’stable’, ‘unstable’, or ‘all’</p>
+</div></blockquote>
+<ul>
+<li><dl class="simple">
+<dt>name<span class="classifier">str</span></dt><dd><p>Parameter name (‘cof’, ‘A0’, ‘kf0’, ‘mu’)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>value<span class="classifier">float</span></dt><dd><p>Parameter value</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>ws_max<span class="classifier">float</span></dt><dd><p>Maximum wind speed for empirical method</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>CF_L<span class="classifier">float</span></dt><dd><p>Correction factor for empirical method</p>
+</dd>
+</dl>
+</li>
+</ul>
+</p></li>
+<li><p><strong>ctrplot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <em>optional</em>) – If True, generate diagnostic plots for method 1</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Correction factor(s) for low-pass filtering losses</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">array_like</span></code></p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>For method 1, the correction factor is calculated as:
+CF = ∫(Co(f)df) / ∫(TF(f)·Co(f)df)
+where Co(f) is the Massman model cospectrum and TF(f) is
+a Lorentzian transfer function.</p>
+<p>For method 2, the correction factor is interpolated from
+a lookup table based on wind speed and stability class.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="correction_factor_lpf.theor_cospectra_massman.html#correction_factor_lpf.theor_cospectra_massman" title="correction_factor_lpf.theor_cospectra_massman"><code class="xref py py-obj docutils literal notranslate"><span class="pre">theor_cospectra_massman</span></code></a></dt><dd><p>Massman model implementation</p>
+</dd>
+</dl>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">Author</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">------</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">Written</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">20</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">2025.</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">University</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">Gembloux</span></code></p>
+</div>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="correction_factor_lpf.html" class="btn btn-neutral float-left" title="correction_factor_lpf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="correction_factor_lpf.theor_cospectra_massman.html" class="btn btn-neutral float-right" title="correction_factor_lpf.theor_cospectra_massman" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Bernard Heinesch.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
