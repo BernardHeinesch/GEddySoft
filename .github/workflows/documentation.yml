@@ -2,11 +2,15 @@ name: Documentation
 
 on:
   push:
-    branches:
-      - master  # or main, depending on your default branch
+    branches: [ master ]
   pull_request:
     branches:
       - master  # or main, depending on your default branch
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: write
+  pages: write
 
 jobs:
   build-docs:
@@ -23,6 +27,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install numpy==1.23.5
+          pip install statsmodels
           pip install -r requirements.txt
           pip install sphinx myst-parser sphinx-rtd-theme
           pip install -e .
