@@ -42,4 +42,5 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/build/html
-          force_orphan: true
+          force_orphan: true  # Ensures clean deployment
+          cname: ''  # Explicitly empty to avoid custom domain issues
