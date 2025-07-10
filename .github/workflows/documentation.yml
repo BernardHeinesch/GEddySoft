@@ -23,7 +23,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install sphinx myst-parser sphinx-rtd-theme
+          pip install sphinx myst-parser sphinx-rtd-theme sphinxcontrib-mermaid
           
       - name: Build documentation
         run: |
