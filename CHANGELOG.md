@@ -2,6 +2,10 @@
 
 All notable changes to GEddySoft will be documented in this file.
 
+## [4.0.1] - 2025-08-16
+### Fixed
+- correction on conc_prec and conc_LOD computation. Division by number of samples is now out of the sqrt. (16 August 2025)
+
 ## [4.0.0] - 2025-06-27
 ### Fixed
 - Correction of error introduced when implementing time-series wrapping after rolling (27 June 2025)

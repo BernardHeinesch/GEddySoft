@@ -1,39 +1,7 @@
 """
-GEddySoft: A Python Package for Eddy Covariance Processing
-
-This module contains the main processing function for the GEddySoft eddy covariance
-software package. It handles the complete workflow of processing raw high-frequency
-data from sonic anemometers and trace gas analyzers (e.g., PTR-TOF-MS) to calculate
-fluxes and quality control metrics.
-
-Key Features
-------------
-* Flexible input handling for sonic and trace gas data
-* Comprehensive quality control including:
-
-  * Spike detection (Vickers & Mahrt 1997)
-  * Stationarity tests (Foken & Wichura 1996)
-  * Integral turbulence characteristics (Thomas & Foken 2002)
-  * Instrument diagnostics
-
-* Advanced processing options:
-
-  * Multiple coordinate rotation methods
-  * Time lag optimization
-  * Spectral corrections
-  * Flux uncertainty estimation
-
-* Parallel processing support for large datasets
-* HDF5-based data storage with rich metadata
-
-Author
-------
-Bernard Heinesch
-University of Liège, Gembloux Agro-Bio Tech
-
-License
--------
-GEddySoft is available under the terms of the MIT License.
+    GEddySoft_main.py
+    This file is part of the GEddySoft eddy covariance software package developed
+    at the University of Liège, Belgium
 """
 
 # %% Package and functions import
@@ -84,98 +52,6 @@ from flux_unit_conversion import flux_unit_conversion
 
 
 def GEddySoft_main(str_day, ini, log_filename):
-    """
-    Process eddy covariance data for a single day (when used in multithread mode)
-    or for the time period given in the ini file.
-
-    This function handles the complete processing chain for eddy covariance data,
-    from raw high-frequency measurements to quality-controlled fluxes. It supports
-    both single-threaded and parallel processing modes.
-
-    Parameters
-    ----------
-    str_day : str
-        Date string in format 'YYYYMMDD' for the day to process.
-        Use 'no_multithread' for single-threaded mode.
-    ini : dict
-        Configuration dictionary containing all processing parameters:
-
-        * files: Input/output paths and file patterns
-        * param: Processing parameters (QC thresholds, methods, etc.)
-        * run_param: Runtime parameters
-        * sonic: Sonic anemometer configuration
-        * irga: Gas analyzer configuration
-
-    log_filename : str
-        Path to the log file where processing messages will be written
-
-    Returns
-    -------
-    unique_days : list
-        List of successfully processed days
-
-    Notes
-    -----
-    The processing workflow includes:
-
-    1. Data loading and synchronization
-
-       * Sonic anemometer data
-       * Trace gas measurements
-       * Auxiliary meteorological data
-
-    2. Quality control
-
-       * Spike detection and removal
-       * Diagnostic value checking
-       * Missing data handling
-
-    3. Coordinate rotations
-
-       * Double rotation or
-       * Planar fit method
-
-    4. Time lag optimization
-
-       * Covariance maximization
-       * RH-dependent correction
-
-    5. Flux calculations
-
-       * Detrending options
-       * Webb-Pearman-Leuning terms
-
-    6. Quality assessment
-
-       * Stationarity tests
-       * Integral turbulence characteristics
-       * Spectral analysis
-
-    7. Uncertainty estimation
-
-       * Random error (Finkelstein & Sims)
-       * Detection limits
-
-    The function creates two types of output files:
-
-    1. Results file (HDF5)
-
-       * Fluxes and means
-       * Quality flags
-       * Processing parameters
-
-    2. Covariance file (HDF5, optional)
-
-       * Raw covariance functions
-       * Time lag information
-
-    Examples
-    --------
-    >>> # Process a single day
-    >>> ini = read_main_inputs('config.txt')
-    >>> log_file = 'processing.log'
-    >>> processed = GEddySoft_main('20240101', ini, log_file)
-    """
 
     # if multi-processing, mute the console and overwrite the file selection of the ini file
     if str_day != 'no_multithread':
@@ -767,9 +643,9 @@ def GEddySoft_main(str_day, ini, log_filename):
                         elif lag_samples < 0:
                             lag_abs = abs(lag_samples)
                             # Shift c_prime backward (to the left), remove end (wrapped)
-                            c_prime_trim = np.roll(c_prime, lag_samples)[:-lag_abs]
+                            c_prime_trim = np.roll(c_prime_trim, lag_samples)[:-lag_abs]
                             # Remove last lag_abs from w_prime to align
-                            w_prime_trim = w_prime[:-lag_abs]
+                            w_prime_trim = w_prime_trim[:-lag_abs]
 
                         # calculate spectrum for c and cospectrum for wc
                         [spec_c, spec_c_scaled, _] = cospectrum(ini, c_prime_trim, c_prime_trim, f, mean_wind_speed, spectrum_type='spec')
@@ -942,8 +818,8 @@ def GEddySoft_main(str_day, ini, log_filename):
                         c_Q5 = np.nanpercentile(tracerdata['conc'][:, i], 5)
                         c_Q95 = np.nanpercentile(tracerdata['conc'][:, i], 95)
                         c_acc = np.nanmean(abs(tracerdata['conc_acc'][:, i]/tracerdata['conc'][:, i]))
-                        c_prec = np.sqrt(np.nansum(tracerdata['conc_prec'][:, i]**2) / np.count_nonzero(~np.isnan(tracerdata['conc_prec'][:, i])))
-                        c_LOD = 3*np.sqrt(np.nansum(tracerdata['zero_prec'][:, i]**2) / np.count_nonzero(~np.isnan(tracerdata['zero_prec'][:, i])))
+                        c_prec = np.sqrt(np.nansum(tracerdata['conc_prec'][:, i]**2)) / np.count_nonzero(~np.isnan(tracerdata['conc_prec'][:, i]))
+                        c_LOD = 3*np.sqrt(np.nansum(tracerdata['zero_prec'][:, i]**2)) / np.count_nonzero(~np.isnan(tracerdata['zero_prec'][:, i]))
 
                         # detect spikes (and remove if requested)
                         if ini['param']['SPIKE_MODE'] != 0:
@@ -983,6 +859,40 @@ def GEddySoft_main(str_day, ini, log_filename):
                         w_prime_trim = w_prime[first:last + 1]; c_prime_trim = c_prime[first:last + 1]
                         first, last = np.argmax(~np.isnan(c_prime_trim)), len(c_prime_trim) - np.argmax(~np.isnan(c_prime_trim)[::-1]) - 1
                         w_prime_trim = w_prime_trim[first:last + 1]; c_prime_trim = c_prime_trim[first:last + 1]
+
+                        # # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        
+                        # print('************** TEST FOR DEAD_TIME_AFTER_ZERO ACTIVATED **************')
+
+                        # # additionnal trimming for memory-effects on concentrations (TEST !)
+                        # deadtime = {
+                        #     "mz": [
+                        #         43.0178, 45.0335, 47.0128, 59.0491, 61.0284, 67.0542, 71.0491, 75.0441,
+                        #         83.0491, 85.0648, 87.0441, 89.0597, 93.0699, 97.0648, 99.0441, 99.0804,
+                        #         101.0597, 107.0855, 115.0754, 123.1168, 135.1168, 139.1117, 143.1067,
+                        #         151.1117, 153.1274, 155.1067, 157.1223, 167.1076, 169.1223
+                        #     ],
+                        #     "m/z dead time [s]": [
+                        #         491.7195134, 257.2213977, 86.10164751, 303.7559486, 363.5862932, 51.03549943,
+                        #         431.140758, 143.1412389, 105.2041005, 96.54187644, 197.1796212, 42.67194911,
+                        #         113.2686836, 173.3457642, 231.1074991, 43.70769377, 152.5939712, 534.3018095,
+                        #         147.1335773, 14.31914612, 136.9899078, 311.4728698, 103.1485489, 670.3591186,
+                        #         279.3083243, 242.8456704, 97.59966712, 315.495576, 276.2325163
+                        #     ]
+                        # }
+                        # deadtime = pd.DataFrame(deadtime)
+
+                        # # Find the closest match within a tolerance of 0.001
+                        # match = deadtime[abs(deadtime['mz'] - round(float(tracerdata['mz'][i]), 3)) < 0.001].astype(int)
+                        
+                        # # Check how many matches were found
+                        # if len(match) > 1:
+                        #     raise ValueError(f"Multiple matches found for m/z = {round(float(tracerdata['mz'][i]), 3)}")
+                        # elif len(match) == 1:
+                        #     closest_dead_time = match.iloc[0]['m/z dead time [s]']
+                        #     w_prime_trim = w_prime_trim[closest_dead_time*10:]; c_prime_trim = c_prime_trim[closest_dead_time*10:]
+
+                        # # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
                         # calculate cross-covariance over a given lag-window
                         cov_wc = xcov(w_prime_trim, c_prime_trim, [lag_phys_wd_center + lag_clock_drift_samples - ini['param']['LAG_OUTER_WINDOW_SIZE'], lag_phys_wd_center + lag_clock_drift_samples + ini['param']['LAG_OUTER_WINDOW_SIZE']])
