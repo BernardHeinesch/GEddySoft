@@ -5,6 +5,10 @@ Project to compute turbulent fluxes for IRGA or PTR-TOF-MS
 ## Name
 GEddySoft (Gembloux Eddy-covariance Software)
 
+## Documentation status
+The HTML documentation is available online via GitHub Pages:
+https://bernardheinesch.github.io/GEddySoft/
+
 ## Description
 Initially inspired by InnFLUX, which is an an eddy covariance software package developed
 at the University of Innsbruck, Austria by Marcus Striednig et al.
