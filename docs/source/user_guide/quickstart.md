@@ -4,7 +4,7 @@ Get started with GEddySoft in a few simple steps.
 
 ## Basic Usage
 
-1. Set up your input files according to the expected format (see Input Files section)
+1. Set up your input files according to the expected format, or use example data
 
 2. Configure the INI file with your processing parameters (see Configuration section)
 
