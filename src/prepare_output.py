@@ -69,7 +69,8 @@ def prepare_output(ini, out_len, hdf5_nb_tracers=False, hdf5_mz_tracer=False, re
             'MAX_CONSEC_SPIKES': ini['param']['MAX_CONSEC_SPIKES'],                   # maximum number of consecutive outliers that can be considered as spikes
             'MEAS_ID': ini['param']['MEAS_ID'],                                       # measurement ID
 
-            'LPFC': ini['param']['LPFC']                                              # low-pass filtering correction on fluxes (0 = no correction, 1 = cut-off frequency + Massman as reference co-spectra, 2 = wind-speed dependent correction factor)
+            'LPFC': ini['param']['LPFC'],                                              # low-pass filtering correction on fluxes (0 = no correction, 1 = cut-off frequency + Massman as reference co-spectra, 2 = wind-speed dependent correction factor)
+            'MEAS_ID': ini['param']['MEAS_ID']                                         # desired UTC offset for output timestamp (integer value)
 
             }
 

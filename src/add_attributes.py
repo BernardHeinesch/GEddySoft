@@ -1,89 +1,36 @@
-"""Module for adding standardized metadata to GEddySoft HDF5 output files.
-
-This module handles the addition of descriptive attributes to HDF5 datasets
-produced by GEddySoft eddy covariance processing. It ensures that all output
-files have consistent and well-documented metadata including:
-
-- Variable descriptions
-- Physical units
-- Quality control flags
-- Processing parameters
-- Instrument-specific metadata
-
-The metadata follows community standards and best practices for eddy
-covariance data, making the outputs compatible with standard analysis
-tools and workflows.
-
-Author
-------
-B. Heinesch
-University of Liege, Gembloux Agro-Bio Tech
-"""
-
 import h5py
 
 
-def add_attributes(filepath, filename, process_irga_data_day, n_irga, process_tracer_data_day=False, tracerdata=False):
-    """Add standardized metadata attributes to HDF5 output files.
+def add_attributes(filepath, filename, process_irga_data_day, n_irga, UTC_OFFSET, process_tracer_data_day=False, tracerdata=False):
+    """
+    add attributes "name" and "units" to the hdf5 results output file
 
-    This function adds descriptive attributes to each dataset in the HDF5
-    output file, including variable descriptions and physical units. It
-    handles metadata for different data types:
-
-    - Basic file information (creation time, frequencies)
-    - Meteorological variables (wind, temperature, pressure)
-    - IRGA measurements (if present)
-    - Tracer measurements (if present)
-    - Quality control metrics
-    - Processing parameters
-
-    Parameters
+    parameters
     ----------
-    filepath : str
-        Directory path containing the HDF5 output file
-    filename : str
-        Name of the HDF5 output file
-    process_irga_data_day : bool
-        Flag indicating whether IRGA data was processed
-    n_irga : int
-        Number of concentration variables from IRGA
-    process_tracer_data_day : bool, optional
-        Flag indicating whether tracer data was processed
-    tracerdata : bool or dict, optional
-        If dict, contains tracer-specific metadata
-
-    Returns
+    filepath: hdf5 results output directory, string
+    filename: hdf5 results output file name, string
+    process_irga_data_day: flag for irga presence, boolean
+    n_irga: number of concentration variables for irga, int
+    UTC_OFFSET: UTC_OFFSET that has been applied to output time, int 
+    process_tracer_data_day: flag for tracer presence, boolean
+    tracerdata:
+    
+    returns
     -------
     None
-        Function modifies the HDF5 file in place
 
-    Notes
-    -----
-    The function adds two key attributes to each dataset:
-    - 'description': Human-readable description of the variable
-    - 'units': Physical units in standard notation
-
-    For quality control flags, additional metadata about test
-    thresholds and criteria is included.
-
-    The metadata structure follows the hierarchy:
-    - Root level: Basic file information
-    - /MET: Meteorological measurements
-    - /IRGA: Gas analyzer data (if present)
-    - /TRACER: Tracer measurements (if present)
-
-    See Also
+    comments
     --------
-    h5py.File : HDF5 file handling in Python
+    Written by B. Heinesch.
+    University of Liege, Gembloux Agro-Bio Tech.
     """
-
 
     with h5py.File(filepath + '\\' + filename, 'r+') as hdf5_f:
 
         hdf5_f['file_creation_time'].attrs['description'] = 'file_creation_time'; hdf5_f['file_creation_time'].attrs['units'] = 'local computer time'
         hdf5_f['freq'].attrs['description'] = 'frequency axis of co-spectra'; hdf5_f['freq'].attrs['units'] = 's-1'
         hdf5_f['param'].attrs['description'] = 'input parameters'; hdf5_f['param'].attrs['units'] = '-'
-        hdf5_f['time'].attrs['description'] = 'timestamp of the end of each averaging interval'; hdf5_f['time'].attrs['units'] = 'yyyy-mm-dd hh-mm-ss'
+        hdf5_f['time'].attrs['description'] = f'timestamp of the end of each averaging interval (UTC{"+"+str(UTC_OFFSET) if UTC_OFFSET >= 0 else str(UTC_OFFSET)}:00{"h"})'; hdf5_f['time'].attrs['units'] = 'yyyy-mm-dd hh-mm-ss'
 
         hdf5_f['MET']['L'].attrs['description'] = 'Obukhov length'; hdf5_f['MET']['L'].attrs['units'] = 'm'
         hdf5_f['MET']['T'].attrs['description'] = 'temperature'; hdf5_f['MET']['T'].attrs['units'] = 'K'

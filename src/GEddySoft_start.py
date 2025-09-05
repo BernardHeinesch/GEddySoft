@@ -1,28 +1,7 @@
-"""Main entry point for running GEddySoft eddy covariance processing software.
-
-This module serves as the primary entry point for GEddySoft, handling:
-
-1. Configuration loading from INI files
-2. Input file discovery and mapping
-3. Processing mode selection:
-   - Single-process mode for testing/debugging
-   - Multi-process mode for production runs (one process per day)
-4. Execution monitoring and logging
-5. Error handling and automatic retry for failed days
-
-The module implements a robust parallel processing strategy with:
-- Automatic CPU core detection
-- stdout redirection for clean logging
-- Progress tracking and reporting
-- Automatic retry of failed processing days
-
-Typical usage:
-    python GEddySoft_start.py
-
-Author
-------
-B. Heinesch
-University of Liege, Gembloux Agro-Bio Tech
+"""
+Starting routine to run GEddySoft.
+Reads the ini file and allows to run the code either in non-multiprocess mode
+or in multi-process mode (one process per day of input data)
 """
 
 import multiprocessing as mp
@@ -38,36 +17,6 @@ from map_sonic2tracer import map_sonic2tracer
 
 # %% parallel processing routine
 def run_pool(days_to_process, log_filename):
-    """Execute parallel processing of multiple days using a multiprocessing pool.
-
-    This function manages a pool of worker processes to handle eddy covariance
-    data processing for multiple days simultaneously. It includes robust error
-    handling and logging capabilities.
-
-    Parameters
-    ----------
-    days_to_process : list of str
-        List of days to process in YYYY_MM_DD format
-    log_filename : str
-        Path to the log file for recording processing status and errors
-
-    Notes
-    -----
-    The function implements several key features:
-    1. Stdout redirection to prevent cluttered output
-    2. Exception handling with proper resource cleanup
-    3. Automatic process pool management
-    4. Logging of both successful and failed processing
-
-    Global Variables
-    ---------------
-    cpu : int
-        Number of CPU cores to use (set in __main__)
-    ini : dict
-        Configuration parameters (set in __main__)
-    OF : file object
-        Open log file handle (set in __main__)
-    """
     with mp.Pool(cpu) as pool:
         try:
             # Save original stdout before redirecting
@@ -96,7 +45,7 @@ if __name__ == '__main__':
     # -------------------------------------------------------------------------------------------------------
     # user choices
     # ini_filename = 'D:\OneDrive - Universite de Liege\Documents\Science\Programmation\Projets Python\GEddySoft\GEddySoft_v4.0\input\metadata\GEddySoft_parameters_IRGA.ini'
-    ini_filename = '..\examples\metadata\GEddySoft_parameters_IRGA.ini'
+    ini_filename = r'D:\OneDrive - Universite de Liege\Documents\Science\Programmation\Projets Python\GEddySoft\backup versions\GEddySoft_v4.0.2\input\metadata\GEddySoft_parameters_VOC_top.ini'
     # -------------------------------------------------------------------------------------------------------
 
     # store current time

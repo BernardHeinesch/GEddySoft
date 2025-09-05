@@ -13,10 +13,8 @@ from reformat_date import reformat_date
 def read_tracer_file(hdf5_f, ini, idx_tracers_to_process):
     tracerdata = {}
 
-    # convert to datetime format and localize in UTC+1 time zone, then convert to UNIX
-    tracerdata['time'] = np.squeeze(hdf5obj_2_nparray(hdf5_f[ini['tracer']['time_column']], 'f8'))
-    tracerdata['time'] = pd.to_datetime(tracerdata['time'], utc=True).tz_convert(datetime.timezone(datetime.timedelta(hours=1)))
-    tracerdata['time'] = tracerdata['time'].astype('int64') / 10**9  # from datetime to s
+    # convert from UNIX time format in nanoseconds to UNIX in seconds
+    tracerdata['time'] = pd.Index(np.squeeze(hdf5obj_2_nparray(hdf5_f[ini['tracer']['time_column']], 'f8')) / 1e9)
 
     tracerdata['mz'] = np.squeeze(hdf5obj_2_nparray(hdf5_f[ini['tracer']['detected_masses_column']][idx_tracers_to_process], 'f8'))
     tracerdata['calibration'] = np.squeeze(hdf5obj_2_nparray(hdf5_f[ini['tracer']['calibration_column']][idx_tracers_to_process], 'f8'))
@@ -76,6 +74,47 @@ def read_main_inputs(filepath, filename, filetype, ini, OF, idx_tracers_to_proce
 
     Comments
     --------
+    input file formats:
+        
+    wind sonic data format (hdf5) is 
+        col 0: timestamp (UNIX format, in nanoseconds)
+        col 1: U wind component (m s-1)
+        col 2: V wind component (m s-1)
+        col 3: W wind component (m s-1)
+        col 4: sonic temperature (deg C)
+        col 5: status adress (see HS50 manual)
+        col 6: status data (see HS50 manual)
+        col 5: error (see HS50 manual)
+
+    GHG data format is the eddypro™ output
+    
+    tracer data format (hdf5) is (see field attributes in the file for more info)
+        - Time-series datasets:
+            * time: Unix timestamp array [UTC]
+            * Signal: concentration data
+            * concentration_accuracy, concentration_precision: Data quality metrics
+            * Signal_primaryIons, Signal_primaryIons_prec: Primary ion measurements
+            * zero, zero_precision: Zero calibration data
+            
+        - Calibration/Configuration datasets:
+            * mz: Mass-to-charge ratios
+            * calibration: Calibration coefficients
+            * k_reac: Reaction rate coefficients
+            * transmission: Transmission factors
+            * FY, IF: Fragmentation/Ion data
+            * cluster_min, cluster_max: Cluster bounds
+            * Xr0: Reference mixing ratios
+            * MeasurementsTimeInterval: Time intervals
+        
+        - Key attributes:
+            * PAP processing version
+            * Timezone info for filename (UTC+01:00)
+            * Configuration parameters for:
+                - Zero calibration intervals
+                - Processing intervals
+                - Calibration settings
+                - Data averaging periods
+
     Written by B. Heinesch.
     University of Liege, Gembloux Agro-Bio Tech.
     """
@@ -94,6 +133,7 @@ def read_main_inputs(filepath, filename, filetype, ini, OF, idx_tracers_to_proce
                 _, sonicdata, _, _ = read_GHG(filepath + '\\' + filename, 'ghg', filepath + r'\unzipped_GHG')
                 sonicdata = sonicdata.to_numpy()
                 sonicdata = sonicdata[:, ini['sonic']['sonic_columns'] + ini['irga']['irga_columns']]
+                # convert from UNIX time format in nanoseconds to UNIX in seconds
                 sonicdata[:, 0] += sonicdata[:, 1] / 1e9
                 sonicdata = np.delete(sonicdata, 1, axis=1)
             else:

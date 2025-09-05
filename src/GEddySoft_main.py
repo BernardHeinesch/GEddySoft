@@ -9,6 +9,8 @@
 import numpy as np
 import pandas as pd
 import datetime
+from tzlocal import get_localzone
+import pytz
 import os
 import sys
 import scipy.signal
@@ -186,7 +188,12 @@ def GEddySoft_main(str_day, ini, log_filename):
             # +3600 : to convert to UTC +1
             first_ts = round(sonicdata[0, 0])
             last_ts = round(next((i for i in reversed(sonicdata[:, 0]) if i != 0), None))
-            results['time'][n] = datetime.datetime.utcfromtimestamp(last_ts + 3600)
+
+            # Convert Unix timestamp to datetime with given offset
+            tz = datetime.timezone(datetime.timedelta(hours=ini['param']['UTC_OFFSET']), name=f"UTC{'+' if ini['param']['UTC_OFFSET'] >= 0 else ''}{ini['param']['UTC_OFFSET']:+d}:00")
+            results['time'][n] = datetime.datetime.fromtimestamp(last_ts, tz)
+            # # Convert Unix timestamp to datetime with given offset
+            # results['time'][n] = datetime.datetime.fromtimestamp(last_ts, datetime.timezone(datetime.timedelta(hours=ini['param']['UTC_OFFSET'])))
 
             # remove sonicdata trailing zeros (the file is initially oversized and filled with zero values)
             sonicdata = sonicdata[:len(sonicdata[sonicdata[:, 0] != 0, :]), :]
@@ -376,20 +383,20 @@ def GEddySoft_main(str_day, ini, log_filename):
 
             # get mean atmospheric pressure
             if ini['files']['meteo_filepath'] and ini['meteo']['pressure_column']:
-                p_mean = get_closest_value(df_meteofiledata.iloc[:, ini['meteo']['pressure_column']-1], results['time'][n])
+                p_mean = get_closest_value(df_meteofiledata.iloc[:, ini['meteo']['pressure_column']-1], results['time'][n].replace(tzinfo=None))
             else:
                 p_mean = ini['param']['DEFAULT_PRESSURE']
 
             # get mean air temperature (in K, only for improved computation of air molar concentration)
             T_meteo = np.NaN
             if ini['files']['meteo_filepath'] and ini['meteo']['temperature_column']:
-                T_meteo = get_closest_value(df_meteofiledata.iloc[:, ini['meteo']['temperature_column']-1], results['time'][n]) + 273.15
+                T_meteo = get_closest_value(df_meteofiledata.iloc[:, ini['meteo']['temperature_column']-1], results['time'][n].replace(tzinfo=None)) + 273.15
             else:
                 T_meteo = np.NaN
 
             # get mean air relative humidity (in %, for lag-RH dependency, if any)
             if ini['files']['meteo_filepath'] and ini['meteo']['relative_humidity_column']:
-                rh_meteo = get_closest_value(df_meteofiledata.iloc[:, ini['meteo']['relative_humidity_column']-1], results['time'][n])
+                rh_meteo = get_closest_value(df_meteofiledata.iloc[:, ini['meteo']['relative_humidity_column']-1], results['time'][n].replace(tzinfo=None))
             else:
                 rh_meteo = np.NaN
 
@@ -738,7 +745,7 @@ def GEddySoft_main(str_day, ini, log_filename):
                     # get clock-drift time lag drift if input file provided
                     if ini['files']['lag_clock_drift_filepath']:
                         # time lag drift info are present and must be accounted for
-                        lag_clock_drift_samples = int(-df_lag_clock_drift['TDC-computer'][abs(df_lag_clock_drift.index - results['time'][n]).argmin()] * ini['param']['SAMPLING_RATE_FINAL'])  # find closest time lag based on timestamp
+                        lag_clock_drift_samples = int(-df_lag_clock_drift['TDC-computer'][abs(df_lag_clock_drift.index - results['time'][n].replace(tzinfo=None)).argmin()] * ini['param']['SAMPLING_RATE_FINAL'])  # find closest time lag based on timestamp
 
                     # get prescribed time lag (instrumental + physical) if input file provided
                     if ini['param']['LAG_DETECT_METHOD'] == 'PRESCRIBED':
@@ -1032,8 +1039,8 @@ def GEddySoft_main(str_day, ini, log_filename):
 
         # add attributes "name" and "units"
         if  'TRACER' in results:  # TRACER part has been created in the result dict (tracer data for that day)
-            add_attributes(ini['files']['output_folder'], res_filename, process_irga_data_day, len(ini['irga']['irga_columns']), True, tracerdata)
+            add_attributes(ini['files']['output_folder'], res_filename, process_irga_data_day, len(ini['irga']['irga_columns']), ini['param']['UTC_OFFSET'], True, tracerdata)
         else:
-            add_attributes(ini['files']['output_folder'], res_filename, process_irga_data_day, len(ini['irga']['irga_columns']))
+            add_attributes(ini['files']['output_folder'], res_filename, process_irga_data_day, len(ini['irga']['irga_columns']), ini['param']['UTC_OFFSET'])
 
     return unique_days

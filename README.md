@@ -5,10 +5,6 @@ Project to compute turbulent fluxes for IRGA or PTR-TOF-MS
 ## Name
 GEddySoft (Gembloux Eddy-covariance Software)
 
-## Documentation status
-The HTML documentation is available online via GitHub Pages:
-https://bernardheinesch.github.io/GEddySoft/
-
 ## Description
 Initially inspired by InnFLUX, which is an an eddy covariance software package developed
 at the University of Innsbruck, Austria by Marcus Striednig et al.
@@ -145,3 +141,11 @@ Once the user wants to contribute to the main branch, please create a merge requ
     -----------------
     Corrected mistakes:
     - 16 August 2025: correction on conc_prec and conc_LOD computation. Division by number of samples must be out of the sqrt.
+
+    v4.0.2 2025-08-29
+    -----------------
+    - Added configurable UTC offset through UTC_OFFSET parameter in ini settings
+    - Simplifications brought to date handling in read_main_inputs
+    Corrected mistakes:
+    - w_prime_trim was used instead of w_prime in the IRGA part when implementing time-series wrapping after rolling. Idem for c_prime_trim.
+
