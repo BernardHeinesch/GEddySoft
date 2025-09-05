@@ -105,7 +105,7 @@ To verify the installation:
 
 If you encounter any issues during installation:
 
-1. Ensure you have Python 3.11.7 or higher
+1. Ensure you have Python 3.7 or higher
 2. Check that all required dependencies are installed
 3. Verify your system meets the minimum requirements
 4. Contact the maintainer if problems persist

@@ -1,13 +1,27 @@
 # Version History
 
+## v4.0.2 (2025-08-16)
+
+### Improvements
+- Added configurable UTC offset through UTC_OFFSET parameter in ini settings
+- Simplifications brought to date handling in read_main_inputs
+
+### Corrected Mistakes
+- w_prime_trim was used instead of w_prime in the IRGA part when implementing time-series wrapping after rolling. Idem for c_prime_trim.
+
+## v4.0.1 (2025-08-16)
+
+### Corrected Mistakes
+- correction on conc_prec and conc_LOD computation. Division by number of samples is now out of the sqrt
+
 ## v4.0 (2025-06-27)
 
 ### Corrected Mistakes
-- June 27, 2025: Correction of the error introduced in v3.1 when implementing time-series wrapping after rolling
-- June 28, 2025: Correction for RH dependent lag - fixed string-type search of mz with 0.001 tolerance for matching
+- Correction of the error introduced in v3.1 when implementing time-series wrapping after rolling
+- Correction for RH dependent lag - fixed string-type search of mz with 0.001 tolerance for matching
 
 ### Improvements
-- June 29, 2025: Improved get_closest_index to search in windows of increasing size for missing/nan/empty values
+- Improved get_closest_index to search in windows of increasing size for missing/nan/empty values
 
 ## v3.1 (2025-05-16)
 
