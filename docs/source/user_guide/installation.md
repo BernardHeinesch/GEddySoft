@@ -59,7 +59,7 @@ Python's built-in `venv` module is a lighter alternative if you prefer not to in
 
 ## Installation Steps
 
-Once you have set up and activated your Python environment:
+Once you have set up and activated your Python environment (see Environment Setup above):
 
 1. Clone the repository:
    ```bash
@@ -67,18 +67,18 @@ Once you have set up and activated your Python environment:
    cd GEddySoft
    ```
 
-2. Create and activate a virtual environment (recommended):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. Install required packages:
+2. Install required packages:
    ```bash
    pip install -r requirements.txt
    ```
+   Watch the console output during installation to ensure there are no error messages.
 
-4. Install GEddySoft in development mode:
+3. Install GEddySoft:
+   ```bash
+   pip install .
+   ```
+
+   Note: For developers who plan to modify the source code, use the development mode instead:
    ```bash
    pip install -e .
    ```
@@ -89,16 +89,7 @@ To verify the installation:
 
 1. Check Python version:
    ```bash
-   python --version  # Should be 3.11.7 or higher
-   ```
-
-2. Try importing key dependencies:
-   ```python
-   import numpy
-   import pandas
-   import h5py
-   import hdfdict
-   import diptest
+   python --version  # Should be 3.7 or higher
    ```
 
 ## Troubleshooting

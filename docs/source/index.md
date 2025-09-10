@@ -2,7 +2,7 @@
 
 GEddySoft (**G**embloux **Eddy**-covariance **Soft**ware) is a Python package for computing turbulent fluxes from IRGA or PTR-TOF-MS measurements.
 
-The package is provided with an example dataset (see the Quick Start and Example Dataset sections). These example files are high-frequency eddy covariance measurements that can be used to test and validate the software's functionality.
+The package is provided with an example dataset (see the 'Quick Start' and 'Example Dataset' sections). These example files are high-frequency eddy covariance measurements that can be used to test and validate the software's functionality.
 
 Initially inspired by InnFLUX (a MATLAB-based eddy covariance software from the University of Innsbruck, v1.1.0 2021-02-23, https://git.uibk.ac.at/acinn/apc/innflux), GEddySoft began as a Python translation of the original code and has since been enhanced with:
 - more flexible input file content handling
