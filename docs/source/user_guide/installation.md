@@ -13,6 +13,9 @@ All core dependencies are listed in requirements.txt and will be automatically i
 - h5py: For HDF5 file operations
 - hdfdict: For HDF5 dictionary operations
 - diptest: For statistical tests
+- statsmodels: For advanced statistical analysis
+- multiprocess: For parallel processing operations
+- tzlocal: For timezone handling
 
 ### Documentation Dependencies
 These are only needed if you want to build the documentation locally:

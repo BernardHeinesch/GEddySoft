@@ -18,6 +18,6 @@ You can test GEddySoft processing capabilities using:
    - Typical running time: 14 minutes (on a i7 processor, without the multiprocessing option activated in the ini)
 
 2. **CO2/H2O Flux Processing**
-   - Use the configuration file: `GEddySoft_parameters_IRGA`
+   - Use the configuration file: `GEddySoft_parameters_IRGA.ini`
    - This will process the SmartFlux GHG data (`*_OTV.ghg`) for CO2 and H2O flux calculations
    - Typical running time: 9 minutes (on a i7 processor, without the multiprocessing option activated in the ini)
