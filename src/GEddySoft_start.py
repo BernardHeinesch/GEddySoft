@@ -44,8 +44,7 @@ if __name__ == '__main__':
 
     # -------------------------------------------------------------------------------------------------------
     # user choices
-    # ini_filename = 'D:\OneDrive - Universite de Liege\Documents\Science\Programmation\Projets Python\GEddySoft\GEddySoft_v4.0\input\metadata\GEddySoft_parameters_IRGA.ini'
-    ini_filename = r'D:\OneDrive - Universite de Liege\Documents\Science\Programmation\Projets Python\GEddySoft\backup versions\GEddySoft_v4.0.2\input\metadata\GEddySoft_parameters_VOC_top.ini'
+    ini_filename = r'..\examples\metadata\GEddySoft_parameters_VOC_top.ini'
     # -------------------------------------------------------------------------------------------------------
 
     # store current time
@@ -78,7 +77,7 @@ if __name__ == '__main__':
         all_sonic_files_list, all_tracer_files_list = get_list_input_files(ini)
 
         # map sonic file list to tracer file list if asked for
-        if ini['run_param']['MAP_SONIC2TRACER']:
+        if ini['run_param']['MAP_SONIC2TRACER'] and ini['run_param']['CONCENTRATION_TYPE']:
             all_sonic_files_list = map_sonic2tracer(all_sonic_files_list, all_tracer_files_list)
             print('sonic files mapped to tracer files\n')
 
@@ -87,6 +86,8 @@ if __name__ == '__main__':
         # get uniques yyyy_mm_dd in the sonic file list
         unique_days = list(set(list(map(lambda x: x[len(ini['files']['sonic_files_prefix']):len(ini['files']['sonic_files_prefix']) + 10], all_sonic_files_list['name']))))
         unique_days.sort()
+
+        unique_days = [date.replace('-', '_') for date in unique_days]
 
         cpu = mp.cpu_count()
         print('running in multithread mode with ' + str(cpu) + ' CPUs... (console muted)\n')
@@ -136,7 +137,7 @@ if __name__ == '__main__':
 
         # run in normal mode
         GEddySoft_main('no_multithread', ini, log_filename)
-
+        
     # display time needed
     proc_end_time = datetime.datetime.now()
     print('finished at ' + proc_end_time.strftime("%d/%m/%Y %H:%M:%S"))

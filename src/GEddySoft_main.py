@@ -84,8 +84,6 @@ def GEddySoft_main(str_day, ini, log_filename):
     if ini['param']['LAG_RH_DEPENDENCY'] == 1:
         df_lag_rh_dependency = read_metadata_files(ini['files']['lag_rh_dependency_filepath'], OF, rh_lag=True)
 
-
-
     if ini['param']['LPFC'] != 0:
         df_lpfc = read_metadata_files(ini['files']['lpfc_filepath'], OF, lpfc=ini['param']['LPFC'])
 
@@ -100,7 +98,7 @@ def GEddySoft_main(str_day, ini, log_filename):
         os.makedirs(cov_folder)
         print(f"Created missing folder: {cov_folder}\n"); OF.write(f"Created missing folder: {cov_folder}\n\n")
     
-    # get list of sonic and tracer input files (in the given dir for sonic and also in subdir for tracer)
+    # get list of sonic and tracer input files (in the given folder for sonic and also in sub-folders for tracer)
     all_sonic_files_list, all_tracer_files_list = get_list_input_files(ini)
 
     # map sonic file list to tracer file list if asked for
@@ -111,7 +109,7 @@ def GEddySoft_main(str_day, ini, log_filename):
     print('*************** processing data ***************' + '\n')
     OF.write('*************** processing data ***************' + '\n' + '\n')
 
-    # get uniques yyyy_mm_dd in the sonic file list
+    # get unique yyyy_mm_dd values from the sonic file list
     unique_days = list(set(list(map(lambda x: x[len(ini['files']['sonic_files_prefix']):len(ini['files']['sonic_files_prefix']) + 10], all_sonic_files_list['name']))))
     unique_days.sort()
 
@@ -650,9 +648,9 @@ def GEddySoft_main(str_day, ini, log_filename):
                         elif lag_samples < 0:
                             lag_abs = abs(lag_samples)
                             # Shift c_prime backward (to the left), remove end (wrapped)
-                            c_prime_trim = np.roll(c_prime_trim, lag_samples)[:-lag_abs]
+                            c_prime_trim = np.roll(c_prime, lag_samples)[:-lag_abs]
                             # Remove last lag_abs from w_prime to align
-                            w_prime_trim = w_prime_trim[:-lag_abs]
+                            w_prime_trim = w_prime[:-lag_abs]
 
                         # calculate spectrum for c and cospectrum for wc
                         [spec_c, spec_c_scaled, _] = cospectrum(ini, c_prime_trim, c_prime_trim, f, mean_wind_speed, spectrum_type='spec')
