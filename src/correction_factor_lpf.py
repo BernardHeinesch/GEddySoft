@@ -1,32 +1,3 @@
-"""Module for computing low-pass filtering correction factors in eddy covariance.
-
-This module provides functions to calculate correction factors for high-frequency
-losses in eddy covariance measurements. It implements two methods:
-
-1. Theoretical approach using Massman (2004) cospectra and a transfer function
-   based on a half-power cutoff frequency.
-2. Empirical approach using pre-calculated correction factors as a function of
-   wind speed and atmospheric stability.
-
-References
-----------
-.. [1] Massman, W. J. (2004). Concerning the measurement of atmospheric trace
-       gas fluxes with open- and closed-path eddy covariance systems: The WPL
-       terms and spectral attenuation. In Handbook of Micrometeorology (pp. 133-160).
-.. [2] Peltola, O., et al. (2021). Insights into updating algorithms for spectral
-       corrections in eddy covariance flux measurements. Atmospheric Measurement
-       Techniques, 14(8), 5071-5088.
-
-Author
-------
-B. Heinesch
-University of Liege, Gembloux Agro-Bio Tech
-
-Created
--------
-2025-02-20
-"""
-
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.integrate import trapz
@@ -36,46 +7,23 @@ from scipy.integrate import trapz
 
 def theor_cospectra_massman(zoL, nf, kf, a0_st, kf0_st, mu_st,
                             a0_un, kf0_un, mu_un):
-    """Calculate reference cospectra using the Massman model.
+    """
+    Calculate reference cospectra using the Massman model.
+    Based on Massman et al. Handbook of Meteorology, 2004, Eq 4.2.
 
-    This function implements the Massman (2004) model for scalar flux cospectra.
-    The model uses different parameters for stable and unstable conditions to
-    account for the effects of atmospheric stability on turbulent transport.
+    Args:
+        zoL (float): Stability parameter (-)
+        nf (ndarray): Natural frequency array (Hz)
+        kf (ndarray): Normalized frequency array (-)
+        a0_st (float): Stability correction parameter
+        kf0_st (float): Frequency correction parameter for stable conditions
+        mu_st (float): Correction factor for stable conditions
+        a0_un (float): Unstable correction parameter
+        kf0_un (float): Frequency correction parameter for unstable conditions
+        mu_un (float): Correction factor for unstable conditions
 
-    Parameters
-    ----------
-    zoL : float
-        Stability parameter (z-d)/L, where z is measurement height,
-        d is displacement height, and L is Obukhov length [-]
-    nf : ndarray
-        Natural frequency array [Hz]
-    kf : ndarray
-        Normalized frequency array, f*(z-d)/U, where U is wind speed [-]
-    a0_st : float
-        Amplitude parameter for stable conditions [-]
-    kf0_st : float
-        Peak frequency parameter for stable conditions [-]
-    mu_st : float
-        Shape parameter for stable conditions [-]
-    a0_un : float
-        Amplitude parameter for unstable conditions [-]
-    kf0_un : float
-        Peak frequency parameter for unstable conditions [-]
-    mu_un : float
-        Shape parameter for unstable conditions [-]
-
-    Returns
-    -------
-    ndarray
-        Normalized cospectrum values for each input frequency
-
-    Notes
-    -----
-    The model follows Eq. 4.2 from Massman (2004) with the form:
-    Co(f) = a0 * (kf/kf0) / (1 + (kf/kf0)^(2μ))^(7/6μ) / f
-
-    Different parameters are used for stable (zoL > 0) and unstable
-    (zoL ≤ 0) conditions to better match observed cospectra.
+    Returns:
+        ndarray: Calculated normalised cospectrum
     """
     # Initialize cospectra array
     cosp = np.zeros_like(nf)
@@ -93,69 +41,25 @@ def theor_cospectra_massman(zoL, nf, kf, a0_st, kf0_st, mu_st,
 
 
 def correction_factor_lpf(u, zoL, ini, df_lpfc=False, ctrplot=0):
-    """Calculate correction factors for high-frequency flux losses.
+    """
+    Computes high-frequency loss correction factor based either on
+    - a half-power cut-off frequency and the Massman modeled cospectrum (ini['param']['LPFC']=1)
+    - a correction factor vs wind speed relation per stability class (ini['param']['LPFC']=2)
 
-    This function implements two methods to correct for high-frequency losses
-    in eddy covariance measurements:
-
-    1. Theoretical approach (ini['param']['LPFC']=1):
-       Uses Massman model cospectra and a transfer function based on
-       half-power cutoff frequency.
-
-    2. Empirical approach (ini['param']['LPFC']=2):
-       Uses pre-calculated correction factors based on wind speed
-       and atmospheric stability class.
-
-    Parameters
+    parameters
     ----------
-    u : array_like
-        Wind speed [m s⁻¹]
-    zoL : array_like
-        Stability parameter (z-d)/L [-]
-    ini : dict
-        Configuration dictionary containing:
-        - param.LPFC : int
-            Method selection (1 or 2)
-        - param.SAMPLING_RATE_TRACER : float
-            Sampling frequency [Hz]
-        - param.SENSOR_HEIGHT : float
-            Measurement height [m]
-    df_lpfc : pandas.DataFrame, optional
-        Lookup table for correction factors containing columns:
-        - stability_class : str
-            'stable', 'unstable', or 'all'
-        - name : str
-            Parameter name ('cof', 'A0', 'kf0', 'mu')
-        - value : float
-            Parameter value
-        - ws_max : float
-            Maximum wind speed for empirical method
-        - CF_L : float
-            Correction factor for empirical method
-    ctrplot : bool, optional
-        If True, generate diagnostic plots for method 1
+    u: numpy arr of float, wind speed [s-1]
+    zoL: numpy arr of float, stability parameter [-]
+    ini: dict, the ini file content
+    df_lpfc: dataframe, correction factor vs windspeed array
+    ctrplot (bool): If True, generate plots for the method 1 (COF + Massman)
 
-    Returns
+    returns
     -------
-    float or array_like
-        Correction factor(s) for low-pass filtering losses
+    cf_lpf: numpy arr of float, correction factor for low-pass filtering
 
-    Notes
-    -----
-    For method 1, the correction factor is calculated as:
-    CF = ∫(Co(f)df) / ∫(TF(f)·Co(f)df)
-    where Co(f) is the Massman model cospectrum and TF(f) is
-    a Lorentzian transfer function.
-
-    For method 2, the correction factor is interpolated from
-    a lookup table based on wind speed and stability class.
-
-    See Also
+    comments
     --------
-    theor_cospectra_massman : Massman model implementation
-
-    Author
-    ------
     Written by B. Heinesch, 20 February, 2025.
     University of Liege, Gembloux Agro-Bio Tech.
     """

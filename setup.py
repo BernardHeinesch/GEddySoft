@@ -8,7 +8,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 
 setup(
     name="GEddySoft",
-    version="4.0.1",
+    version="4.1",
     author="Bernard Heinesch",
     author_email="bernard.heinesch@uliege.be",
     description="A Python package for surface eddy-flux computation, with a specific focus on BVOCs from PTR-TOF-MS",

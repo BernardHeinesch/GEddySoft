@@ -3,7 +3,8 @@ import numpy as np
 import pandas as pd
 from hdf5obj_2_nparray import hdf5obj_2_nparray
 import zipfile
-import datetime
+# import datetime
+from datetime import datetime, timedelta, timezone
 from copy import deepcopy
 from read_GHG import read_GHG
 from prepare_output import prepare_output
@@ -11,6 +12,29 @@ from reformat_date import reformat_date
 
 
 def read_tracer_file(hdf5_f, ini, idx_tracers_to_process):
+    """Read a PTR-TOF-MS tracer HDF5 file into arrays.
+
+    Parameters
+    ----------
+    hdf5_f : h5py.File
+        Open HDF5 file handle.
+    ini : dict
+        Parsed INI settings.
+    idx_tracers_to_process : array_like of int
+        Indices of tracers (m/z rows) to extract.
+
+    Returns
+    -------
+    tracerdata : dict
+        Dictionary containing time series and per-tracer metadata.
+
+    Raises
+    ------
+    ValueError
+        If ``ini['param']['TRACER_NORM'] == 1`` and required primary-ion
+        information is missing (attributes FPH1/FPH2 or m/z 21.022 and 38.033
+        within tolerance).
+    """
     tracerdata = {}
 
     # convert from UNIX time format in nanoseconds to UNIX in seconds
@@ -21,17 +45,87 @@ def read_tracer_file(hdf5_f, ini, idx_tracers_to_process):
     tracerdata['transmission'] = np.squeeze(hdf5obj_2_nparray(hdf5_f[ini['tracer']['transmission_column']][idx_tracers_to_process], 'f8'))
     tracerdata['Xr0'] = np.squeeze(hdf5obj_2_nparray(hdf5_f[ini['tracer']['Xr0_column']][idx_tracers_to_process], 'f8'))
 
-    tracerdata['default_CC_kinetic'] = hdf5_f.attrs['default_CC_kinetic']
     tracerdata['cluster_min'] = np.squeeze(hdf5obj_2_nparray(hdf5_f[ini['tracer']['cluster_min_column']][idx_tracers_to_process], 'f8'))
     tracerdata['cluster_max'] = np.squeeze(hdf5obj_2_nparray(hdf5_f[ini['tracer']['cluster_max_column']][idx_tracers_to_process], 'f8'))
-    tracerdata['k_reac'] = np.squeeze(hdf5obj_2_nparray(hdf5_f[ini['tracer']['k_reac_column']][idx_tracers_to_process], 'f8'))
-    tracerdata['FY'] = np.squeeze(hdf5obj_2_nparray(hdf5_f[ini['tracer']['FY_column']][idx_tracers_to_process], 'f8'))
-    tracerdata['IF'] = np.squeeze(hdf5obj_2_nparray(hdf5_f[ini['tracer']['IF_column']][idx_tracers_to_process], 'f8'))
 
-    tracerdata['conc'] = hdf5obj_2_nparray(hdf5_f[ini['tracer']['conc_column']][:, idx_tracers_to_process], 'f8')
+    if 'default_CC_kinetic' in hdf5_f.attrs:
+        tracerdata['default_CC_kinetic'] = hdf5_f.attrs['default_CC_kinetic']
+    if 'FPH1' in hdf5_f.attrs:
+        tracerdata['FPH1'] = hdf5_f.attrs['FPH1']
+    if 'FPH2' in hdf5_f.attrs:
+        tracerdata['FPH2'] = hdf5_f.attrs['FPH2']
+    
+    for key in ('k_reac', 'FY', 'IF', 'sensitivity'):
+        ini_key = f'{key}_column'
+        if ini_key in ini['tracer']:
+            column = ini['tracer'][ini_key]
+            if column in hdf5_f:
+                tracerdata[key] = np.squeeze(
+                    hdf5obj_2_nparray(
+                        hdf5_f[column][idx_tracers_to_process],
+                        'f8'
+                    )
+                )
+
+    signal = hdf5obj_2_nparray(hdf5_f[ini['tracer']['conc_column']][:, idx_tracers_to_process], 'f8')
+    signal_primary_ions = hdf5obj_2_nparray(hdf5_f['Signal_primaryIons'][:, idx_tracers_to_process], 'f8')
+    cols_primary = ~np.all(np.isnan(signal_primary_ions), axis=0)
+    signal[:, cols_primary] = signal_primary_ions[:, cols_primary]
+    tracerdata['conc'] = signal
+
+    signal_prec = hdf5obj_2_nparray(hdf5_f[ini['tracer']['conc_prec_column']][:, idx_tracers_to_process], 'f8')
+    signal_primary_ions_prec = hdf5obj_2_nparray(hdf5_f['Signal_primaryIons_prec'][:, idx_tracers_to_process], 'f8')
+    cols_primary_prec = ~np.all(np.isnan(signal_primary_ions_prec), axis=0)
+    signal_prec[:, cols_primary_prec] = signal_primary_ions_prec[:, cols_primary_prec]
+    tracerdata['conc_prec'] = signal_prec
+
     tracerdata['conc_acc'] = hdf5obj_2_nparray(hdf5_f[ini['tracer']['conc_acc_column']][:, idx_tracers_to_process], 'f8')
-    tracerdata['conc_prec'] = hdf5obj_2_nparray(hdf5_f[ini['tracer']['conc_prec_column']][:, idx_tracers_to_process], 'f8')
     tracerdata['zero_prec'] = hdf5obj_2_nparray(hdf5_f[ini['tracer']['zero_prec_column']][:, idx_tracers_to_process], 'f8')
+
+    if ini['param']['TRACER_NORM'] == 1:
+        if ('FPH1' not in tracerdata) or ('FPH2' not in tracerdata):
+            raise ValueError(
+                "TRACER_NORM=1 requested but required HDF5 root attributes are missing: "
+                f"FPH1 present={('FPH1' in tracerdata)}, FPH2 present={('FPH2' in tracerdata)}. "
+                f"File: {getattr(hdf5_f, 'filename', 'unknown')}"
+            )
+
+        # Primary ion time-series needed for TRACER_NORM (m/z 21.022 & 38.033), read outside idx_tracers_to_process selection.
+        mz_21 = 21.022
+        mz_38 = 38.033
+        mz_tol = 0.001
+        mz_all = np.squeeze(hdf5obj_2_nparray(hdf5_f[ini['tracer']['detected_masses_column']][:], 'f8'))
+        idx_21 = int(np.nanargmin(np.abs(mz_all - mz_21)))
+        idx_38 = int(np.nanargmin(np.abs(mz_all - mz_38)))
+
+        mz_found_21 = float(mz_all[idx_21])
+        mz_found_38 = float(mz_all[idx_38])
+        dmz_21 = float(abs(mz_found_21 - mz_21))
+        dmz_38 = float(abs(mz_found_38 - mz_38))
+        if dmz_21 > mz_tol:
+            raise ValueError(
+                "TRACER_NORM=1 requested but primary ion m/z 21.022 was not found within tolerance. "
+                f"Nearest m/z={mz_found_21:.6f}, |dmz|={dmz_21:.6f} (> {mz_tol}). "
+                f"File: {getattr(hdf5_f, 'filename', 'unknown')}"
+            )
+        if dmz_38 > mz_tol:
+            raise ValueError(
+                "TRACER_NORM=1 requested but primary ion m/z 38.033 was not found within tolerance. "
+                f"Nearest m/z={mz_found_38:.6f}, |dmz|={dmz_38:.6f} (> {mz_tol}). "
+                f"File: {getattr(hdf5_f, 'filename', 'unknown')}"
+            )
+
+        conc_21 = hdf5obj_2_nparray(hdf5_f[ini['tracer']['conc_column']][:, [idx_21]], 'f8')
+        conc_21_primary = hdf5obj_2_nparray(hdf5_f['Signal_primaryIons'][:, [idx_21]], 'f8')
+        if not np.all(np.isnan(conc_21_primary)):
+            conc_21 = conc_21_primary
+        tracerdata['conc_primary_21_022'] = np.squeeze(conc_21)
+
+        conc_38 = hdf5obj_2_nparray(hdf5_f[ini['tracer']['conc_column']][:, [idx_38]], 'f8')
+        conc_38_primary = hdf5obj_2_nparray(hdf5_f['Signal_primaryIons'][:, [idx_38]], 'f8')
+        if not np.all(np.isnan(conc_38_primary)):
+            conc_38 = conc_38_primary
+        tracerdata['conc_primary_38_033'] = np.squeeze(conc_38)
 
     return tracerdata
 
@@ -141,6 +235,56 @@ def read_main_inputs(filepath, filename, filetype, ini, OF, idx_tracers_to_proce
                 print(e)
                 error_code = 1
             sonicdata = np.array(sonicdata, dtype=float)
+        elif ini['sonic']['sonic_files_type'] == 'csv':
+            sonicdata = np.loadtxt(filepath + '\\' + filename, delimiter=',', skiprows=1)
+
+            sonicdata[sonicdata == -9999] = np.nan
+
+            # Filter out negative values from both sonic_columns and irga_columns and slice the sonicdata using the valid indices
+            sonic_columns = [col for col in ini['sonic']['sonic_columns'] if col >= 0]
+            irga_columns = [col for col in ini['irga']['irga_columns'] if col >= 0]
+            valid_columns = sonic_columns + irga_columns
+            sonicdata = sonicdata[:, valid_columns]
+
+            # add time based on filename
+            date_format='yyyymmddHHMM'
+            date_string = filename[len(ini['files']['sonic_files_prefix']):len(ini['files']['sonic_files_prefix'])+len(date_format)]
+            date_num = datetime(int(date_string[date_format.find("yyyy"):date_format.find("yyyy")+4]),
+                                          int(date_string[date_format.find("mm"):date_format.find("mm")+2]),
+                                          int(date_string[date_format.find("dd"):date_format.find("dd")+2]),
+                                          int(date_string[date_format.find("HH"):date_format.find("HH")+2]),
+                                          int(date_string[date_format.find("MM"):date_format.find("MM")+2]),
+                                          int(date_string[date_format.find("SS"):date_format.find("SS")+2] if "SS" in date_format else "00"),
+                                          )
+            
+            # Convert date_num (UTC+1) to UTC (subtract 1 hour)
+            start_datetime_utc = date_num - timedelta(hours=1)
+
+            # Convert start_datetime_utc to Unix timestamp (in seconds)
+            start_datetime_utc = start_datetime_utc.replace(tzinfo=timezone.utc)
+            start_timestamp_seconds = int(start_datetime_utc.timestamp())
+            start_timestamp_seconds = int(start_datetime_utc.timestamp())
+            
+            # Generate Unix timestamps for each data point using the SAMPLING_RATE_SONIC
+            num_samples = sonicdata.shape[0]
+            time_diff_seconds = 1 / ini['param']['SAMPLING_RATE_SONIC']
+
+            unix_timestamps = np.zeros(num_samples, dtype=np.float64)
+            for i in range(num_samples):
+                unix_timestamps[i] = start_timestamp_seconds + i * time_diff_seconds
+            
+            # Pre-allocate the final sonicdata array with 3 additional columns (1 for timestamp, 2 for quality flags)
+            final_sonicdata = np.full((num_samples, sonicdata.shape[1] + 3), np.nan)
+            
+            # Insert Unix timestamps in the first column, former sonicdata and the flag columns
+            final_sonicdata[:, 0] = unix_timestamps
+            final_sonicdata[:, 1:5] = sonicdata[:, 0:4]
+            final_sonicdata[:, 5] = 0
+            final_sonicdata[:, 6:8] = sonicdata[:, 4:6]
+            final_sonicdata[:, 8] = 0
+
+            sonicdata = final_sonicdata
+
         return (sonicdata, error_code)
 
     if filetype == 'tracer':

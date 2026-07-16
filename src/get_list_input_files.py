@@ -1,72 +1,24 @@
-"""Module for locating and listing input files.
-
-This module provides functionality to locate and list sonic anemometer
-and tracer gas analyzer data files based on configuration settings.
-It supports:
-
-- Multiple input directories
-- Various file formats (HDF5, GHG, SLT)
-- Date-based file filtering
-- Recursive subdirectory scanning for tracer files
-
-Author
-------
-B. Heinesch
-University of Liege, Gembloux Agro-Bio Tech
-"""
-
 import os
 from list_files_datestring import list_files_datestring
 
 
 def get_list_input_files(ini):
-    """Locate sonic anemometer and tracer gas analyzer data files.
+    """
+        Function to identify input raw files
 
-    This function scans specified directories for input data files from
-    sonic anemometers and tracer gas analyzers, filtering by file type,
-    prefix, and date range.
+        parameters
+        ----------
+        ini: dictionnary with all initialisation information
 
-    Parameters
-    ----------
-    ini : dict
-        Configuration dictionary containing:
-        - files : dict
-            File search parameters including:
-            - sonic_files_folders : list
-                Paths to search for sonic data
-            - sonic_files_prefix : str
-                Prefix for sonic filenames
-            - tracer_files_folders : list
-                Paths to search for tracer data
-            - tracer_files_prefix : str
-                Prefix for tracer filenames
-            - tracer_files_suffix : str
-                Suffix for tracer filenames
-            - tracer_files_date_format : str
-                Date format in tracer filenames
-            - date_files_selection : str
-                Date range for file filtering
-        - sonic : dict
-            Sonic configuration including:
-            - sonic_files_type : str
-                Type of sonic files ('hdf5', 'ghg', 'slt')
+        returns
+        -------
+        sonic_files_list: list, sonic files that were find in the folder given in the ini and in its subfolders
+        tracer_files_list: list, tracer files that were find in the folder given in the ini and in its subfolders
 
-    Returns
-    -------
-    tuple
-        Two-element tuple containing:
-        - sonic_files_list : dict
-            Dictionary of sonic files with keys:
-            - name : list
-                Filenames
-            - path : list
-                Full paths to files
-            - prefix : list
-                File prefixes
-            - date : list
-                File dates
-        - tracer_files_list : dict
-            Dictionary of tracer files with same structure
+        comments
+        --------
+        Written by B. Heinesch.
+        University of Liege, Gembloux Agro-Bio Tech.
     """
 
     # get list of sonic input files in the given folder
@@ -82,9 +34,9 @@ def get_list_input_files(ini):
                                          ini['files']['sonic_files_prefix'], '.ghg', 'yyyy-mm-ddTHHMMSS',
                                          ini['files']['date_files_selection'],
                                          sub_dir=False)
-        elif ini['sonic']['sonic_files_type'] == 'slt':
+        elif ini['sonic']['sonic_files_type'] == 'csv':
             temp = list_files_datestring(ini['files']['sonic_files_folders'][n],
-                                         ini['files']['sonic_files_prefix'], '.slt', 'xxx',
+                                         ini['files']['sonic_files_prefix'], '.csv', 'yyyymmddHHMM',
                                          ini['files']['date_files_selection'],
                                          sub_dir=False)
 

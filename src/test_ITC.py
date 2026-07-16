@@ -3,78 +3,26 @@ import numpy as np
 
 def test_ITC(w_prime, u_prime, T_prime, wT, zoL, u_star, lat):
     """
-    Test for developed turbulent conditions using Integral Turbulence Characteristics (ITC).
-
-    This function implements the ITC test based on flux-variance similarity as described
-    in Foken and Wichura (1996) and Thomas & Foken (2002). It evaluates the degree of
-    developed turbulence by comparing measured and modeled standard deviations of wind
-    components and temperature, normalized by appropriate scaling parameters.
+    test on developed turbulent conditions
+    Foken and Wichura 1996
+    calculates integral turbulence characteristics based on flux-variance similarity
 
     Parameters
     ----------
-    w_prime : numpy.ndarray
-        High-frequency fluctuations of vertical wind velocity [m s⁻¹]
-    u_prime : numpy.ndarray
-        High-frequency fluctuations of horizontal wind velocity [m s⁻¹]
-    T_prime : numpy.ndarray
-        High-frequency fluctuations of temperature [K]
-    wT : float
-        Kinematic temperature flux <w'T'> [K m s⁻¹]
-    zoL : float
-        Monin-Obukhov stability parameter (z/L)
-        z: measurement height [m]
-        L: Obukhov length [m]
-    u_star : float
-        Friction velocity [m s⁻¹]
-    lat : float
-        Site latitude [degrees]
+    w_prime, u_prime, T_prime: high frequency time series of fluctuations for w, u and T
+    wT : temperature flux <w'T'>
+    zoL: stability parameter
+    u_star: friction velocity
 
-    Returns
+    returns
     -------
-    ITC_w : float
-        Relative model deviation for vertical wind component
-        ITC_w = |(σ_w/u_*)_model - (σ_w/u_*)_meas| / (σ_w/u_*)_model
-    ITC_u : float
-        Relative model deviation for horizontal wind component
-        ITC_u = |(σ_u/u_*)_model - (σ_u/u_*)_meas| / (σ_u/u_*)_model
-    ITC_T : float
-        Relative model deviation for temperature
-        ITC_T = |(σ_T/T_*)_model - (σ_T/T_*)_meas| / (σ_T/T_*)_model
+    ITC_w, ITC_u, ITC_T: relative model deviation of integral turbulence characteristics test for w, u, and T
 
-    Notes
-    -----
-
-    References
+    Comments
     ----------
-    .. [1] Foken, T. and Wichura, B. (1996). Tools for quality assessment of
-           surface-based flux measurements. Agricultural and Forest Meteorology,
-           78(1-2), 83-105.
-    .. [2] Thomas, C. and Foken, T. (2002). Re-evaluation of integral turbulence
-           characteristics and their parameterizations. 15th Conference on Boundary
-           Layer and Turbulence. 15-19 July 2002, Wageningen, The Netherlands.
+    Created on Sun May 29 12:00 2022
+    @author: Bernard HEINESCH
 
-    See Also
-    --------
-    test_steady_state_FW96 : Test for steady state conditions
-    test_steady_state_M98 : Alternative steady state test
-
-    Examples
-    --------
-    >>> # Example with unstable conditions
-    >>> w = np.random.normal(0, 0.3, 18000)  # 30 min at 10 Hz
-    >>> u = np.random.normal(0, 0.5, 18000)
-    >>> T = np.random.normal(0, 0.1, 18000)
-    >>> wT = -0.1  # Upward heat flux
-    >>> zoL = -0.5  # Unstable
-    >>> u_star = 0.4
-    >>> lat = 50.0
-    >>> ITC_w, ITC_u, ITC_T = test_ITC(w, u, T, wT, zoL, u_star, lat)
-
-    Author
-    ------
-    Written by Bernard Heinesch (May 2022)
-    University of Liege, Gembloux Agro-Bio Tech
-    Based on EddyPro v7.0.4 implementation
     """
 
     # implementation from EddyPro v7.0.4

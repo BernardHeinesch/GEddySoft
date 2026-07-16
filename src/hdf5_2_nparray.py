@@ -1,58 +1,28 @@
-"""Module for converting HDF5 datasets to NumPy arrays.
-
-This module provides functionality to read data from HDF5 files into
-NumPy arrays, with support for:
-
-- Single and compound datasets
-- Type conversion
-- Column-wise extraction for compound data
-- Memory-efficient file handling
-
-Author
-------
-B. Heinesch
-University of Liege, Gembloux Agro-Bio Tech
-May 29, 2022
-"""
 
 import h5py
 import numpy as np
 
 
 def hdf5_2_nparray(filename, field, dtype):
-    """Read HDF5 dataset into NumPy array with type conversion.
-
-    This function reads a specified field from an HDF5 file and converts
-    it to a NumPy array. It handles both simple datasets and compound
-    datasets (with multiple columns).
+    """
+    Reads a given field of an hdf5 file into a numpy array.
 
     Parameters
     ----------
-    filename : str
-        Full path to the HDF5 file
-    field : str
-        Name of the dataset to read from the HDF5 file.
-        Can be a path within the HDF5 hierarchy (e.g. 'group/dataset')
-    dtype : str or numpy.dtype
-        Data type for the output array. All data will be converted
-        to this type.
+    filename : string
+        A single string with the full hdf5 file path and name.
+    field : string
+        A single string with the name of the field to be extracted from the hdf5 structure.
+        - If "extrapolate", then points outside the data range will be
+          extrapolated.
+    dtype : string
+        A single string with dtype of the homogeneous output numpy array.
 
-    Returns
-    -------
-    numpy.ndarray
-        For simple datasets:
-            1D or 2D array of specified dtype
-        For compound datasets:
-            2D array where each column is a field from the dataset
-
-    Notes
-    -----
-    For compound datasets:
-    1. Each field is extracted separately
-    2. All fields are converted to the specified dtype
-    3. Fields are stacked as columns in the output array
+    comments
+    --------
+    Written by B. Heinesch on Sun May 29 12:00 2022
+    University of Liege, Gembloux Agro-Bio Tech.
     """
-
     with h5py.File(filename, 'r') as hdf5_f:
         ds = hdf5_f[field]
 

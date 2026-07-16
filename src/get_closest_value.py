@@ -1,60 +1,28 @@
-"""Module for robust time series value interpolation.
-
-This module provides functionality to find the closest value in a time
-series to a target timestamp, with robust handling of missing values.
-It implements:
-
-- Exact timestamp matching when available
-- Adaptive window median interpolation when exact match unavailable
-- Progressive window size expansion until valid values found
-
-Author
-------
-B. Heinesch
-University of Liege, Gembloux Agro-Bio Tech
-April, 2025
-"""
-
 import numpy as np
 import datetime
 
 
 def get_closest_value(df, target_timestamp):
-    """Find closest value to target timestamp with robust handling.
+    """
+    find the value in df that is the closest as the target timestamp
 
-    This function searches a time series for the value closest to a
-    target timestamp. If an exact match is not available or contains
-    NaN, it progressively expands a window around the target time
-    until valid values are found, then returns their median.
-
-    Parameters
+    parameters
     ----------
-    df : pandas.DataFrame
-        DataFrame with:
-        - datetime index
-        - Single column of values to interpolate
-        - May contain NaN values
-    target_timestamp : datetime.datetime
-        Target timestamp to find closest value for
+    df: df with timestamp as datetime index and var values as only column
+    target_timestamp: the target timestamp
 
-    Returns
+    returns
     -------
-    float
-        Either:
-        - Exact value if timestamp match found and not NaN
-        - Median of closest valid values using adaptive window
+    value: the var value at target timestamp and if no value at that timestamp, 
+           the median of the xth closest values, x starting with ten and increased 
+           by steps of ten until values are found  
 
-    Notes
-    -----
-    The search process:
-    1. Try exact timestamp match first
-    2. If no match or value is NaN:
-       - Start with window of 10 closest timestamps
-       - Expand window by 10 until valid values found
-       - Return median of valid values in window
-    3. Window expansion continues until either:
-       - Valid values found
-       - Entire series searched
+    Comments
+    --------
+
+    Written by B. Heinesch, April, 2025.
+    University of Liege, Gembloux Agro-Bio Tech.
+
     """
 
     closest_index = abs(df.index - target_timestamp).argmin()

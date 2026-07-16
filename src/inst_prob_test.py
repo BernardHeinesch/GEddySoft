@@ -1,26 +1,3 @@
-"""Module for detecting instrumental problems in eddy covariance data.
-
-This module implements the instrumental problem detection methods from
-Vitale et al. 2020 (Biogeosciences), providing comprehensive quality
-checks for eddy covariance measurements. It includes:
-
-- Statistical tests for data quality
-- Visualization of test results
-- Configurable thresholds for different variables
-- Comprehensive error detection metrics
-
-References
-----------
-Vitale et al. 2020, Biogeosciences
-    "Robust data cleaning procedure for eddy covariance flux measurements"
-
-Author
-------
-B. Heinesch
-University of Liege, Gembloux Agro-Bio Tech
-October 17, 2022
-"""
-
 import numpy as np
 from scipy.stats import kurtosis
 from scipy.stats import skew as skewness
@@ -34,82 +11,51 @@ from nandetrend import nandetrend
 
 
 def inst_prob_test(x, detrend=False, hz=20, plot=False, var_name='w'):
-    """Detect instrumental problems in eddy covariance time series.
-
-    This function implements multiple statistical tests to identify
-    potential instrumental problems in high-frequency eddy covariance
-    data, following the methodology of Vitale et al. 2020.
-
-    Parameters
-    ----------
-    x : array_like
-        Raw high-frequency eddy covariance time series
-    detrend : bool, optional
-        If True, removes linear trend from data. Default is False.
-    hz : int, optional
-        Data acquisition frequency in Hz (e.g., 10 or 20).
-        Default is 20 Hz.
-    plot : bool, optional
-        If True, generates diagnostic plots. Default is False.
-    var_name : {'U', 'V', 'W', 'T_SONIC', 'CO2', 'H2O'}, optional
-        Variable name for OOR test limits and plot labels.
-        Default is 'w'.
-
-    Returns
-    -------
-    list
-        Quality metrics in the following order:
-        - S_VM97 : float
-            Skewness (Vickers and Mahrt 1997)
-        - K_VM97 : float
-            Kurtosis (Vickers and Mahrt 1997)
-        - KID0 : float
-            Kurtosis index on differenced data (with zeros)
-        - KID : float
-            Kurtosis index on differenced data (no zeros)
-        - HF5 : float
-            Fluctuation homogeneity (5σ limit) [%]
-        - HF10 : float
-            Fluctuation homogeneity (10σ limit) [%]
-        - HD5 : float
-            Differenced data homogeneity (5σ limit) [%]
-        - HD10 : float
-            Differenced data homogeneity (10σ limit) [%]
-        - AL1 : float
-            Autocorrelation at lag 1
-        - DDI : float
-            Data distribution integrity
-        - DIP : float
-            Hartigan's dip test p-value
-        - OOR : float
-            Out of range percentage [%]
-
-    Notes
-    -----
-    Implementation details:
-    1. Uses Qn scale estimator for robust standard deviation
-       Qn was found to be extremely slow. And far worse if using the robustbase package.
-    2. Removes repeated values for differenced data (for HD5, HD10 and KID) using 1E-3 threshold,
-       which might not be suitable for all tracers and might affect .
-    3. Assumes 30-minute averaging periods
-    4. OOR limits (in m/s and °C):
-       - U, V: [-30, 30]
-       - W: [-10, 10]
-       - T_SONIC: [-50, 50]
-       - CO2: [300, 1000]
-       - H2O: [0, 30]
-
-    See Vitale 2020, Table 1 for recommended thresholds. 
-    See also the associated Rflux manual and Rflux vignette.
-
-    References
-    ----------
-    .. [1] Vitale et al. 2020, Biogeosciences
-           "Robust data cleaning procedure for eddy covariance"
-    .. [2] Vickers and Mahrt 1997
-           "Quality Control and Flux Sampling Problems for Tower"
     """
+    Detection of instrumental malfunctions, errors in eddy covariance systems
+    after Vitale et al. 2020, Biogeosciences, "Robust data cleaning procedure
+    for eddy covariance flux measurements"" and associated inst_prob_test
+    routine found on Gitlab (Rflux). See also the associated Rflux manual and Rflux vignette.
 
+    parameters
+    ----------
+    x :  raw high frequency eddy covariance time series.
+    detrend : logical. If TRUE a linear trend is removed from data (see details).
+    hz : integer. The data acquisition frequency (ie 10 or 20 HZ).
+    plot : logical. If TRUE a graphical representation of the results is provided.
+           Default FALSE.
+    var_name : character. variable name that must be specified to
+               - choose the limits for the OOR test, will be implemented only for ("U","V","W","T_SONIC")
+               - enrich the graphical output when plot=TRUE (e.g. "U","V","W","T_SONIC","CO2","H2O"), optional
+
+    returns
+    -------
+    S_VM97: skewness after Vickers and Mahrt (1997)
+    K_VM97: kurtosis after Vickers and Mahrt (1997)
+    KID0: Kurtosis index on the differenced data without exclusion of zero values
+    KID: Kurtosis index on the differenced data
+    HF5: Homogeneity of fluctuations with 5 sigma limit (in %)
+    HF10: Homogeneity of fluctuations with 10 sigma limit (in %)
+    HD5: Homogeneity of differenced data with 5 sigma limit (in %)
+    HD10: Homogeneity of differenced data with 10 sigma limit (in %)
+    AL1: Test based on the autocorrelation estimate at lag 1
+    DDI: Data Distribution Integrity
+    DIP: Test of unimodality
+    OOR: Out of range
+
+    For the tresholds to be used for data filtering based on these indices, see Vitale 2020, Table 1
+
+    Comments
+    --------
+      - !!!! Qn extremely slow. And far worse if using the robustbase package (see test in untitled.py)
+      - when computing differenced data, repeated values are remove using a treshold of 1E-3 which might not be suitable for other tracers. 
+        Might affect HD5, HD10 and KID
+      - in the treshold definitions, the lenght of the dataset is hard-coded (30'). Be careful if using different averaging times
+
+    Written by B. Heinesch, 17 October, 2022.
+    University of Liege, Gembloux Agro-Bio Tech.
+
+    """
 
     nl = 36000 if len(x) > 20000 else 18000
 

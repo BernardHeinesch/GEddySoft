@@ -1,36 +1,8 @@
-"""Module for synchronizing sonic anemometer and tracer gas analyzer files.
-
-This module provides functionality to match sonic anemometer and tracer
-gas analyzer files based on their timestamps, ensuring that flux
-calculations only proceed when both measurements are available.
-It handles:
-
-- Parsing of standardized filename formats
-- Half-hourly period matching
-- Filtering of unpaired measurements
-
-Author
-------
-B. Heinesch
-University of Liege, Gembloux Agro-Bio Tech
-"""
-
 from datetime import datetime
 
 
 def parse_datetime_sonic(filename):
-    """Parse datetime from sonic anemometer filename.
-
-    Parameters
-    ----------
-    filename : str
-        Filename in format 'GHS50_YYYY_MM_DD__HH_MM_SS.hdf5'
-
-    Returns
-    -------
-    datetime
-        Parsed datetime object
-    """
+    # Parse e.g. GHS50_2023_06_10__02_30_00.hdf5
     parts = filename.split('__')  # Split by double underscore
     date_str = parts[0].split('_', 1)[1]  # Remove GHS50_ prefix and get date
     time_str = parts[1].replace('.hdf5', '')  # Get time part
@@ -38,18 +10,7 @@ def parse_datetime_sonic(filename):
 
 
 def parse_datetime_tracer(filename):
-    """Parse datetime from tracer gas analyzer filename.
-
-    Parameters
-    ----------
-    filename : str
-        Filename in format 'K2_BE-Vie_YYYY_TOF4000_YYYY_MM_DD__HH_MM_SS.h5'
-
-    Returns
-    -------
-    datetime
-        Parsed datetime object
-    """
+    # Parse e.g. K2_BE-Vie_2023_TOF4000_2023_06_10__02_30_35.h5
     parts = filename.split('__')  # Split by double underscore
     date_str = parts[0].split('_')[-3:]  # Get last 3 parts of first section (year, month, day)
     date_str = '_'.join(date_str)  # Rejoin with underscores
@@ -58,43 +19,23 @@ def parse_datetime_tracer(filename):
 
 
 def map_sonic2tracer(all_sonic_files_list, all_tracer_files_list):
-    """Filter sonic files to keep only those with matching tracer files.
-
-    This function examines sonic anemometer files and keeps only those
-    that have corresponding tracer gas analyzer files within the same
-    half-hour period. This ensures data synchronization for flux
-    calculations.
-
-    Parameters
-    ----------
-    all_sonic_files_list : dict
-        Dictionary of sonic files containing:
-        - name : list
-            Filenames
-        - path : list
-            Full paths to files
-        - prefix : list
-            File prefixes
-        - date : list
-            File dates
-    all_tracer_files_list : dict
-        Dictionary of tracer files with same structure
-
-    Returns
-    -------
-    dict
-        Filtered sonic files dictionary containing only entries
-        with matching tracer files. Maintains same structure as
-        input dictionary.
-
-    Notes
-    -----
-    The matching process:
-    1. For sonic files at MM=00, looks for tracer files between MM=00-29
-    2. For sonic files at MM=30, looks for tracer files between MM=30-59
-    3. Files must match exactly in year, month, day, and hour
     """
+    removes half-hours for which a sonic file is present but not a tracer file
 
+    parameters
+    ----------
+    all_sonic_files_list: list, sonic files that were find in the folder given in the ini and in its subfolders
+    all_tracer_files_list: list, tracer files that were find in the folder given in the ini and in its subfolders
+
+    returns
+    -------
+    filtered_sonic: the filtered all_sonic_files_list
+
+    comments
+    --------
+    Written by B. Heinesch.
+    University of Liege, Gembloux Agro-Bio Tech.
+    """
     # Convert tracer filenames to datetime objects
     tracer_times = [parse_datetime_tracer(name) for name in all_tracer_files_list['name']]
 

@@ -9,8 +9,6 @@
 import numpy as np
 import pandas as pd
 import datetime
-from tzlocal import get_localzone
-import pytz
 import os
 import sys
 import scipy.signal
@@ -25,6 +23,7 @@ import h5py
 from read_GHG import read_diag_val
 from read_main_inputs import read_main_inputs
 from read_metadata_files import read_metadata_files
+from extract_unique_days import extract_unique_days
 from check_raw_timestamps import check_raw_timestamps
 from get_list_input_files import get_list_input_files
 from prepare_output import prepare_output
@@ -39,6 +38,7 @@ from test_steady_state_M98 import test_steady_state_M98
 from test_steady_state_D99 import test_steady_state_D99
 from test_ITC import test_ITC
 from compute_wind_direction import compute_wind_direction
+from adjust_primary_ion_normalisation import adjust_primary_ion_normalisation
 from cospectrum import cospectrum
 from inst_prob_test import inst_prob_test
 from add_attributes import add_attributes
@@ -49,6 +49,8 @@ from spike_detection_vickers97 import spike_detection_vickers97
 from map_sonic2tracer import map_sonic2tracer
 from wind_rotations import wind_rotations
 from flux_unit_conversion import flux_unit_conversion
+from tracer_imputation import build_interp_c
+from compute_time_lag import compute_time_lag
 
 # %% read inputs and prepare the process of individual days
 
@@ -110,8 +112,7 @@ def GEddySoft_main(str_day, ini, log_filename):
     OF.write('*************** processing data ***************' + '\n' + '\n')
 
     # get unique yyyy_mm_dd values from the sonic file list
-    unique_days = list(set(list(map(lambda x: x[len(ini['files']['sonic_files_prefix']):len(ini['files']['sonic_files_prefix']) + 10], all_sonic_files_list['name']))))
-    unique_days.sort()
+    unique_days = extract_unique_days(all_sonic_files_list['name'], ini['files']['sonic_files_prefix'])
 
     idx_tracers_to_process = None
 
@@ -179,19 +180,13 @@ def GEddySoft_main(str_day, ini, log_filename):
             sonicdata, error_code = read_main_inputs(sonic_files_list['path'][n], sonic_files_list['name'][n], 'sonic', ini, OF)
             if error_code: continue
 
-            # store timestamp
-            # Filename is in UTC+1, start of the half-hour
-            # Timestamp in the input file is in UNIX format (number of seconds since Epoch, 1/1/1970 00:00:00 UTC).
-            # The instruction utcfromtimestamp converts time in the UTC timezone
-            # +3600 : to convert to UTC +1
+            # store timestamp (convert Unix timestamp to datetime, using the offset given in the ini)
+            # Timestamp in the sonic file is in UNIX format (number of seconds since Epoch, 1/1/1970 00:00:00 UTC).
+            # To be noted that the date in the sonic filename (not used here) is in UTC+1, start of the half-hour
             first_ts = round(sonicdata[0, 0])
             last_ts = round(next((i for i in reversed(sonicdata[:, 0]) if i != 0), None))
-
-            # Convert Unix timestamp to datetime with given offset
             tz = datetime.timezone(datetime.timedelta(hours=ini['param']['UTC_OFFSET']), name=f"UTC{'+' if ini['param']['UTC_OFFSET'] >= 0 else ''}{ini['param']['UTC_OFFSET']:+d}:00")
             results['time'][n] = datetime.datetime.fromtimestamp(last_ts, tz)
-            # # Convert Unix timestamp to datetime with given offset
-            # results['time'][n] = datetime.datetime.fromtimestamp(last_ts, datetime.timezone(datetime.timedelta(hours=ini['param']['UTC_OFFSET'])))
 
             # remove sonicdata trailing zeros (the file is initially oversized and filled with zero values)
             sonicdata = sonicdata[:len(sonicdata[sonicdata[:, 0] != 0, :]), :]
@@ -249,13 +244,15 @@ def GEddySoft_main(str_day, ini, log_filename):
 
             # detect w and T spikes (and remove if requested)
             if ini['param']['SPIKE_MODE'] != 0:
-                sonicdata[:, 3], is_spike = spike_detection_vickers97(
+                sonicdata[:, 3], is_spike, _ = spike_detection_vickers97(
                                              sonicdata[:, 3],
                                              spike_mode = ini['param']['SPIKE_MODE'],
                                              avrg_len = int(ini['param']['WINDOW_LENGTH']/60),
                                              ac_freq = ini['param']['SAMPLING_RATE_SONIC'],
                                              spike_limit = ini['param']['SPIKE_DETECTION_THRESHOLD_W'],
                                              max_consec_spikes = ini['param']['MAX_CONSEC_SPIKES'],
+                                             error_value = np.nan,
+                                             series_label = 'w',
                                              ctrplot = ini['run_param']['PLOT_SPIKE_DETECTION']
                                              )
                 num_spikes_w = int(sum(is_spike))
@@ -263,12 +260,14 @@ def GEddySoft_main(str_day, ini, log_filename):
                 num_spikes_w = np.nan
 
             if ini['param']['SPIKE_MODE'] != 0:
-                sonicdata[:, 4], is_spike = spike_detection_vickers97(sonicdata[:, 4], 
+                sonicdata[:, 4], is_spike, _ = spike_detection_vickers97(sonicdata[:, 4], 
                                              spike_mode = ini['param']['SPIKE_MODE'],
                                              avrg_len = int(ini['param']['WINDOW_LENGTH']/60),
                                              ac_freq = ini['param']['SAMPLING_RATE_SONIC'],
                                              spike_limit = ini['param']['SPIKE_DETECTION_THRESHOLD_T'],
                                              max_consec_spikes = ini['param']['MAX_CONSEC_SPIKES'],
+                                             error_value = np.nan,
+                                             series_label = 'T',
                                              ctrplot = ini['run_param']['PLOT_SPIKE_DETECTION']
                                              )
                 num_spikes_T = int(sum(is_spike))
@@ -345,6 +344,7 @@ def GEddySoft_main(str_day, ini, log_filename):
 
             # calculate temperature T from virtual sonic temperature T_sonic and water vapor concentration
             # T_sonic = T*(1 + 0.32*w), were w is the volume mixing ratio of water vapor in air
+
             if ini['run_param']['CONCENTRATION_TYPE'] == 0:
                  interp_H2O = interp1d(sonicdata[:,0], sonicdata[:, 4], kind='nearest', bounds_error=False, fill_value=np.NaN)(interp_time)
                  completeness_H2O = sum(np.isfinite(interp_H2O))/(ini['param']['WINDOW_LENGTH']*ini['param']['SAMPLING_RATE_FINAL'])
@@ -381,20 +381,20 @@ def GEddySoft_main(str_day, ini, log_filename):
 
             # get mean atmospheric pressure
             if ini['files']['meteo_filepath'] and ini['meteo']['pressure_column']:
-                p_mean = get_closest_value(df_meteofiledata.iloc[:, ini['meteo']['pressure_column']-1], results['time'][n].replace(tzinfo=None))
+                p_mean = get_closest_value(df_meteofiledata.iloc[:, ini['meteo']['pressure_column']-1], results['time'][n])
             else:
                 p_mean = ini['param']['DEFAULT_PRESSURE']
 
             # get mean air temperature (in K, only for improved computation of air molar concentration)
             T_meteo = np.NaN
             if ini['files']['meteo_filepath'] and ini['meteo']['temperature_column']:
-                T_meteo = get_closest_value(df_meteofiledata.iloc[:, ini['meteo']['temperature_column']-1], results['time'][n].replace(tzinfo=None)) + 273.15
+                T_meteo = get_closest_value(df_meteofiledata.iloc[:, ini['meteo']['temperature_column']-1], results['time'][n]) + 273.15
             else:
                 T_meteo = np.NaN
 
             # get mean air relative humidity (in %, for lag-RH dependency, if any)
             if ini['files']['meteo_filepath'] and ini['meteo']['relative_humidity_column']:
-                rh_meteo = get_closest_value(df_meteofiledata.iloc[:, ini['meteo']['relative_humidity_column']-1], results['time'][n].replace(tzinfo=None))
+                rh_meteo = get_closest_value(df_meteofiledata.iloc[:, ini['meteo']['relative_humidity_column']-1], results['time'][n])
             else:
                 rh_meteo = np.NaN
 
@@ -531,19 +531,16 @@ def GEddySoft_main(str_day, ini, log_filename):
                     # time lag drift info are present and must be accounted for
                     lag_clock_drift_samples = int(-df_lag_clock_drift['TDC-computer'][abs(df_lag_clock_drift.index - results['time'][n]).argmin()] * ini['param']['SAMPLING_RATE_FINAL'])  # find closest time lag based on timestamp
 
-                # get prescribed time lag (instrumental + physical) if input file provided
+                # get prescribed time lag (clock-drift + physical) if input file provided
+                prescribed_lag_samples = None
                 if ini['param']['LAG_DETECT_METHOD'] == 'PRESCRIBED':
-                    # get prescribed time lag (clock-drift + physical)
+
                     closest_index = abs(df_lag_prescribed.index - results['time'][n]).argmin()
                     if abs(df_lag_prescribed.index - results['time'][n]).min() == datetime.timedelta():
                         # a lag is present for this half-hour
                         prescribed_lag_samples = int(df_lag_prescribed['time lag in s'][closest_index] * ini['param']['SAMPLING_RATE_FINAL'])  # find closest time lag based on timestamp
                     else:                        
                         # a lag is not present for this half-hour, compute the median lag of the ten closest values
-                        # the median must be computed on the physical lag
-
-                        # Synchronize on df_lag_prescribed index
-                        df_lag_clock_drift_synchronized = df_lag_clock_drift.reindex(df_lag_prescribed.index, method='nearest')
 
                         # Calculate indices for the non-NaN values around the gap
                         valid_indices = range(len(df_lag_prescribed))
@@ -554,7 +551,7 @@ def GEddySoft_main(str_day, ini, log_filename):
                         selected_indices = sorted_indices[:10]
 
                         # Calculate the median of the selected values
-                        prescribed_lag_samples = (np.median(df_lag_prescribed.iloc[selected_indices,0].values + df_lag_clock_drift_synchronized.iloc[selected_indices,0].values) - df_lag_clock_drift_synchronized.iloc[closest_index,0])* ini['param']['SAMPLING_RATE_FINAL']
+                        prescribed_lag_samples = np.median(df_lag_prescribed.iloc[selected_indices,0].values)* ini['param']['SAMPLING_RATE_FINAL']
 
                 # compute flux correction factor for low-pass filtering
                 if ini['param']['LPFC'] == 0:
@@ -583,12 +580,14 @@ def GEddySoft_main(str_day, ini, log_filename):
 
                     # detect spikes (and remove if requested)
                     if ini['param']['SPIKE_MODE'] != 0:
-                        sonicdata[:, i+6], is_spike=spike_detection_vickers97(sonicdata[:, i+6],
+                        sonicdata[:, i+6], is_spike, _ = spike_detection_vickers97(sonicdata[:, i+6],
                                                      spike_mode=ini['param']['SPIKE_MODE'],
                                                      avrg_len=int(ini['param']['WINDOW_LENGTH']/60),
                                                      ac_freq=ini['param']['SAMPLING_RATE_FINAL'],
                                                      spike_limit=ini['param']['SPIKE_DETECTION_THRESHOLD_IRGA'],
                                                      max_consec_spikes=ini['param']['MAX_CONSEC_SPIKES'],
+                                                     error_value=np.nan,
+                                                     series_label=f"IRGA {ini['irga']['irga_names'][i]}",
                                                      ctrplot=ini['run_param']['PLOT_SPIKE_DETECTION']
                                                      )
                         num_spikes = int(sum(is_spike))
@@ -597,7 +596,6 @@ def GEddySoft_main(str_day, ini, log_filename):
 
                     # test on instrument malfunctions from Vitale 2020
                     IPT = inst_prob_test(sonicdata[:,i+6], ini['param']['DETREND_TRACER_SIGNAL'], ini['param']['SAMPLING_RATE_FINAL'], ini['run_param']['PLOT_INST_PROB_TEST'], 'c or h')
-                    # IPT = [np.nan for a in range(12)]
     
                     interp_c = interp1d(sonicdata[:,0], sonicdata[:,i+6], kind='nearest', bounds_error=False, fill_value=np.NaN)(interp_time)
                     completeness_IRGA = sum(np.isfinite(interp_c))/(ini['param']['WINDOW_LENGTH']*ini['param']['SAMPLING_RATE_FINAL'])
@@ -617,27 +615,26 @@ def GEddySoft_main(str_day, ini, log_filename):
                         std_c = np.nanstd(c_prime, ddof=1)
                         c_prime = np.nan_to_num(c_prime, 0)
 
-                        # calculate cross-covariance over a given lag-window
-                        cov_wc = xcov(w_prime, c_prime, [lag_phys_wd_center + lag_clock_drift_samples - ini['param']['LAG_OUTER_WINDOW_SIZE'], lag_phys_wd_center + lag_clock_drift_samples + ini['param']['LAG_OUTER_WINDOW_SIZE']])
+                        # define the center of the lag window, taking into account clock-drift
+                        lag_center = int(lag_phys_wd_center + lag_clock_drift_samples)
 
-                        # find time lag
-                        if ini['param']['LAG_DETECT_METHOD'] == 'CONSTANT':
-                            lag_samples = int(lag_phys_wd_center + lag_clock_drift_samples)
-                        elif ini['param']['LAG_DETECT_METHOD'] == 'MAX':
-                            lag_samples = find_covariance_peak(cov_wc, ini['param']['LAG_OUTER_WINDOW_SIZE'], ini['param']['LAG_INNER_WINDOW_SIZE'], lag_phys_wd_center + lag_clock_drift_samples, ini['param']['LAG_COVPEAK_FILTER_LENGTH'], 0, ini['run_param']['PLOT_FIND_COVARIANCE_PEAK'], sonic_files_list['name'][n])  # lag in samples
-                        elif ini['param']['LAG_DETECT_METHOD'] == 'MAX_WITH_DEFAULT':
-                            lag_samples = find_covariance_peak(cov_wc, ini['param']['LAG_OUTER_WINDOW_SIZE'], ini['param']['LAG_INNER_WINDOW_SIZE'], lag_phys_wd_center + lag_clock_drift_samples, ini['param']['LAG_COVPEAK_FILTER_LENGTH'], 0, ini['run_param']['PLOT_FIND_COVARIANCE_PEAK'], sonic_files_list['name'][n])  # lag in samples
-                            # if lag was found at the extremum of the search window, replace by the default
-                            if (lag_samples == lag_phys_wd_center + lag_clock_drift_samples - ini['param']['LAG_INNER_WINDOW_SIZE'] + 1 or 
-                                lag_samples == lag_phys_wd_center + lag_clock_drift_samples + ini['param']['LAG_INNER_WINDOW_SIZE']):
-                                lag_samples = lag_phys_wd_center + lag_clock_drift_samples
-                        elif ini['param']['LAG_DETECT_METHOD'] == 'PRESCRIBED':
-                            lag_samples = int(prescribed_lag_samples)
+                        # prepare a np array for the covariance function
+                        cov_wc = np.full((2 * ini['param']['LAG_OUTER_WINDOW_SIZE'] + 1,), np.nan)
 
+                        # set/calculate time lag
+                        lag_samples, cov_wc = compute_time_lag(ini=ini, w_prime=w_prime, c_prime=c_prime, lag_center=lag_center, prescribed_lag_samples=prescribed_lag_samples, cov_wc=cov_wc, plot_label=sonic_files_list['name'][n])
+
+                        # convert time lag to seconds
                         lagtime_individual = lag_samples/ini['param']['SAMPLING_RATE_FINAL']  # seconds
 
-                        # calculate flux in umol/m^2/s or mmol/m^2/s
-                        flux_individual = (cov_wc[ini['param']['LAG_OUTER_WINDOW_SIZE'] - (ini['param']['LAG_WINDOW_CENTER'] + lag_clock_drift_samples) + lag_samples])
+                        # calculate flux in ug/m^2/s
+                        if ini['param']['LAG_DETECT_METHOD'] in ('CONST', 'PRESCRIBED'):
+                            flux_individual = xcov(w_prime, c_prime, [lag_samples, lag_samples])
+                        else:
+                            flux_individual = cov_wc[ini['param']['LAG_OUTER_WINDOW_SIZE'] - lag_center + lag_samples]
+
+                        # correct flux for low-pass filtering
+                        flux_individual = flux_individual * cf_lpf
 
                         # align c_prime for time-lag and trim the circular part, corrected time-series being needed for further computations
                         if lag_samples > 0:
@@ -651,6 +648,9 @@ def GEddySoft_main(str_day, ini, log_filename):
                             c_prime_trim = np.roll(c_prime, lag_samples)[:-lag_abs]
                             # Remove last lag_abs from w_prime to align
                             w_prime_trim = w_prime[:-lag_abs]
+                        elif lag_samples == 0:
+                            c_prime_trim = c_prime
+                            w_prime_trim = w_prime
 
                         # calculate spectrum for c and cospectrum for wc
                         [spec_c, spec_c_scaled, _] = cospectrum(ini, c_prime_trim, c_prime_trim, f, mean_wind_speed, spectrum_type='spec')
@@ -663,7 +663,7 @@ def GEddySoft_main(str_day, ini, log_filename):
 
                         # compute flux uncertainties
                         [flux_noise_mean, flux_noise_std, flux_noise_rmse, random_error_FS, random_flux, random_error_noise] = \
-                            flux_uncertainties(ini, w_prime_trim, c_prime_trim)
+                            [cf_lpf * x for x in flux_uncertainties(ini, w_prime_trim, c_prime_trim)]
 
                         # convert IRGA flux from kinematic units to desired units
                         flux_individual, flux_noise_mean, flux_noise_std, flux_noise_rmse, random_error_FS, random_flux, random_error_noise = \
@@ -695,7 +695,6 @@ def GEddySoft_main(str_day, ini, log_filename):
                         results['IRGA'][str(i)]['qaqc']['random_error_noise'][n] = random_error_noise
                         cov_data['IRGA'][str(i)]['cov'][n] = cov_wc
 
-
 # %% process TRACER data
 
             if ini['run_param']['CONCENTRATION_TYPE'] == 1:
@@ -709,7 +708,7 @@ def GEddySoft_main(str_day, ini, log_filename):
                 if not(error_code):  # corresponding tracer file was found
                 
                     # compute completeness of tracer data
-                    completeness_tracerdata = sum(np.isfinite(tracerdata['conc']), 1)/(ini['param']['WINDOW_LENGTH']*ini['param']['SAMPLING_RATE_FINAL'])
+                    completeness_tracerdata = sum(np.isfinite(tracerdata['conc']), 1)/(ini['param']['WINDOW_LENGTH']*ini['param']['SAMPLING_RATE_TRACER'])
     
                     # check validity of timestamp series, if present
                     time_series = pd.Series(np.vectorize(datetime.datetime.utcfromtimestamp)(tracerdata['time']))
@@ -728,24 +727,13 @@ def GEddySoft_main(str_day, ini, log_filename):
                     #         plt.plot(timedif)
                     #         print('timedif detected for file : ' + sonic_files_list['name'][n] )  # + '\n'
 
-                    # upsample data to final sampling rate if necessary
-                    if (ini['param']['SAMPLING_RATE_TRACER'] < ini['param']['SAMPLING_RATE_FINAL']):
-                        first_ts = tracerdata['time'][0, 0]
-
-                        upsampling_factor = ini['param']['SAMPLING_RATE_FINAL']/ini['param']['SAMPLING_RATE_TRACER']
-                        tracerdata['conc'] = scipy.signal.resample(tracerdata['conc'], int(tracerdata['conc'].shape[0]*upsampling_factor))
-
-                        # reconstruct the timestamp colum (used later on by interp1d). 
-                        tracerdata['time'][:] = (first_ts +
-                                                 np.asarray([x for x in range(0, len(tracerdata['time']))])/ini['param']['SAMPLING_RATE_FINAL'])
-
                     lag_clock_drift_samples = 0
                     # get clock-drift time lag drift if input file provided
                     if ini['files']['lag_clock_drift_filepath']:
                         # time lag drift info are present and must be accounted for
-                        lag_clock_drift_samples = int(-df_lag_clock_drift['TDC-computer'][abs(df_lag_clock_drift.index - results['time'][n].replace(tzinfo=None)).argmin()] * ini['param']['SAMPLING_RATE_FINAL'])  # find closest time lag based on timestamp
-
+                        lag_clock_drift_samples = int(-df_lag_clock_drift['TDC-computer'][abs(df_lag_clock_drift.index - results['time'][n]).argmin()] * ini['param']['SAMPLING_RATE_FINAL'])  # find closest time lag based on timestamp
                     # get prescribed time lag (instrumental + physical) if input file provided
+                    prescribed_lag_samples = None
                     if ini['param']['LAG_DETECT_METHOD'] == 'PRESCRIBED':
 
                         closest_index = abs(df_lag_prescribed.index - results['time'][n]).argmin()
@@ -780,10 +768,18 @@ def GEddySoft_main(str_day, ini, log_filename):
                     results['TRACER']['cf_lpf'][n] = cf_lpf
 
                     # save config parameters
-                    results['TRACER']['default_CC_kinetic'][n] = tracerdata['default_CC_kinetic']
+                    # results['TRACER']['default_CC_kinetic'][n] = tracerdata['default_CC_kinetic']
+                    if 'default_CC_kinetic' in tracerdata:
+                        if 'default_CC_kinetic' in results['TRACER']:
+                            results['TRACER']['default_CC_kinetic'][n] = tracerdata['default_CC_kinetic']
+
+                    if ini['param']['TRACER_NORM'] == 1:
+                        # Alternative primary-ion normalisation according to Loubet et al., 2021
+                        tracerdata = adjust_primary_ion_normalisation(tracerdata)
 
                     # iterate over tracers
                     msg_tracer = ''
+                    completeness_checked = False
                     for i in range(tracerdata['conc'].shape[1]):
 
                         # check if whole values are NaNs and skip process if the case
@@ -799,10 +795,12 @@ def GEddySoft_main(str_day, ini, log_filename):
                             continue
 
                         # check completeness of tracer data
-                        if(completeness_tracerdata[i] < ini['param']['COMPLETENESS_THRESHOLD']):
-                            if i == 0:
+                        if not completeness_checked:
+                            completeness_checked = True
+                            if(completeness_tracerdata[i] < ini['param']['COMPLETENESS_THRESHOLD']):
                                 msg_tracer = msg_tracer + 'tracer file incomplete (' + str(int(completeness_tracerdata[i] * 100)) + '%), tracer process skipped\n'
-                                continue
+                                OF.write(msg_tracer)
+                                break
 
                         lag_phys_wd_center = ini['param']['LAG_WINDOW_CENTER']
 
@@ -828,12 +826,14 @@ def GEddySoft_main(str_day, ini, log_filename):
 
                         # detect spikes (and remove if requested)
                         if ini['param']['SPIKE_MODE'] != 0:
-                            tracerdata['conc'][:, i], is_spike = spike_detection_vickers97(tracerdata['conc'][:, i], 
+                            tracerdata['conc'][:, i], is_spike, _ = spike_detection_vickers97(tracerdata['conc'][:, i], 
                                                   spike_mode = ini['param']['SPIKE_MODE'],
                                                   avrg_len = int(ini['param']['WINDOW_LENGTH']/60),
                                                   ac_freq = ini['param']['SAMPLING_RATE_FINAL'],
                                                   spike_limit = ini['param']['SPIKE_DETECTION_THRESHOLD_TRACER'],
                                                   max_consec_spikes = ini['param']['MAX_CONSEC_SPIKES'],
+                                                  error_value = np.nan,
+                                                  series_label=f"TRACER mz={round(float(tracerdata['mz'][i]), 3)}",
                                                   ctrplot = ini['run_param']['PLOT_SPIKE_DETECTION']
                                                   )
                             num_spikes = int(sum(is_spike))
@@ -850,8 +850,15 @@ def GEddySoft_main(str_day, ini, log_filename):
                         dc_dt = nanlinfit(tracerdata['conc'][:, i])[0]
                         dc_dt = dc_dt*ini['param']['SAMPLING_RATE_TRACER']
 
-                        # interpolate concentration data (keep NaNs and extrapolate using NaNs)
-                        interp_c = interp1d(np.squeeze(tracerdata['time'][:]), np.squeeze(tracerdata['conc'][:, i]), kind='nearest', bounds_error=False, fill_value=np.NaN)(interp_time)
+                        # build interpolated concentration time-series
+                        interp_c = build_interp_c(
+                            tracer_time=tracerdata['time'],
+                            tracer_conc=tracerdata['conc'][:, i],
+                            interp_time=interp_time,
+                            sampling_rate_final=ini['param']['SAMPLING_RATE_FINAL'],
+                            sampling_rate_tracer=ini['param']['SAMPLING_RATE_TRACER'],
+                            imputation_method=ini['param']['IMPUTATION_METHOD'],
+                        )
 
                         # Reynolds decomposition / detrending
                         if ini['param']['DETREND_TRACER_SIGNAL']:
@@ -865,61 +872,23 @@ def GEddySoft_main(str_day, ini, log_filename):
                         first, last = np.argmax(~np.isnan(c_prime_trim)), len(c_prime_trim) - np.argmax(~np.isnan(c_prime_trim)[::-1]) - 1
                         w_prime_trim = w_prime_trim[first:last + 1]; c_prime_trim = c_prime_trim[first:last + 1]
 
-                        # # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                        
-                        # print('************** TEST FOR DEAD_TIME_AFTER_ZERO ACTIVATED **************')
+                        # define the center of the lag window, taking into account clock-drift
+                        lag_center = int(lag_phys_wd_center + lag_clock_drift_samples)
 
-                        # # additionnal trimming for memory-effects on concentrations (TEST !)
-                        # deadtime = {
-                        #     "mz": [
-                        #         43.0178, 45.0335, 47.0128, 59.0491, 61.0284, 67.0542, 71.0491, 75.0441,
-                        #         83.0491, 85.0648, 87.0441, 89.0597, 93.0699, 97.0648, 99.0441, 99.0804,
-                        #         101.0597, 107.0855, 115.0754, 123.1168, 135.1168, 139.1117, 143.1067,
-                        #         151.1117, 153.1274, 155.1067, 157.1223, 167.1076, 169.1223
-                        #     ],
-                        #     "m/z dead time [s]": [
-                        #         491.7195134, 257.2213977, 86.10164751, 303.7559486, 363.5862932, 51.03549943,
-                        #         431.140758, 143.1412389, 105.2041005, 96.54187644, 197.1796212, 42.67194911,
-                        #         113.2686836, 173.3457642, 231.1074991, 43.70769377, 152.5939712, 534.3018095,
-                        #         147.1335773, 14.31914612, 136.9899078, 311.4728698, 103.1485489, 670.3591186,
-                        #         279.3083243, 242.8456704, 97.59966712, 315.495576, 276.2325163
-                        #     ]
-                        # }
-                        # deadtime = pd.DataFrame(deadtime)
+                        # prepare a np array for the covariance function
+                        cov_wc = np.full((2 * ini['param']['LAG_OUTER_WINDOW_SIZE'] + 1,), np.nan)
 
-                        # # Find the closest match within a tolerance of 0.001
-                        # match = deadtime[abs(deadtime['mz'] - round(float(tracerdata['mz'][i]), 3)) < 0.001].astype(int)
-                        
-                        # # Check how many matches were found
-                        # if len(match) > 1:
-                        #     raise ValueError(f"Multiple matches found for m/z = {round(float(tracerdata['mz'][i]), 3)}")
-                        # elif len(match) == 1:
-                        #     closest_dead_time = match.iloc[0]['m/z dead time [s]']
-                        #     w_prime_trim = w_prime_trim[closest_dead_time*10:]; c_prime_trim = c_prime_trim[closest_dead_time*10:]
+                        # set/calculate time lag
+                        lag_samples, cov_wc = compute_time_lag(ini=ini, w_prime=w_prime_trim, c_prime=c_prime_trim, lag_center=lag_center, prescribed_lag_samples=prescribed_lag_samples, cov_wc=cov_wc, plot_label=tracer_files_list['name'][tracer_file_index])
 
-                        # # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-                        # calculate cross-covariance over a given lag-window
-                        cov_wc = xcov(w_prime_trim, c_prime_trim, [lag_phys_wd_center + lag_clock_drift_samples - ini['param']['LAG_OUTER_WINDOW_SIZE'], lag_phys_wd_center + lag_clock_drift_samples + ini['param']['LAG_OUTER_WINDOW_SIZE']])
-
-                        # find time lag
-                        if ini['param']['LAG_DETECT_METHOD'] == 'CONSTANT':
-                            lag_samples = int(lag_phys_wd_center + lag_clock_drift_samples)
-                        elif ini['param']['LAG_DETECT_METHOD'] == 'MAX':
-                            lag_samples = find_covariance_peak(cov_wc, ini['param']['LAG_OUTER_WINDOW_SIZE'], ini['param']['LAG_INNER_WINDOW_SIZE'], lag_phys_wd_center + lag_clock_drift_samples, ini['param']['LAG_COVPEAK_FILTER_LENGTH'], 0, ini['run_param']['PLOT_FIND_COVARIANCE_PEAK'], tracer_files_list['name'][tracer_file_index])  # lag in samples
-                        elif ini['param']['LAG_DETECT_METHOD'] == 'MAX_WITH_DEFAULT':
-                            lag_samples = find_covariance_peak(cov_wc, ini['param']['LAG_OUTER_WINDOW_SIZE'], ini['param']['LAG_INNER_WINDOW_SIZE'], lag_phys_wd_center + lag_clock_drift_samples, ini['param']['LAG_COVPEAK_FILTER_LENGTH'], 0, ini['run_param']['PLOT_FIND_COVARIANCE_PEAK'], tracer_files_list['name'][tracer_file_index])  # lag in samples
-                            # if lag was found at the extremum of the search window, replace by the default
-                            if (lag_samples == lag_phys_wd_center + lag_clock_drift_samples - ini['param']['LAG_INNER_WINDOW_SIZE'] + 1 or 
-                                lag_samples == lag_phys_wd_center + lag_clock_drift_samples + ini['param']['LAG_INNER_WINDOW_SIZE']):
-                                lag_samples = lag_phys_wd_center + lag_clock_drift_samples
-                        elif ini['param']['LAG_DETECT_METHOD'] == 'PRESCRIBED':
-                            lag_samples = int(prescribed_lag_samples)
-
+                        # convert time lag to seconds
                         lagtime_individual = lag_samples/ini['param']['SAMPLING_RATE_FINAL']  # seconds
 
                         # calculate flux in ug/m^2/s
-                        flux_individual = cov_wc[ini['param']['LAG_OUTER_WINDOW_SIZE'] - (lag_phys_wd_center + lag_clock_drift_samples) + lag_samples]
+                        if ini['param']['LAG_DETECT_METHOD'] in ('CONST', 'PRESCRIBED'):
+                            flux_individual = xcov(w_prime_trim, c_prime_trim, [lag_samples, lag_samples])
+                        else:
+                            flux_individual = cov_wc[ini['param']['LAG_OUTER_WINDOW_SIZE'] - lag_center + lag_samples]
 
                         # correct flux for low-pass filtering
                         flux_individual = flux_individual * cf_lpf
@@ -936,6 +905,9 @@ def GEddySoft_main(str_day, ini, log_filename):
                             c_prime_trim = np.roll(c_prime_trim, lag_samples)[:-lag_abs]
                             # Remove last lag_abs from w_prime to align
                             w_prime_trim = w_prime_trim[:-lag_abs]
+                        elif lag_samples == 0:
+                            c_prime_trim = c_prime
+                            w_prime_trim = w_prime
 
                         # calculate spectrum for c and cospectrum for wc
                         [spec_c, spec_c_scaled, _] = cospectrum(ini, c_prime_trim, c_prime_trim, f, mean_wind_speed, spectrum_type='spec')
@@ -948,7 +920,7 @@ def GEddySoft_main(str_day, ini, log_filename):
 
                         # compute flux uncertainties
                         [flux_noise_mean, flux_noise_std, flux_noise_rmse, random_error_FS, random_flux, random_error_noise] = \
-                            flux_uncertainties(ini, w_prime_trim, c_prime_trim)
+                            [cf_lpf * x for x in flux_uncertainties(ini, w_prime_trim, c_prime_trim)]
 
                         # convert tracer flux and associated variables from kinematic units to desired units
                         flux_individual, flux_noise_mean, flux_noise_std, flux_noise_rmse, random_error_FS, random_flux, random_error_noise = \
@@ -988,9 +960,9 @@ def GEddySoft_main(str_day, ini, log_filename):
                         results['TRACER'][str(i)]['Xr0'][n] = tracerdata['Xr0'][i]
                         results['TRACER'][str(i)]['cluster_min'][n] = tracerdata['cluster_min'][i]
                         results['TRACER'][str(i)]['cluster_max'][n] = tracerdata['cluster_max'][i]
-                        results['TRACER'][str(i)]['k_reac'][n] = tracerdata['k_reac'][i]
-                        results['TRACER'][str(i)]['FY'][n] = tracerdata['FY'][i]
-                        results['TRACER'][str(i)]['IF'][n] = tracerdata['IF'][i]
+                        for key in ('k_reac', 'FY', 'IF', 'sensitivity'):
+                            if key in tracerdata and key in results['TRACER'][str(i)]:
+                                results['TRACER'][str(i)][key][n] = tracerdata[key][i]
 
                         cov_data['TRACER'][str(i)]['cov'][n] = cov_wc
 

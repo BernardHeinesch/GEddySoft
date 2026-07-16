@@ -1,59 +1,19 @@
-"""Module for computing wind direction from sonic anemometer measurements.
-
-This module provides functions to convert wind measurements from sonic anemometer
-coordinate systems to meteorological wind direction conventions. It handles
-different sonic anemometer types (Gill, Campbell, etc.) and accounts for their
-specific mounting orientations.
-
-See Also
---------
-UCAR EOL Wind Direction Quick Reference:
-    https://www.eol.ucar.edu/content/wind-direction-quick-reference
-    (but there seems to be an error, with arguments of arctg2 eronously signed,
-     and the routine is here vectorized for performance improvement)
-Author
-------
-B. Heinesch
-University of Liege, Gembloux Agro-Bio Tech
-
-Created
--------
-2020
-"""
-
 import numpy as np
 
 def compute_wind_direction(Usonic, Vsonic, SonicType, SonicNorthAzimuth):
-    """Convert sonic anemometer wind components to meteorological wind direction.
-
-    This function converts wind velocity components measured in sonic anemometer
-    coordinates to meteorological wind direction (direction FROM which the wind
-    is blowing). It handles different sonic types and mounting orientations.
-    The function is vectorized for improved performance.
-
-    Coordinate Systems
-    ==================
-    Meteorological (target):
-        - Umet: Positive = wind blowing to East
-        - Vmet: Positive = wind blowing to North
-        - Forms right-handed system with upward Wmet
-        - Wind direction: 0° = North, 90° = East (direction wind is FROM)
-
-    Sonic (source):
-        - Coordinate system varies by manufacturer
-        - Vsonic axis angle (Vaz) depends on type:
-            * CSAT3: Vaz = array direction - 90°
-            * Gill R2: Vaz = N arrow + 240° (U flipped)
-            * Gill R3/HS50 AXIS: Vaz = N arrow + 240°
-            * Gill R3/HS50 SPAR: Vaz = N arrow + 270°
-
-    Coordinate Diagram::
-
-                v>0
-                ^
-                |
-                |
-                +----> U>0
+    """
+    see https://www.eol.ucar.edu/content/wind-direction-quick-reference
+    (but there seems to be an error, with arguments of arctg2 eronously signed,
+     and the routine is here vectorized for performance improvement)
+    Meteorological wind coordinate system: Umet, Vmet
+    A positive Umet component represents wind blowing to the East. +Vmet is
+    wind to the North. This is right handed with respect to an upward +Wmet.
+    ::
+        v>0
+         ^
+         |
+         |
+         +----> U>0
 
     Converting between Sonic and Meteorological Coordinates
     Determine the angle with respect to true north, (0=N,90=E) of the +Vsonic
@@ -72,37 +32,28 @@ def compute_wind_direction(Usonic, Vsonic, SonicType, SonicNorthAzimuth):
 
     From this Meteorological Coordinates, the direction the  wind is blowing 
     FROM is finaly computed 
+
     Parameters
     ----------
-    Usonic : array_like
-        U wind component in sonic coordinates [m/s]
-    Vsonic : array_like
-        V wind component in sonic coordinates [m/s]
-    SonicType : str
-        Sonic anemometer model/configuration:
-        - 'R2': Gill R2
-        - 'R3Spar': Gill R3 SPAR configuration
-        - 'R3Axis': Gill R3 AXIS configuration
-        - 'HS50Spar': Gill HS50 SPAR configuration
-        - 'HS50Axis': Gill HS50 AXIS configuration
-        - 'CSAT3': Campbell CSAT3
+    Usonic : float or np array of float
+        sonic u wind speed component
+    Vsonic : float or np array of float
+        sonic v wind speed component
+    SonicType : string
+        type of sonic coordinate system (see respective sonic manuals)
+        (either 'R2Axis','R3Spar','R3Axis','HS50Spar','HS50Axis' or 'CSAT3')
     SonicNorthAzimuth : float
-        Azimuth angle of sonic anemometer reference direction
-        relative to true North [degrees] (=0 if pointing to North)
+        direction to which the sonic is pointing to (=0 if pointing to North)
 
     Returns
     -------
-    Dirmet : ndarray
-        Wind direction in meteorological coordinates [degrees]
-        (0-360°, direction wind is coming FROM)
+    Dirmet : float or np array of float
+        direction the wind is coming from (usual meteorological convention)
 
-    Notes
-    -----
-    The conversion process:
-    1. Convert U,V components to direction in sonic coordinates
-    2. Apply sonic-specific rotation (Vaz)
-    3. Correct for sonic mounting orientation (SonicNorthAzimuth)
-    4. Convert from 'wind blowing TO' to 'wind blowing FROM'
+    comments
+    --------
+    Written by B. Heinesch.
+    University of Liege, Gembloux Agro-Bio Tech.
     """
 
     # Ensure Usonic and Vsonic are arrays for vectorized operations

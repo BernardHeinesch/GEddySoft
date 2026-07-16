@@ -10,7 +10,19 @@ if "%SPHINXBUILD%" == "" (
 set SOURCEDIR=source
 set BUILDDIR=build
 
+where %SPHINXBUILD% >NUL 2>NUL
+if errorlevel 1 (
+	echo.
+	echo Error: '%SPHINXBUILD%' not found. Please install Sphinx, for example: pip install -r requirements.txt, and ensure it is on PATH.
+	popd
+	exit /b 1
+)
+
 %SPHINXBUILD% -M html %SOURCEDIR% %BUILDDIR% %SPHINXOPTS% %O%
+if errorlevel 1 (
+	popd
+	exit /b 1
+)
 
 popd
 

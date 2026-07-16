@@ -25,9 +25,6 @@ user_guide/quickstart
 user_guide/configuration
 user_guide/performance
 user_guide/running_example
-user_guide/input_files
-user_guide/processing
-user_guide/outputs
 ```
 
 ```{toctree}

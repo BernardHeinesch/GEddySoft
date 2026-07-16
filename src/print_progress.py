@@ -5,6 +5,8 @@ Created on Wed Jun  1 14:00:54 2022
 @author: Ariane Faures
 """
 
+import sys
+
 def print_progress(processed_, total_to_process, text, flush_=True, end_='\r',
                    width=30):
     """
@@ -30,6 +32,7 @@ def print_progress(processed_, total_to_process, text, flush_=True, end_='\r',
     percent_processed = processed_ / total_to_process * 100
     left = width * int(percent_processed) // 100
     right = width - left
+
     print('\r' + text + ': [',
           '#' * left, ' ' * right, ']',
           f' {percent_processed:.0f}%',

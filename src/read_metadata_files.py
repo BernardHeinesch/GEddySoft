@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import re
 import sys
+from datetime import timezone, timedelta
 
 
 def read_metadata_files(path, OF, meteo=False, tilt=False, clock_drift=False, presc_lag=False, rh_lag=False, lpfc=False):
@@ -29,6 +30,8 @@ def read_metadata_files(path, OF, meteo=False, tilt=False, clock_drift=False, pr
         print('using meteo file: ' + path); OF.write('using meteo file: ' + path + '\n')
         df_meteofiledata = pd.read_csv(path, header=0, names=['pressure', 'temperature', 'relative humidity'], sep=',', skiprows=1)  # read input meteo file
         df_meteofiledata.index = pd.to_datetime(df_meteofiledata.index, format='%d/%m/%Y %H:%M')  # format index as datetime
+        # Localize the index to UTC+1
+        df_meteofiledata.index = df_meteofiledata.index.tz_localize(timezone(timedelta(hours=1)))
         df_meteofiledata = df_meteofiledata[~df_meteofiledata.index.duplicated()]
 
         return df_meteofiledata
@@ -73,6 +76,8 @@ def read_metadata_files(path, OF, meteo=False, tilt=False, clock_drift=False, pr
         # lag drift info are present and must be accounted for
         df_lag_clock_drift = pd.read_csv(path, header=0, names=['TDC-computer', 'lag drift'], sep=',')  # read input lag drift file
         df_lag_clock_drift.index = pd.to_datetime(df_lag_clock_drift.index, format='%d/%m/%Y %H:%M')  # format index as datetime
+        # Localize the index to UTC+1
+        df_lag_clock_drift.index = df_lag_clock_drift.index.tz_localize(timezone(timedelta(hours=1)))
         df_lag_clock_drift = df_lag_clock_drift[~df_lag_clock_drift.index.duplicated()]
 
         return df_lag_clock_drift
@@ -86,8 +91,10 @@ def read_metadata_files(path, OF, meteo=False, tilt=False, clock_drift=False, pr
         print('using presc_lag file: ' + path); OF.write('using presc_lag file: ' + path + '\n')
 
         # time lag present and must be accounted for
-        df_lag_prescribed = pd.read_csv(path, header=0, names=['time lag in s'], sep=',')  # read input lag drift file
+        df_lag_prescribed = pd.read_csv(path, header=0, names=['time lag in s'], sep=',', skiprows=1)  # read input file
         df_lag_prescribed.index = pd.to_datetime(df_lag_prescribed.index, format='%d/%m/%Y %H:%M')  # format index as datetime
+        # Localize the index to UTC+1
+        df_lag_prescribed.index =  df_lag_prescribed.index.tz_localize(timezone(timedelta(hours=1)))
         df_lag_prescribed = df_lag_prescribed[~df_lag_prescribed.index.duplicated()]
         df_lag_prescribed = df_lag_prescribed.dropna()
 

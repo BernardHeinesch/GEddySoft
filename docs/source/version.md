@@ -1,5 +1,21 @@
 # Version History
 
+## v4.1 (2026-07-16)
+
+### Improvements
+- Added one accepted input file format (csv from QCL)
+- Added IMPUTATION_METHOD option (0/1/2) for TRACER concentration alignment on the SAMPLING_RATE_FINAL grid. Method 0 maps only measured TRACER timestamps (no imputation), method 1 uses FFT resampling, method 2 uses plateau (zero-order hold) upsampling.
+- Added systematic inclusion of primary ions in outputs, with a selectable normalisation option via INI parameter TRACER_NORM (0/1).
+- Refactored lag/flux computation: CONST/PRESCRIBED flux uses xcov at a single lag; MAX and MAX_WITH_DEFAULT share a common code path. Def 'compute_time_lag also created, to improve modularity.
+
+### Corrected Mistakes
+- 16 August 2025: correction on conc_prec and conc_LOD computation. Division by number of samples must be out of the sqrt.
+- 23 December 2025: added correction for low-pass filtering on flux uncertainties for TRACER : flux uncertainties were not corrected while the flux was.
+- 26 December 2025: added correction for prescribed lag which was corrected for clock-drift altough the input file is physical + clock drift lag
+- 26 December 2025: make time-zone aware all the timestamps for the metadata input files
+- 28 May 2026: fixed spike_detection_vickers97 multi-pass despiking (now updates the working signal between passes) and improved invalid-data handling (NaN/Inf via error_value) 
+- 29 May 2026: wind_rotations: replaced arctan by arctan2 for yaw/pitch (correct quadrant + improved stability); no impact expected on key outputs (mean wind speed/direction and scalar fluxes), except rare edge cases when u_mean≈0.
+
 ## v4.0.2 (2025-08-16)
 
 ### Improvements

@@ -1,92 +1,33 @@
-"""Module for date-based file listing and filtering.
-
-This module provides functionality to list and filter files based on
-embedded date strings in filenames. It supports:
-
-- Recursive directory traversal
-- Date string parsing and validation
-- Time window filtering
-- Sorting by date
-- Flexible date formats
-
-Typical use case: Finding all eddy covariance data files within a
-specific time period.
-
-Author
-------
-B. Heinesch
-University of Liege, Gembloux Agro-Bio Tech
-"""
-
 from datetime import datetime
 import os
 
 
 def list_files_datestring(folder_path, prefixes, suffix, date_format, filter_crit='', sub_dir=True):
-    """List and filter files by embedded date strings in filenames.
-
-    This function recursively searches directories for files with specific
-    prefixes and suffixes, extracts date information from filenames, and
-    optionally filters them by a time window.
-
-    Parameters
-    ----------
-    folder_path : str
-        Root directory to start searching
-    prefixes : str
-        File prefix(es) to match
-    suffix : str
-        File suffix to match (e.g., '.dat', '.txt')
-    date_format : str
-        Format string for date in filename. Supported tokens:
-        - yyyy: 4-digit year
-        - mm: 2-digit month
-        - dd: 2-digit day
-        - HH: 2-digit hour (24-hour)
-        - MM: 2-digit minute
-        - SS: 2-digit second
-        Example: 'yyyy_mm_dd_HH_MM_SS'
-    filter_crit : tuple of str, optional
-        (start_date, end_date) for filtering.
-        Format: 'YYYY_MM_DD__HH_MM_SS'
-        Default: '' (no filtering)
-    sub_dir : bool, optional
-        If True, search subdirectories recursively.
-        Default: True
-
-    Returns
-    -------
-    dict
-        Dictionary with matched files info:
-        - name : list of str
-            Filenames
-        - path : list of str
-            Full paths to files
-        - prefix : list of str
-            Matched prefixes
-        - date : list of int
-            Ordinal dates (days since 01-01-0001)
-
-    Notes
-    -----
-    1. Files containing 'trunk' after prefix are excluded
-    2. For files with only date (no time):
-       - HH, MM, SS fields can be empty
-    3. Results are sorted by filename
-    4. Empty lists are returned if no matches found
-
-    Examples
-    --------
-    >>> files = list_files_datestring(
-    ...     'data/',
-    ...     'SONIC_',
-    ...     '.dat',
-    ...     'yyyy_mm_dd',
-    ...     ('2023_01_01__00_00_00', '2023_12_31__23_59_59')
-    ... )
-    >>> print(len(files['name']), 'files found')
     """
+    lists all files in a folder and sub-folders with filenames starting with
+    one of the given prefixes followed by a date string of the format given
+    by date_format (e.g. "yyyy_mm_dd"), within the given time window and
+    followed by a given suffix.
+    Additionally sorts files according to the date string.
 
+    parameters
+    ----------
+    folder_path: string
+    prefixes: string
+    suffix: string
+    date_format: str, date format used (e.g. 'yyyy_mm_dd_HH_MM_SS')
+    filter_crit: tuple of strings with the start date and the end date in a text format
+    sub_dir: boolean, if True, consider also sub-folders, default is True
+
+    returns
+    -------
+    files: dict with keys: 'name', 'path', 'prefix', 'date'
+
+    comments
+    --------
+    Written by B. Heinesch
+    University of Liege, Gembloux Agro-Bio Tech.
+    """
 
     # define output dict
     files = {'name': [], 'path': [], 'prefix': [], 'date': []}
@@ -118,12 +59,14 @@ def list_files_datestring(folder_path, prefixes, suffix, date_format, filter_cri
                                   )]
         else:
             # time is also provided
+
+            # Check if SS exists in the date format, and set it to 00 if not found
             date_num += [datetime(int(date_string[date_format.find("yyyy"):date_format.find("yyyy")+4]),
                                   int(date_string[date_format.find("mm"):date_format.find("mm")+2]),
                                   int(date_string[date_format.find("dd"):date_format.find("dd")+2]),
                                   int(date_string[date_format.find("HH"):date_format.find("HH")+2]),
                                   int(date_string[date_format.find("MM"):date_format.find("MM")+2]),
-                                  int(date_string[date_format.find("SS"):date_format.find("SS")+2]),
+                                  int(date_string[date_format.find("SS"):date_format.find("SS")+2] if "SS" in date_format else "00"),
                                   )]
 
     # filter list of filemanes that are within the time window in filter_crit

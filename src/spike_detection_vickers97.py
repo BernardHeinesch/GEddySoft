@@ -1,60 +1,42 @@
+"""
+spike_detection_vickers_97.py
+----------------------------------
+Started form a python conversion of the EDDYPRO Fortran spike detection algorithm, 
+based on Vickers and Mahrt (1997) spike detection method.
+Subsequently modified by Bernard Heinesch and Jonathan Bitton
+
+"""
+from typing import Tuple, Optional
 import numpy as np
-from typing import Tuple
 import matplotlib.pyplot as plt
 
-# %%
-
-
-def linear_interpolate_spikes(data: np.ndarray, is_spike: np.ndarray, error_value: float) -> np.ndarray:
+def linear_interpolate_spikes(data: np.ndarray, is_spike: np.ndarray, error_value: Optional[float] = None) -> np.ndarray:
     """
-    Replace detected spikes with linear interpolation.
-
-    This function replaces spike values in a time series with linearly interpolated
-    values using valid neighboring points. It handles both isolated spikes and
-    consecutive sequences of spikes, as well as error values in the data.
-
-    Parameters
-    ----------
-    data : numpy.ndarray
-        Input data array containing the original time series with spikes
-    is_spike : numpy.ndarray
-        Boolean array of same length as data, True where spikes were detected
+    Replace spikes with linear interpolation using neighboring valid values.
+    Started form a python conversion of the EDDYPRO Fortran spike detection algorithm, 
+    based on Vickers and Mahrt (1997) spike detection method.
+    Subsequently modified by Bernard Heinesch and Jonathan Bitton
+    
+    Parameters:
+    -----------
+    data : np.ndarray
+        Input data array
+    is_spike : np.ndarray
+        Boolean array indicating spike locations
     error_value : float
-        Special value indicating invalid or missing data points
-        These points are skipped when finding valid neighbors for interpolation
-
-    Returns
-    -------
-    numpy.ndarray
-        Copy of input data with spikes replaced by linear interpolation
-
-    Notes
-    -----
-    The interpolation strategy is:
-    1. For each sequence of spikes, find valid (non-spike, non-error) points
-       before and after the sequence
-    2. If both points exist: perform linear interpolation
-    3. If only one exists: use that value (nearest neighbor)
-    4. If neither exists: spikes remain unchanged
-
-    This implementation follows the EddyPro software's approach but is
-    vectorized for better performance in Python.
-
-    See Also
+        Value indicating invalid/error data
+    
+    Returns:
     --------
-    spike_detection_vickers97 : Main spike detection algorithm
-
-    Examples
-    --------
-    >>> import numpy as np
-    >>> # Create sample data with spikes
-    >>> data = np.array([1.0, 10.0, 1.1, np.nan, 1.2])
-    >>> spikes = np.array([False, True, False, False, False])
-    >>> cleaned = linear_interpolate_spikes(data, spikes, np.nan)
-    >>> print(cleaned)  # [1.0, 1.05, 1.1, nan, 1.2]
+    np.ndarray
+        Data array with spikes replaced by linear interpolation
     """
     data_out = data.copy()
     N = len(data)
+    
+    invalid_mask = np.isnan(data) | np.isinf(data)
+    if error_value is not None:
+        invalid_mask |= (data == error_value)
 
     # Find consecutive spike sequences
     spike_starts = np.where(np.diff(np.concatenate(([0], is_spike.astype(int)))) == 1)[0]
@@ -66,11 +48,11 @@ def linear_interpolate_spikes(data: np.ndarray, is_spike: np.ndarray, error_valu
         right_idx = end + 1
 
         # Look for valid left point
-        while left_idx >= 0 and (is_spike[left_idx] or data[left_idx] == error_value):
+        while left_idx >= 0 and (is_spike[left_idx] or invalid_mask[left_idx]):
             left_idx -= 1
 
         # Look for valid right point
-        while right_idx < N and (is_spike[right_idx] or data[right_idx] == error_value):
+        while right_idx < N and (is_spike[right_idx] or invalid_mask[right_idx]):
             right_idx += 1
 
         # Perform interpolation if valid points are found
@@ -89,109 +71,61 @@ def linear_interpolate_spikes(data: np.ndarray, is_spike: np.ndarray, error_valu
 
 # %%
 
-
 def spike_detection_vickers97(data: np.ndarray,
-                                   spike_mode: int = 1,
-                                   max_pass: int = 10,
-                                   avrg_len: int = 30,
-                                   ac_freq: int = 10,
-                                   spike_limit: float = 3.5,
-                                   max_consec_spikes: int = 3,
-                                   ctrplot: bool = False
-                                   ) -> Tuple[np.ndarray, np.ndarray]:
+                                   spike_mode: Optional[int] = 1,
+                                   max_pass: Optional[int] = 10,
+                                   avrg_len: Optional[int] = 30,
+                                   ac_freq: Optional[int] = 10,
+                                   spike_limit: Optional[float] = 3.5,
+                                   max_consec_spikes: Optional[int] = 3,
+                                   error_value: Optional[float] = None,
+                                   series_label: Optional[str] = None,
+                                   ctrplot: Optional[bool] = False
+                                   ) -> Tuple[np.ndarray, np.ndarray, int]:
     """
-    Detect and remove spikes in high-frequency eddy covariance data.
+    Detects and counts spikes, and replaces them by linear interpolation if requested.
+    Hard-flags file for too many spikes.
+    Started form a python conversion of the EDDYPRO Fortran spike detection algorithm, 
+    based on Vickers and Mahrt (1997) spike detection method.
+    Subsequently modified by Bernard Heinesch and Jonathan Bitton
 
-    This function implements the Vickers and Mahrt (1997) despiking algorithm for
-    eddy covariance data. It uses an iterative moving window approach to identify
-    outliers based on local statistics. The algorithm can either flag spikes or
-    both flag and remove them through linear interpolation.
+    Parameters:
+    -----------
+    data : np.ndarray
+        1D input data array
+    spike_mode : int
+        If 1: detect and flag spikes only (no interpolation; detected spikes are masked as NaN in the
+        working signal for subsequent passes). If 2: detect, flag and remove spikes by linear
+        interpolation.
+    max_pass: int
+        maximum number of passes for spikes detection
+    avrg_len: int
+        lenght of data, in minutes
+    ac_freq: float
+        Frequency (Hz)
+    spike_limit : float
+        Standard deviation multiplier for spike detection
+    max_consec_spikes : int
+        Maximum number of consecutive points that can be considered spikes
+    series_label : str
+        Optional label used only for diagnostic plots (ctrplot=True) to indicate which time series is
+        being processed.
+    ctrplot : bool
+        Whether to generate and save diagnostic plots
 
-    Parameters
-    ----------
-    data : numpy.ndarray
-        1D input data array containing high-frequency measurements
-        (e.g., wind components, scalar concentrations)
-    spike_mode : {1, 2}, optional
-        Operation mode:
-        - 1: Only detect spikes
-        - 2: Detect and remove spikes via linear interpolation
-        Default is 1
-    max_pass : int, optional
-        Maximum number of iterations for spike detection.
-        Each pass may use progressively larger thresholds.
-        Default is 10
-    avrg_len : int, optional
-        Averaging period length in minutes.
-        Used to determine the window size for local statistics.
-        Default is 30
-    ac_freq : int, optional
-        Data acquisition frequency in Hz.
-        Used to calculate the number of samples in each window.
-        Default is 10
-    spike_limit : float, optional
-        Initial threshold for spike detection in standard deviations.
-        Points exceeding mean ± (spike_limit × std) are flagged.
-        Default is 3.5
-    max_consec_spikes : int, optional
-        Maximum number of consecutive points that can be flagged as spikes.
-        Longer sequences are not considered spikes.
-        Default is 3
-    ctrplot : bool, optional
-        If True, generates diagnostic plots showing:
-        - Original data with detected spikes
-        - Cleaned data with interpolated values
-        Default is False
-
-    Returns
-    -------
-    data_out : numpy.ndarray
-        If spike_mode=1: Copy of input with spikes still present
-        If spike_mode=2: Data with spikes replaced by linear interpolation
-    is_spike : numpy.ndarray
-        Boolean array same length as input, True where spikes were detected
-
-    Notes
-    -----
-    The algorithm follows these steps:
-    1. Divides data into overlapping windows
-    2. Calculates local mean and standard deviation
-    3. Flags points exceeding threshold as potential spikes
-    4. Checks for consecutive outliers
-    5. Optionally interpolates across spike locations
-    6. Repeats with adjusted threshold if spikes found
-
-    The window advancement step is currently set to 100 samples, which
-    differs from both the original VM97 paper (1 sample) and the EddyPro
-    manual recommendation (half window size).
-
-    See Also
+    Returns:
     --------
-    linear_interpolate_spikes : Function used to replace detected spikes
+    Tuple[np.ndarray, np.ndarray, int]
+        - Modified data array with spikes removed (and interpolated if requested)
+        - Boolean array indicating individual spike points (spike locations). The number of
+          individual spike points is given by sum(is_spike).
+        - Number of spike events detected (an event is a contiguous sequence of consecutive spike
+          points, i.e. a run of outliers with length <= max_consec_spikes).
 
-    References
-    ----------
-    .. [1] Vickers, D. and Mahrt, L. (1997). Quality control and flux sampling
-           problems for tower and aircraft data. Journal of Atmospheric and
-           Oceanic Technology, 14(3), 512-526.
-    .. [2] LI-COR Biosciences (2019). EddyPro Software Instruction Manual,
-           Version 7.0.4.
-
-    Examples
+    Comments:
     --------
-    >>> # Generate sample data with artificial spikes
-    >>> import numpy as np
-    >>> data = np.random.normal(0, 1, 18000)  # 30 min at 10 Hz
-    >>> data[1000:1002] = 10  # Add artificial spikes
-    >>> cleaned, spikes = spike_detection_vickers97(
-    ...     data, spike_mode=2, ctrplot=True
-    ... )
-    >>> print(f'Found {np.sum(spikes)} spikes')
+    - check step (EDDYPRO manual says half the window size. May speed up the routine).
 
-    Author
-    ------
-    Written by Bernard Heinesch
-    University of Liege, Gembloux Agro-Bio Tech
     """
 
     # Parameters
@@ -200,7 +134,6 @@ def spike_detection_vickers97(data: np.ndarray,
     lim_step = 0.1  # increase of inliers range
 
     N = len(data)
-    error_value = np.nan
 
     # Calculate window length
     win_len = avrg_len // 6
@@ -210,30 +143,36 @@ def spike_detection_vickers97(data: np.ndarray,
 
     # Initialize arrays
     is_spike = np.zeros(N, dtype=bool)
+    is_spike_pass = np.zeros(N, dtype=bool)
     loc_mean = np.zeros(N)
     loc_stdev = np.zeros(N)
     data_out = data.copy()
 
     # Main processing loop
     passes = 0
+    nspikes = 0
     adv_lim = spike_limit
 
     while passes < max_pass:
         passes += 1
-        nspikes = 0
+        is_spike_pass.fill(False)
         nspikes_sng = 0
         cnt = 0  # Counter for consecutive outliers
+
+        invalid_mask = np.isnan(data_out) | np.isinf(data_out)
+        if error_value is not None:
+            invalid_mask |= (data_out == error_value)
 
         # Process each window
         for wdw in range(wdw_num):
             # Extract window data
             start_idx = wdw * step
-            window_data = data[start_idx:start_idx + nn]
+            window_data = data_out[start_idx:start_idx + nn]
 
             # Calculate window statistics
-            valid_mask = window_data != error_value
-            window_mean = np.nanmean(window_data[valid_mask])
-            window_std = np.nanstd(window_data[valid_mask])
+            valid_window = ~invalid_mask[start_idx:start_idx + nn]
+            window_mean = np.nanmean(window_data[valid_window])
+            window_std = np.nanstd(window_data[valid_window])
 
             # Define central points range
             imin = nn//2 - step//2 + step * wdw
@@ -254,7 +193,7 @@ def spike_detection_vickers97(data: np.ndarray,
         # Spike detection with consecutive outlier checking
         i = 0
         while i < N:
-            if data[i] == error_value:
+            if invalid_mask[i]:
                 i += 1
                 continue
 
@@ -262,28 +201,45 @@ def spike_detection_vickers97(data: np.ndarray,
             lower_limit = loc_mean[i] - adv_lim * loc_stdev[i]
 
             # Check if point is an outlier
-            if data[i] > upper_limit or data[i] < lower_limit:
+            if data_out[i] > upper_limit or data_out[i] < lower_limit:
                 cnt += 1
                 i += 1
             else:
                 # Found a valid point, check the previous sequence
                 if cnt > 0 and cnt <= max_consec_spikes:
+                    new_spike = False
                     # Mark the previous cnt points as spikes
                     for k in range(i-cnt, i):
                         if not is_spike[k]:
-                            nspikes += 1
+                            new_spike = True
                             nspikes_sng += 1
                             is_spike[k] = True
+                            is_spike_pass[k] = True
+                    if new_spike:
+                        nspikes += 1
                 cnt = 0  # Reset counter
                 i += 1
-
-        # Replace spikes using linear interpolation
-        if spike_mode == 2 and nspikes > 0:
-            data_out = linear_interpolate_spikes(data, is_spike, error_value)
+        # Handle spike sequence reaching the end of the series
+        if cnt > 0 and cnt <= max_consec_spikes:
+            new_spike = False
+            for k in range(N - cnt, N):
+                if not is_spike[k]:
+                    new_spike = True
+                    nspikes_sng += 1
+                    is_spike[k] = True
+                    is_spike_pass[k] = True
+            if new_spike:
+                nspikes += 1
 
         # Check if another pass is needed
-        if nspikes == 0:
+        if nspikes_sng == 0: 
             break
+        else:
+            # Replace spikes using linear interpolation
+            if spike_mode == 2:
+                data_out = linear_interpolate_spikes(data_out, is_spike_pass)
+            elif spike_mode == 1:
+                data_out[is_spike_pass] = np.nan
 
         # Adjust limits for next pass
         adv_lim += lim_step
@@ -292,6 +248,7 @@ def spike_detection_vickers97(data: np.ndarray,
 
     # Generate diagnostic plots if requested
     if ctrplot:
+        title_prefix = '' if series_label is None else f'{series_label} - '
         fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 8), sharex=True)
 
         # Data with spikes highlighted
@@ -299,7 +256,7 @@ def spike_detection_vickers97(data: np.ndarray,
         spike_points = np.where(is_spike)[0]
         if len(spike_points) > 0:
             ax1.plot(spike_points, data[spike_points], 'rx', label='Detected Spikes')
-        ax1.set_title('Original Data with Detected Spikes')
+        ax1.set_title(f'{title_prefix}Original Data with Detected Spikes')
         ax1.set_ylabel('Value')
         ax1.grid(True)
         ax1.legend()
@@ -308,7 +265,7 @@ def spike_detection_vickers97(data: np.ndarray,
         ax2.plot(data_out, 'g-', label='Cleaned (Interpolated)', alpha=0.7)
         if len(spike_points) > 0:
             ax2.plot(spike_points, data[spike_points], 'rx', label='Original Spike Values')
-        ax2.set_title('Final Data with Interpolated Values')
+        ax2.set_title(f'{title_prefix}Final Data with Interpolated Values')
         ax2.set_xlabel('Sample Number')
         ax2.set_ylabel('Value')
         ax2.grid(True)
@@ -318,4 +275,4 @@ def spike_detection_vickers97(data: np.ndarray,
         # plt.savefig('spike_detection_results.png')
         # plt.close()
 
-    return data_out, is_spike
+    return data_out, is_spike, nspikes

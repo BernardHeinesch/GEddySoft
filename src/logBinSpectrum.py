@@ -1,83 +1,31 @@
-"""Module for logarithmic binning of spectral data.
-
-This module provides functionality for logarithmic binning of
-spectral data, particularly useful for analyzing eddy covariance
-spectra and cospectra. It implements:
-
-- Logarithmic frequency binning
-- Special handling of zero frequency
-- Automatic bin averaging
-- Flexible bin count control
-
-Based on the InnFlux code for spectral analysis.
-
-Author
-------
-B. Heinesch
-University of Liege, Gembloux Agro-Bio Tech
-November 2, 2022
-"""
-
 import math
 import numpy as np
 import warnings
 
 
 def logBinSpectrum(f, y, N, f_min, f_max):
-    """Perform logarithmic binning of spectral data.
-
-    This function bins spectral data using logarithmically spaced
-    frequency intervals. The zero frequency component is handled
-    separately in the first bin.
-
-    Parameters
-    ----------
-    f : numpy.ndarray
-        Frequency array [Hz]
-        Must be monotonically increasing
-        First element should be 0 Hz
-    y : numpy.ndarray
-        Spectral values array
-        Must be same length as f
-    N : int
-        Number of logarithmic bins
-        Must be > 1
-    f_min : float
-        Minimum frequency for binning [Hz]
-        Must be > 0
-    f_max : float
-        Maximum frequency for binning [Hz]
-        Must be > f_min
-
-    Returns
-    -------
-    list
-        [f_out, y_out] where:
-        f_out : numpy.ndarray
-            Logarithmically binned frequencies [Hz]
-            Length = N
-            f_out[0] = 0 for zero frequency
-        y_out : numpy.ndarray
-            Binned spectral values
-            Length = N
-            y_out[0] = y[0] for zero frequency
-
-    Notes
-    -----
-    1. Bin edges are calculated as:
-       exp(linspace(log(f_min), log(f_max), N))
-    2. Bin centers are geometric means of edges
-    3. Values within each bin are arithmetically averaged
-    4. Warnings are suppressed during computation
-    5. NaN is used for empty bins
-
-    Examples
-    --------
-    >>> f = np.linspace(0, 10, 1000)
-    >>> y = np.sin(2*np.pi*f)
-    >>> f_binned, y_binned = logBinSpectrum(f, y, 20, 0.1, 10)
     """
+    log-bin average y(f), from InnFlux code
 
+    parameters
+    ----------
+    f: numpy arr of float, frequency axis [s-1]
+    y: numpy arr of float, cospectrum
+    N: number of bins
+    f_min: lower frequency to be considered
+    f_max: highest frequency to be considered
+
+    returns
+    -------
+    f_out: numpy arr of float, log-binned frequency
+    y_out: numpy arr of float, log-binned (co)spectrum
+
+    comments
+    --------
+    Written by B. Heinesch, 2 November, 2022.
+    University of Liege, Gembloux Agro-Bio Tech.
+
+    """
     warnings.filterwarnings("ignore")
 
     bounds = np.concatenate((np.array([0]), np.exp(np.linspace( math.log(f_min), math.log(f_max), N ))), axis=0)

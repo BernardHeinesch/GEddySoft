@@ -43,6 +43,8 @@ def prepare_output(ini, out_len, hdf5_nb_tracers=False, hdf5_mz_tracer=False, re
             'WINDOW_LENGTH': ini['param']['WINDOW_LENGTH'],                           # samples
             'SAMPLING_RATE_SONIC': ini['param']['SAMPLING_RATE_SONIC'],               # per second sonic anemometer sampling rate
             'SAMPLING_RATE_TRACER': ini['param']['SAMPLING_RATE_TRACER'],             # per second gas analyzer sampling rate
+            'IMPUTATION_METHOD': ini['param']['IMPUTATION_METHOD'],                   # imputation method for tracer data when upsampling is needed
+            'TRACER_NORM': ini['param']['TRACER_NORM'],                               # tracer normalisation by primary ion counts (0 = HF cps, 1 = averaged cps)
             'DETREND_TEMPERATURE_SIGNAL': ini['param']['DETREND_TEMPERATURE_SIGNAL'], # if 1, linear detrending is applied to temperature signal
             'DETREND_TRACER_SIGNAL': ini['param']['DETREND_TRACER_SIGNAL'],           # if 1, linear detrending is applied to tracer signal
             'LAG_DETECT_METHOD': ini['param']['LAG_DETECT_METHOD'],                   # time-lag detection method to be applied; choose between: 'CONST', 'MAX', 'MAX_WITH_DEFAULT'. 
@@ -210,9 +212,15 @@ def prepare_output(ini, out_len, hdf5_nb_tracers=False, hdf5_mz_tracer=False, re
         TRACER['Xr0'] = [np.NaN] * out_len             # Xr0
         TRACER['cluster_min'] = [np.NaN] * out_len     # cluster_min
         TRACER['cluster_max'] = [np.NaN] * out_len     # cluster max
-        TRACER['k_reac'] = [np.NaN] * out_len          # Ion/Molecule reaction rate constant
-        TRACER['FY'] = [np.NaN] * out_len              # Fragmentation yield to correct signal due to fragmentation in the drift tube 
-        TRACER['IF'] = [np.NaN] * out_len              # Isotopic factor to correct isotopic ratio
+
+        # k_reac = Ion/Molecule reaction rate constant
+        # FY = Fragmentation yield to correct signal due to fragmentation in the drift tube 
+        # IF = Isotopic factor to correct isotopic ratio
+        # sensitivity = sensitivity
+        for key in ('k_reac', 'FY', 'IF', 'sensitivity'):
+            ini_key = f'{key}_column'
+            if ini_key in ini['tracer']:
+                TRACER[key] = [np.NaN] * out_len
 
         results['TRACER'] = dict(zip(tuple(str(x) for x in tuple(range(0, hdf5_nb_tracers))),
                                     [deepcopy(TRACER) for i in range(hdf5_nb_tracers)]))  # struct containing results for each tracer
@@ -224,6 +232,8 @@ def prepare_output(ini, out_len, hdf5_nb_tracers=False, hdf5_mz_tracer=False, re
             results['TRACER'][str(n)]['mz'] = str(hdf5_mz_tracer[n])
 
         results['TRACER']['cf_lpf'] = [np.NaN] * out_len               # correction factor for low-pass filtering
-        results['TRACER']['default_CC_kinetic'] = [np.NaN] * out_len   # default_CC_kinetic
+
+        if any(f'{key}_column' in ini['tracer'] for key in ('k_reac', 'FY', 'IF')):
+            results['TRACER']['default_CC_kinetic'] = [np.NaN] * out_len   # default_CC_kinetic
 
     return results

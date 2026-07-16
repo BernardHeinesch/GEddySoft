@@ -33,7 +33,7 @@ def add_attributes(filepath, filename, process_irga_data_day, n_irga, UTC_OFFSET
         hdf5_f['time'].attrs['description'] = f'timestamp of the end of each averaging interval (UTC{"+"+str(UTC_OFFSET) if UTC_OFFSET >= 0 else str(UTC_OFFSET)}:00{"h"})'; hdf5_f['time'].attrs['units'] = 'yyyy-mm-dd hh-mm-ss'
 
         hdf5_f['MET']['L'].attrs['description'] = 'Obukhov length'; hdf5_f['MET']['L'].attrs['units'] = 'm'
-        hdf5_f['MET']['T'].attrs['description'] = 'temperature'; hdf5_f['MET']['T'].attrs['units'] = 'K'
+        hdf5_f['MET']['T'].attrs['description'] = 'sonic temperature'; hdf5_f['MET']['T'].attrs['units'] = 'K'
         hdf5_f['MET']['cospec_wT'].attrs['description'] = 'co-spectrum for wT'; hdf5_f['MET']['cospec_wT'].attrs['units'] = 'Co(w_prime,T_prime,f)'
         hdf5_f['MET']['cospec_wT_scaled'].attrs['description'] = 'scaled co-spectrum for wT'; hdf5_f['MET']['cospec_wT_scaled'].attrs['units'] = 'f*Co(w_prime,T_prime,f)/cov(w_prime,T_prime)'
         hdf5_f['MET']['p'].attrs['description'] = 'air pressure'; hdf5_f['MET']['p'].attrs['units'] = 'hP'
@@ -132,8 +132,8 @@ def add_attributes(filepath, filename, process_irga_data_day, n_irga, UTC_OFFSET
         if process_tracer_data_day:
             
             hdf5_f['TRACER']['cf_lpf'].attrs['description'] = 'flux correction factor for low-pass filtering'; hdf5_f['TRACER']['cf_lpf'].attrs['units'] = '-'
-            hdf5_f['TRACER']['default_CC_kinetic'].attrs['description'] = 'default_CC_kinetic'; hdf5_f['TRACER']['default_CC_kinetic'].attrs['units'] = '[trncps ppbv^-1]'
-
+            if 'default_CC_kinetic' in hdf5_f['TRACER']:
+                hdf5_f['TRACER']['default_CC_kinetic'].attrs['description'] = 'default_CC_kinetic'; hdf5_f['TRACER']['default_CC_kinetic'].attrs['units'] = '[trncps ppbv^-1]'
             
             # loop on tracers
             for key in hdf5_f["TRACER"].keys():
@@ -161,9 +161,14 @@ def add_attributes(filepath, filename, process_irga_data_day, n_irga, UTC_OFFSET
                     hdf5_f['TRACER'][key]['Xr0'].attrs['description'] = 'Xr0'; hdf5_f['TRACER'][key]['Xr0'].attrs['units'] = '-'
                     hdf5_f['TRACER'][key]['cluster_min'].attrs['description'] = 'Cluster min'; hdf5_f['TRACER'][key]['cluster_min'].attrs['units'] = 'atomic mass unit'
                     hdf5_f['TRACER'][key]['cluster_max'].attrs['description'] = 'Cluster max'; hdf5_f['TRACER'][key]['cluster_max'].attrs['units'] = 'atomic mass unit'
-                    hdf5_f['TRACER'][key]['k_reac'].attrs['description'] = 'Ion/Molecule reaction rate constant'; hdf5_f['TRACER'][key]['k_reac'].attrs['units'] = '1.e-9 cm3 molecule-1 s-1'
-                    hdf5_f['TRACER'][key]['FY'].attrs['description'] = 'Fragmentation yield to correct signal due to fragmentation in the drift tube'; hdf5_f['TRACER'][key]['FY'].attrs['units'] = '-'
-                    hdf5_f['TRACER'][key]['IF'].attrs['description'] = 'Isotopic factor to correct isotopic ratio'; hdf5_f['TRACER'][key]['IF'].attrs['units'] = '-'
+                    if 'k_reac' in hdf5_f['TRACER'][key]:
+                        hdf5_f['TRACER'][key]['k_reac'].attrs['description'] = ('Ion/Molecule reaction rate constant'); hdf5_f['TRACER'][key]['k_reac'].attrs['units'] = ('1.e-9 cm3 molecule-1 s-1')                  
+                    if 'FY' in hdf5_f['TRACER'][key]:
+                        hdf5_f['TRACER'][key]['FY'].attrs['description'] = ('Fragmentation yield to correct signal due to fragmentation in the drift tube'); hdf5_f['TRACER'][key]['FY'].attrs['units'] = '-'
+                    if 'IF' in hdf5_f['TRACER'][key]:
+                        hdf5_f['TRACER'][key]['IF'].attrs['description'] = ('Isotopic factor to correct isotopic ratio'); hdf5_f['TRACER'][key]['IF'].attrs['units'] = '-'
+                    if 'sensitivity' in hdf5_f['TRACER'][key]:
+                        hdf5_f['TRACER'][key]['sensitivity'].attrs['description'] = ('sensitivity'); hdf5_f['TRACER'][key]['sensitivity'].attrs['units'] = ('')                  
     
                     hdf5_f['TRACER'][key]['qaqc']['IPT'].attrs['description'] = 'instrumental problems tests for TRACER (S_VM97, K_VM97, KID0, KID, HF5, HF10, HD5, HD10, AL1, DDI, DIP, OOR)'; hdf5_f['TRACER'][key]['qaqc']['IPT'].attrs['units'] = '-'
                     hdf5_f['TRACER'][key]['qaqc']['SST_FW96'].attrs['description'] = 'relative deviation in steady-state test for wc according to Foken and Wichura 1996'; hdf5_f['TRACER'][key]['qaqc']['SST_FW96'].attrs['units'] = '%'
@@ -171,13 +176,13 @@ def add_attributes(filepath, filename, process_irga_data_day, n_irga, UTC_OFFSET
                     hdf5_f['TRACER'][key]['qaqc']['SST_D99'].attrs['description'] = 'relative deviation in steady-state test for wc according to Dutaur 1999'; hdf5_f['TRACER'][key]['qaqc']['SST_D99'].attrs['units'] = '-'
                     hdf5_f['TRACER'][key]['qaqc']['completeness_TRACER'].attrs['description'] = 'fraction of tracer data used in this averaging interval'; hdf5_f['TRACER'][key]['qaqc']['completeness_TRACER'].attrs['units'] = '%'
                     hdf5_f['TRACER'][key]['qaqc']['num_spikes'].attrs['description'] = 'number of spikes on raw data'; hdf5_f['TRACER'][key]['qaqc']['num_spikes'].attrs['units'] = '-'
-                    hdf5_f['TRACER'][key]['qaqc']['flux_SNR'].attrs['description'] = 'flux signal-to-noise ratio'; hdf5_f['TRACER'][key]['qaqc']['flux_SNR'].attrs['units'] = '-'
-                    hdf5_f['TRACER'][key]['qaqc']['flux_noise_mean'].attrs['description'] = 'mean flux noise far off the integral timescale'; hdf5_f['TRACER'][key]['qaqc']['flux_noise_mean'].attrs['units'] = 'ug m-2 s-1'
-                    hdf5_f['TRACER'][key]['qaqc']['flux_noise_rmse'].attrs['description'] = 'RMSE of flux noise far off the integral timescale'; hdf5_f['TRACER'][key]['qaqc']['flux_noise_rmse'].attrs['units'] = 'ug m-2 s-1'
-                    hdf5_f['TRACER'][key]['qaqc']['flux_noise_std'].attrs['description'] = 'standard deviation of flux noise far off the integral timescale'; hdf5_f['TRACER'][key]['qaqc']['flux_noise_std'].attrs['units'] = 'ug m-2 s-1'
+                    hdf5_f['TRACER'][key]['qaqc']['flux_SNR'].attrs['description'] = 'flux signal-to-noise ratio (corrected for HF losses)'; hdf5_f['TRACER'][key]['qaqc']['flux_SNR'].attrs['units'] = '-'
+                    hdf5_f['TRACER'][key]['qaqc']['flux_noise_mean'].attrs['description'] = 'mean flux noise far off the integral timescale (corrected for HF losses)'; hdf5_f['TRACER'][key]['qaqc']['flux_noise_mean'].attrs['units'] = 'ug m-2 s-1'
+                    hdf5_f['TRACER'][key]['qaqc']['flux_noise_rmse'].attrs['description'] = 'RMSE of flux noise far off the integral timescale (corrected for HF losses)'; hdf5_f['TRACER'][key]['qaqc']['flux_noise_rmse'].attrs['units'] = 'ug m-2 s-1'
+                    hdf5_f['TRACER'][key]['qaqc']['flux_noise_std'].attrs['description'] = 'standard deviation of flux noise far off the integral timescale (corrected for HF losses)'; hdf5_f['TRACER'][key]['qaqc']['flux_noise_std'].attrs['units'] = 'ug m-2 s-1'
                     hdf5_f['TRACER'][key]['qaqc']['num_spikes'].attrs['description'] = 'number of spikes (tbd)'; hdf5_f['TRACER'][key]['qaqc']['num_spikes'].attrs['units'] = '-'
-                    hdf5_f['TRACER'][key]['qaqc']['random_error_FS'].attrs['description'] = 'random error as described by Finkelstein and Sims (2001);'; hdf5_f['TRACER'][key]['qaqc']['random_error_FS'].attrs['units'] = 'ug m-2 s-1'
-                    hdf5_f['TRACER'][key]['qaqc']['random_error_noise'].attrs['description'] = 'random error noise estimated according to Mauder (2013)'; hdf5_f['TRACER'][key]['qaqc']['random_error_noise'].attrs['units'] = 'ug m-2 s-1'
-                    hdf5_f['TRACER'][key]['qaqc']['random_flux'].attrs['description'] = 'random flux level estimated by random shuffle criteria (Billesbach, 2011)'; hdf5_f['TRACER'][key]['qaqc']['random_flux'].attrs['units'] = 'ug m-2 s-1'
+                    hdf5_f['TRACER'][key]['qaqc']['random_error_FS'].attrs['description'] = 'random error as described by Finkelstein and Sims (2001) (corrected for HF losses);'; hdf5_f['TRACER'][key]['qaqc']['random_error_FS'].attrs['units'] = 'ug m-2 s-1'
+                    hdf5_f['TRACER'][key]['qaqc']['random_error_noise'].attrs['description'] = 'random error noise estimated according to Mauder (2013) (corrected for HF losses)'; hdf5_f['TRACER'][key]['qaqc']['random_error_noise'].attrs['units'] = 'ug m-2 s-1'
+                    hdf5_f['TRACER'][key]['qaqc']['random_flux'].attrs['description'] = 'random flux level estimated by random shuffle criteria (Billesbach, 2011) (corrected for HF losses)'; hdf5_f['TRACER'][key]['qaqc']['random_flux'].attrs['units'] = 'ug m-2 s-1'
             
     return None

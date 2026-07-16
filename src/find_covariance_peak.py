@@ -1,95 +1,34 @@
-"""Module for determining time lags between correlated atmospheric signals.
-
-This module provides functionality to estimate time lags between two signals by
-analyzing their cross-covariance function.
-
-The implementation uses smoothed cross-covariance analysis with configurable
-window sizes and filtering to handle noisy signals robustly.
-
-Author
-------
-B. Heinesch
-University of Liege, Gembloux Agro-Bio Tech
-"""
-
 import numpy as np
 from scipy.signal import filtfilt
 import matplotlib.pyplot as plt
 
 
 def find_covariance_peak(covariance, outer_window_size, inner_window_size, window_center, filter_length, positive_peak_only, plot=False, filename=''):
-    """Estimate time lag between two signals using cross-covariance analysis.
+    """
+    For two shifted (anti)correlated signals, s1 and s2,
+    this fuction estimates the lag of s2 with respect to s1 by finding the
+    maximum/minimum of the (smoothed) crosscovariance xcov(s1, s2)
 
-    For two time-shifted signals that are either positively or negatively
-    correlated, this function estimates their relative time lag by finding
-    the maximum/minimum of their smoothed cross-covariance function within
-    a specified search window.
-
-    Parameters
+    parameters
     ----------
-    covariance : array_like
-        Cross-covariance function between the two signals
-    outer_window_size : int
-        Size (±samples) of the outer window used for visualization.
-        The total window size will be 2*outer_window_size + 1.
-    inner_window_size : int
-        Size (±samples) of the inner window used for lag search.
-        The peak will be searched within window_center ± inner_window_size.
-    window_center : int
-        Expected lag in samples around which to center the search windows
-    filter_length : int
-        Length of the Hamming window used for smoothing the covariance
-        function before peak detection. Set to 1 for no filtering.
-    positive_peak_only : bool
-        If True, only search for positive peaks (maximum).
-        If False, determine peak sign based on mean covariance.
-    plot : bool, optional
-        If True, generate diagnostic plots showing the covariance
-        function and detected peak
-    filename : str, optional
-        Name of the file being processed, used in plot titles
+    covariance: np, covariance function
+    outer_window_size: samples, size (+/-) of the outer window (for lag plotting only)
+    inner_window_size: samples, size (+/-) of the inner window (for lag search)
+    window_center: samples, lag of the outer window center
+    filter_length: samples smoothing length of filter applied prior to finding covariance peak
+    positive_peak_only: boolean, True if only the positive peak in the cov function has to be searched for
 
-    Returns
+    returns
     -------
-    int
-        Estimated lag in samples between the two signals
+    lag_samples: lag in samples
 
-    Notes
-    -----
-    The function implements the following steps:
-    1. Optional smoothing using a Hamming window and filtfilt
-    2. Peak detection within the inner search window
-    3. Sign handling:
-       - If positive_peak_only=True: always find maximum
-       - If positive_peak_only=False: find maximum for positive
-         correlation, minimum for negative correlation
-
-    The smoothing helps reduce false peak detection in noisy data.
-    The filter_length parameter should be chosen carefully:
-    - Too small: susceptible to noise
-    - Too large: may cause errors in filtfilt and lose true peaks
-
-    This implementation differs from some others (e.g., InnFlux)
-    by not using derivative-based methods, which can be unreliable
-    with low signal-to-noise ratio data.
-
-    Examples
+    Comments
     --------
-    >>> # Generate sample data with known lag
-    >>> import numpy as np
-    >>> x = np.random.randn(1000)
-    >>> y = np.roll(x, 5)  # Create copy of x shifted by 5 samples
-    >>> xcov = np.correlate(x, y, mode='full')
-    >>> lag = find_covariance_peak(
-    ...     xcov, 50, 20, 0, 5, True, plot=True
-    ... )
-    >>> print(f'Detected lag: {lag} samples')
+    - if filter_lenght is too high, an error will occur in the filtfilt function
+    - does not follow the strategy of InnFlux (with derivatives), which was found to be inadequate with low SNR
 
-    See Also
-    --------
-    scipy.signal.filtfilt : Zero-phase filtering used for smoothing
-    numpy.correlate : Correlation calculation
-    xcov : Cross-covariance calculation
+    Written by B. Heinesch.
+    University of Liege, Gembloux Agro-Bio Tech.
     """
 
     if positive_peak_only:
