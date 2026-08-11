@@ -219,24 +219,24 @@ def read_main_inputs(filepath, filename, filetype, ini, OF, idx_tracers_to_proce
         msg = 'sonic  file ' + filename
         print(msg); OF.write(msg + "\n")
         if ini['sonic']['sonic_files_type'] == 'hdf5':
-            with h5py.File(filepath + '\\' + filename, 'r') as hdf5_f:
+            with h5py.File(filepath + '/' + filename, 'r') as hdf5_f:
                 sonicdata = hdf5obj_2_nparray(hdf5_f['Data'], 'f8')
                 sonicdata = sonicdata[:, ini['sonic']['sonic_columns']]
         elif ini['sonic']['sonic_files_type'] == 'ghg':
-            if zipfile.is_zipfile(filepath + '\\' + filename):
-                _, sonicdata, _, _ = read_GHG(filepath + '\\' + filename, 'ghg', filepath + r'\unzipped_GHG')
+            if zipfile.is_zipfile(filepath + '/' + filename):
+                _, sonicdata, _, _ = read_GHG(filepath + '/' + filename, 'ghg', filepath + r'/unzipped_GHG')
                 sonicdata = sonicdata.to_numpy()
                 sonicdata = sonicdata[:, ini['sonic']['sonic_columns'] + ini['irga']['irga_columns']]
                 # convert from UNIX time format in nanoseconds to UNIX in seconds
                 sonicdata[:, 0] += sonicdata[:, 1] / 1e9
                 sonicdata = np.delete(sonicdata, 1, axis=1)
             else:
-                e = 'ERROR on file: ' + filepath + '\\' + filename + ': cannot be unzipped'
+                e = 'ERROR on file: ' + filepath + '/' + filename + ': cannot be unzipped'
                 print(e)
                 error_code = 1
             sonicdata = np.array(sonicdata, dtype=float)
         elif ini['sonic']['sonic_files_type'] == 'csv':
-            sonicdata = np.loadtxt(filepath + '\\' + filename, delimiter=',', skiprows=1)
+            sonicdata = np.loadtxt(filepath + '/' + filename, delimiter=',', skiprows=1)
 
             sonicdata[sonicdata == -9999] = np.nan
 
@@ -307,7 +307,7 @@ def read_main_inputs(filepath, filename, filetype, ini, OF, idx_tracers_to_proce
                 return (None, error_code, idx_tracers_to_process, None)
 
         if error_code == 0:  # corresponding tracer file was found
-            tracer_file_path = tracer_files_list['path'][tracer_file_index] + '\\' + tracer_files_list['name'][tracer_file_index]
+            tracer_file_path = tracer_files_list['path'][tracer_file_index] + '/' + tracer_files_list['name'][tracer_file_index]
 
             if 'TRACER' not in results:
                 # get hdf5_nb_tracers, hdf5_mz_tracer and set idx_calibration

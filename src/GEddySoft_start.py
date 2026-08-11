@@ -44,7 +44,11 @@ if __name__ == '__main__':
 
     # -------------------------------------------------------------------------------------------------------
     # user choices
-    ini_filename = r'..\examples\metadata\GEddySoft_parameters_VOC_top.ini'
+    ini_filename = r'../examples/metadata/GEddySoft_parameters_VOC_top.ini'
+
+    # or read it from command line
+    if len(sys.argv) > 1:
+        ini_filename = sys.argv[1]
     # -------------------------------------------------------------------------------------------------------
 
     # store current time
@@ -56,8 +60,8 @@ if __name__ == '__main__':
 
     # Open logfile in write mode, and close it afterwards
     # start_timestamp = proc_start_time.strftime("%Y%m%d_%H%M%S")
-    # log_filename = f"{ini['files']['log_filepath']}\\logfile_{start_timestamp}.csv"
-    log_filename = f"{ini['files']['log_filepath']}\\logfile.csv"
+    # log_filename = f"{ini['files']['log_filepath']}/logfile_{start_timestamp}.csv"
+    log_filename = f"{ini['files']['log_filepath']}/logfile.csv"
     OF = open(log_filename, 'w')
     OF.write('\n--- New Processing Session ---\n\n')
     OF.write('run started at ' + proc_start_time.strftime("%d/%m/%Y %H:%M:%S") + '\n' + '\n')
