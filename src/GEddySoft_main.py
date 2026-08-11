@@ -160,7 +160,7 @@ def GEddySoft_main(str_day, ini, log_filename):
 
         # prepare covariance data dict to be stored to file
         cov_data = {}
-        temp = {'cov': [[np.NaN] * (2*ini['param']['LAG_OUTER_WINDOW_SIZE']+1)] * out_len}
+        temp = {'cov': [[np.nan] * (2*ini['param']['LAG_OUTER_WINDOW_SIZE']+1)] * out_len}
         cov_data['IRGA'] = dict(zip(tuple(str(x) for x in tuple(range(0, len(ini['irga']['irga_columns'])))),
                                     [deepcopy(temp) for i in range(len(ini['irga']['irga_columns']))]))  # struct containing results for each tracer
 
@@ -223,7 +223,7 @@ def GEddySoft_main(str_day, ini, log_filename):
             if (ini['run_param']['CONCENTRATION_TYPE'] == 0 and ini['irga']['irga_columns'][2] > 0):
                 diag_count = read_diag_val(sonicdata[:, 8])
                 if (diag_count.drop(columns=['AGC', 'Sync', 'Aux_input']) != 0).any(axis=1).any():
-                    sonicdata[:, 6:8] = np.NaN
+                    sonicdata[:, 6:8] = np.nan
                     print('IRGA data flagged')
 
             # subsample sonic data from SAMPLING_RATE_SONIC to SAMPLING RATE FINAL if needed
@@ -304,10 +304,10 @@ def GEddySoft_main(str_day, ini, log_filename):
             interp_time = sonicdata[0, 0] + np.transpose(np.arange(0, ini['param']['WINDOW_LENGTH'], 1/ini['param']['SAMPLING_RATE_FINAL']))
 
             # interpolate wind and scalar data (keep NaN and extrapolate using NaN)
-            interp_u = interp1d(sonicdata[:, 0], uvw_rot[:, 0], kind='nearest', bounds_error=False, fill_value=np.NaN)(interp_time)
-            interp_v = interp1d(sonicdata[:, 0], uvw_rot[:, 1], kind='nearest', bounds_error=False, fill_value=np.NaN)(interp_time)
-            interp_w = interp1d(sonicdata[:, 0], uvw_rot[:, 2], kind='nearest', bounds_error=False, fill_value=np.NaN)(interp_time)
-            interp_Tsonic = interp1d(sonicdata[:, 0], sonicdata[:, 4], kind='nearest', bounds_error=False, fill_value=np.NaN)(interp_time) + 273.15
+            interp_u = interp1d(sonicdata[:, 0], uvw_rot[:, 0], kind='nearest', bounds_error=False, fill_value=np.nan)(interp_time)
+            interp_v = interp1d(sonicdata[:, 0], uvw_rot[:, 1], kind='nearest', bounds_error=False, fill_value=np.nan)(interp_time)
+            interp_w = interp1d(sonicdata[:, 0], uvw_rot[:, 2], kind='nearest', bounds_error=False, fill_value=np.nan)(interp_time)
+            interp_Tsonic = interp1d(sonicdata[:, 0], sonicdata[:, 4], kind='nearest', bounds_error=False, fill_value=np.nan)(interp_time) + 273.15
 
             # check data completeness
             completeness_T = sum(np.isfinite(interp_Tsonic))/(ini['param']['WINDOW_LENGTH']*ini['param']['SAMPLING_RATE_FINAL'])
@@ -346,7 +346,7 @@ def GEddySoft_main(str_day, ini, log_filename):
             # T_sonic = T*(1 + 0.32*w), were w is the volume mixing ratio of water vapor in air
 
             if ini['run_param']['CONCENTRATION_TYPE'] == 0:
-                 interp_H2O = interp1d(sonicdata[:,0], sonicdata[:, 4], kind='nearest', bounds_error=False, fill_value=np.NaN)(interp_time)
+                 interp_H2O = interp1d(sonicdata[:,0], sonicdata[:, 4], kind='nearest', bounds_error=False, fill_value=np.nan)(interp_time)
                  completeness_H2O = sum(np.isfinite(interp_H2O))/(ini['param']['WINDOW_LENGTH']*ini['param']['SAMPLING_RATE_FINAL'])
             else:
                 completeness_H2O = 0
@@ -386,17 +386,17 @@ def GEddySoft_main(str_day, ini, log_filename):
                 p_mean = ini['param']['DEFAULT_PRESSURE']
 
             # get mean air temperature (in K, only for improved computation of air molar concentration)
-            T_meteo = np.NaN
+            T_meteo = np.nan
             if ini['files']['meteo_filepath'] and ini['meteo']['temperature_column']:
                 T_meteo = get_closest_value(df_meteofiledata.iloc[:, ini['meteo']['temperature_column']-1], results['time'][n]) + 273.15
             else:
-                T_meteo = np.NaN
+                T_meteo = np.nan
 
             # get mean air relative humidity (in %, for lag-RH dependency, if any)
             if ini['files']['meteo_filepath'] and ini['meteo']['relative_humidity_column']:
                 rh_meteo = get_closest_value(df_meteofiledata.iloc[:, ini['meteo']['relative_humidity_column']-1], results['time'][n])
             else:
-                rh_meteo = np.NaN
+                rh_meteo = np.nan
 
             # calculate air molar concentration (mol m-3)
             if not pd.isna(T_meteo):
@@ -421,14 +421,14 @@ def GEddySoft_main(str_day, ini, log_filename):
 
             else:
 
-                wT = np.NaN
-                spec_T = [np.NaN] * ini['param']['NUM_FREQ_BINS']
-                spec_T_scaled = [np.NaN] * ini['param']['NUM_FREQ_BINS']
-                cospec_wT = [np.NaN] * ini['param']['NUM_FREQ_BINS']
-                cospec_wT_scaled = [np.NaN] * ini['param']['NUM_FREQ_BINS']
-                steady_state_wT_FW96 = np.NaN
-                steady_state_wT_M98 = np.NaN
-                steady_state_wT_D99 = np.NaN
+                wT = np.nan
+                spec_T = [np.nan] * ini['param']['NUM_FREQ_BINS']
+                spec_T_scaled = [np.nan] * ini['param']['NUM_FREQ_BINS']
+                cospec_wT = [np.nan] * ini['param']['NUM_FREQ_BINS']
+                cospec_wT_scaled = [np.nan] * ini['param']['NUM_FREQ_BINS']
+                steady_state_wT_FW96 = np.nan
+                steady_state_wT_M98 = np.nan
+                steady_state_wT_D99 = np.nan
 
             # calculate Obukhov length, L
             L = -T_mean*u_star**3/(0.4*9.81*wT)
@@ -454,13 +454,13 @@ def GEddySoft_main(str_day, ini, log_filename):
                     theta_v_prime = np.nan_to_num(theta_v_prime, 0)
                     wtheta_v = xcov(w_prime, theta_v_prime, [0, 0])
                 else:
-                    theta_v_mean = np.NaN
-                    wtheta_v = np.NaN
+                    theta_v_mean = np.nan
+                    wtheta_v = np.nan
             else:
-                theta_mean = np.NaN
-                theta_v_mean = np.NaN
-                wtheta = np.NaN
-                wtheta_v = np.NaN
+                theta_mean = np.nan
+                theta_v_mean = np.nan
+                wtheta = np.nan
+                wtheta_v = np.nan
 
             # test on developed turbulent conditions
             ITC_w, ITC_u, ITC_T = test_ITC(w_prime, u_prime, T_prime, wT, zoL, u_star, ini['param']['LATITUDE'])
@@ -597,7 +597,7 @@ def GEddySoft_main(str_day, ini, log_filename):
                     # test on instrument malfunctions from Vitale 2020
                     IPT = inst_prob_test(sonicdata[:,i+6], ini['param']['DETREND_TRACER_SIGNAL'], ini['param']['SAMPLING_RATE_FINAL'], ini['run_param']['PLOT_INST_PROB_TEST'], 'c or h')
     
-                    interp_c = interp1d(sonicdata[:,0], sonicdata[:,i+6], kind='nearest', bounds_error=False, fill_value=np.NaN)(interp_time)
+                    interp_c = interp1d(sonicdata[:,0], sonicdata[:,i+6], kind='nearest', bounds_error=False, fill_value=np.nan)(interp_time)
                     completeness_IRGA = sum(np.isfinite(interp_c))/(ini['param']['WINDOW_LENGTH']*ini['param']['SAMPLING_RATE_FINAL'])
 
                     if completeness_IRGA >= ini['param']['COMPLETENESS_THRESHOLD']:
@@ -986,10 +986,10 @@ def GEddySoft_main(str_day, ini, log_filename):
         if ini['run_param']['WRITE_COV_OUTPUTS']:
             ts = results['time'][0]
             cov_filename = ini['files']['output_files_prefix'] + 'cov_%d%02d%02d.hdf5' % (ts.year, ts.month, ts.day)
-            hdfdict.dump(cov_data, ini['files']['output_folder'] + '\\cov\\' + cov_filename, mode='w')
+            hdfdict.dump(cov_data, ini['files']['output_folder'] + '/cov/' + cov_filename, mode='w')
 
             # add attributes
-            with h5py.File(ini['files']['output_folder'] + '\\cov\\' + cov_filename, 'r+') as hdf5_f:
+            with h5py.File(ini['files']['output_folder'] + '/cov/' + cov_filename, 'r+') as hdf5_f:
                 if ini['run_param']['CONCENTRATION_TYPE'] == 0:
                     # loop on tracers
                     for i in range(len(hdf5_f["IRGA"])):
@@ -1005,7 +1005,7 @@ def GEddySoft_main(str_day, ini, log_filename):
         ts = results['time'][0]
         res_filename = ini['files']['output_files_prefix'] + '%d%02d%02d.hdf5' % (ts.year, ts.month, ts.day)
         results['time'] = [date_obj.strftime('%Y-%m-%d %H-%M-%S') for date_obj in results['time']]
-        hdfdict.dump(results, ini['files']['output_folder']+'\\' + res_filename, mode='w')
+        hdfdict.dump(results, ini['files']['output_folder']+'/' + res_filename, mode='w')
 
         # add attributes "name" and "units"
         if  'TRACER' in results:  # TRACER part has been created in the result dict (tracer data for that day)
