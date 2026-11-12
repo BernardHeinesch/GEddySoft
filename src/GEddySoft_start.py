@@ -4,10 +4,11 @@ Reads the ini file and allows to run the code either in non-multiprocess mode
 or in multi-process mode (one process per day of input data)
 """
 
-import multiprocessing as mp
 import datetime
+import argparse
 import os
 import sys
+from joblib import Parallel, delayed
 from GEddySoft_main import GEddySoft_main
 from get_ini import get_ini
 from get_list_input_files import get_list_input_files
@@ -15,36 +16,41 @@ from check_missing_dates_parallel_processing import check_missing_dates_parallel
 from map_sonic2tracer import map_sonic2tracer
 
 
-# %% parallel processing routine
+# %% parallel processing routine (joblib backend: one process per day,
+#    worker prints forwarded to the console, progress counter in the parent)
 def run_pool(days_to_process, log_filename):
-    with mp.Pool(cpu) as pool:
-        try:
-            # Save original stdout before redirecting
-            original_stdout = sys.stdout
-            # Redirect stdout to devnull for all processes
-            sys.stdout = open(os.devnull, 'w')
-            results = pool.starmap(GEddySoft_main, [(day, ini, log_filename) for day in days_to_process])
-            # Restore stdout
-            sys.stdout = sys.__stdout__
-            print(f'processed days: {results}' + '\n')
-            OF.write(f'successfully processed days: {results}\n')
-        except Exception as e:
-            # Make sure to restore stdout even if there's an error
-            sys.stdout = original_stdout
-            print(f'error during processing: {str(e)}')
-            OF.write(f'error during processing: {str(e)}\n')
-        finally:
-            pool.close()
-            pool.join()
-            print('pool closed')
+    try:
+        total = len(days_to_process)
+        results = []
+        for i, res in enumerate(
+                Parallel(n_jobs=cpu, return_as='generator_unordered')(
+                    delayed(GEddySoft_main)(day, ini, log_filename)
+                    for day in days_to_process), 1):
+            results.append(res)
+            day_done = res[0] if isinstance(res, (list, tuple)) else res
+            print(f'  {i}/{total} runs completed ({day_done})')
+        print(f'processed days: {results}' + '\n')
+        OF.write(f'successfully processed days: {results}\n')
+    except Exception as e:
+        print(f'error during processing: {str(e)}')
+        OF.write(f'error during processing: {str(e)}\n')
 
 
 # %% main
 if __name__ == '__main__':
 
     # -------------------------------------------------------------------------------------------------------
-    # user choices
-    ini_filename = r'..\examples\metadata\GEddySoft_parameters_VOC_top.ini'
+    # command line; the ini file carries every other choice
+    parser = argparse.ArgumentParser(
+        description='Run GEddySoft on a parameter (.ini) file.')
+    parser.add_argument('ini', nargs='?',
+                        default=os.path.normpath(os.path.join(
+                            os.path.dirname(__file__), '..', 'examples', 'metadata',
+                            'GEddySoft_parameters_VOC_top.ini')),
+                        help='path to the GEddySoft parameter (.ini) file')
+    ini_filename = parser.parse_args().ini
+    if not os.path.isfile(ini_filename):
+        sys.exit(f'ini file not found: {ini_filename}')
     # -------------------------------------------------------------------------------------------------------
 
     # store current time
@@ -89,9 +95,9 @@ if __name__ == '__main__':
 
         unique_days = [date.replace('-', '_') for date in unique_days]
 
-        cpu = mp.cpu_count()
-        print('running in multithread mode with ' + str(cpu) + ' CPUs... (console muted)\n')
-        OF.write(f'running in multithread mode with {cpu} CPUs\n')
+        cpu = os.cpu_count() or 1
+        print(f'running in multithread mode (joblib backend) with {cpu} CPUs\n')
+        OF.write(f'running in multithread mode (joblib backend) with {cpu} CPUs\n')
 
         # First attempt with all days
         run_pool(unique_days, log_filename)

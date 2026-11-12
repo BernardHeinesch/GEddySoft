@@ -141,28 +141,42 @@ Once the user wants to contribute to the main branch, please create a merge requ
     - 29 June 2025: correction for get_closest_index : in case of missing/nan/empty value, added the search in a window of increasing size 
                     (not only 10 values), until non nan/empty values are found
                     
-    v4.0.1 2025-08-16
-    -----------------
-    Corrected mistakes:
-    - 16 August 2025: correction on conc_prec and conc_LOD computation. Division by number of samples must be out of the sqrt.
-
-    v4.0.2 2025-08-29
-    -----------------
+    v4.1 2026-07-16
+    ---------------
     - Added configurable UTC offset through UTC_OFFSET parameter in ini settings
     - Simplifications brought to date handling in read_main_inputs
-    Corrected mistakes:
-    - w_prime_trim was used instead of w_prime in the IRGA part when implementing time-series wrapping after rolling. Idem for c_prime_trim.
-
-    v4.1 2026-07-16
-    --------------
-    Corrected mistakes:
     - Added one accepted input file format (csv from QCL)
     - Added IMPUTATION_METHOD option (0/1/2) for TRACER concentration alignment on the SAMPLING_RATE_FINAL grid. Method 0 maps only measured TRACER timestamps (no imputation), method 1 uses FFT resampling, method 2 uses plateau (zero-order hold) upsampling.
     - Refactored lag/flux computation: CONST/PRESCRIBED flux uses xcov at a single lag; MAX and MAX_WITH_DEFAULT share a common code path. Def 'compute_time_lag also created, to improve modularity.
+
+    Corrected mistakes:
     - 16 August 2025: correction on conc_prec and conc_LOD computation. Division by number of samples must be out of the sqrt.
+    - w_prime_trim was used instead of w_prime in the IRGA part when implementing time-series wrapping after rolling. Idem for c_prime_trim.
     - 23 December 2025: added correction for low-pass filtering on flux uncertainties for TRACER : flux uncertainties were not corrected while the flux was.
     - 26 December 2025: added correction for prescribed lag which was corrected for clock-drift altough the input file is physical + clock drift lag
     - 26 December 2025: make time-zone aware all the timestamps for the metadata input files
     - 28 May 2026: fixed spike_detection_vickers97 multi-pass despiking (now updates the working signal between passes) and improved invalid-data handling (NaN/Inf via error_value)
     - 29 May 2026: wind_rotations: replaced arctan by arctan2 for yaw/pitch (correct quadrant + improved stability); no impact expected on key outputs (mean wind speed/direction and scalar fluxes), except rare edge cases when u_mean≈0.
 
+    v4.2 2026-11-12
+    ---------------
+
+    Improved existing features:
+    - GEddySoft_start (parallel processing): replaced the multiprocessing.Pool backend by joblib.Parallel (loky backend), which provides simpler code, live progress report, worker stdout/stderr forwarding to the console, and more robust worker management. joblib is now a required dependency.
+    - GEddySoft_main (T_prime): add warning when NaN values are detected in T_prime before replacing by 0.
+    - compatibility: replaced np.NaN by np.nan across the code, integration routine naming: replaced trapz by scipy.integrate.trapezoid, replaced numpy.string_ by numpy.bytes_ in hdfdict, suggestions by Kim Hoang.
+
+    New functionalities:
+    - GEddySoft_start: can now be launched from command line with an optional ini filepath argument (argparse). If no argument is provided, the example ini path in this repository is used.
+    - Added standalone daily HDF5-to-NetCDF concatenation utility (concat_hdf5.py).
+
+    Corrected mistakes:
+    - compute_time_lag(MAX_WITH_DEFAULT): corrected edge fallback conditions (off-by-one) to match the lag range returned by find_covariance_peak. Bug detected by Pedro Coimbra.
+    - xcov: lag=0 now uses the full arrays (no dropped sample) and negative lags now trim the wrapped samples correctly. Bug detected by Pedro Coimbra. Measured effect at a fixed lag (~-110 samples in an 18000-sample window): median 0.000 %, 90th percentile ~3 %, worst 27 % — negligible on strong fluxes, large on weak ones, and it also feeds the peak search.
+    - GEddySoft_main (wT): 'wT' computation was using 'xcov(w_prime, T_prime,[0, 0])' which drops the last sample. Now with np.cov, same estimator as other sonic covariances, and without dropping the last sample. That one-sample split is the whole of a measured 0.067 % disagreement on wT while every neighbouring sonic quantity reproduces to ~1e-13 %. Bug detected by Pedro Coimbra.
+    - GEddySoft_main (sonic despiking): the two sonic `spike_detection_vickers97` calls (w and T_sonic) passed `ac_freq = SAMPLING_RATE_SONIC` instead of SAMPLING_RATE_FINAL (after resampling). Bug detected by Pedro Coimbra.
+    - GEddySoft_main (TRACER conc_std ddof): tracer conc_std was using ddof=0 instead of ddof=1. Worth `sqrt(N/(N-1)) - 1` = 0.0028 % at N = 17900. Bug detected by Pedro Coimbra.
+    - GEddySoft_main (PTR-TOF-MS neutral mass convention): for conversion of TRACER fluxes to ug m-2 s-1 (neutrals), molar mass is now derived as `mz - 1.00728` (proton mass) instead of `mz - 1`. Suggestion by Pedro Coimbra.
+    - nanlinfit: non-finite (NaN/Inf) samples were deleted before building the fit x-axis (`t = 0..N_valid-1`), so the slope was computed per valid sample instead of per real sample index — overestimating dT_dt/dc_dt when multiplied by the sampling rate, and inconsistent with nandetrend which evaluates the fit on the original indices. Now the fit is performed on the original sample indices (isfinite mask). Bug detected by Matthias Cuntz.
+    - GEddySoft_main (air_mol_conc): flux unit conversion used the moist-air molar concentration p/(R*T) instead of the dry-air concentration (p-ea)/(R*T) — appropriate for dry-air mole fractions (QCL/PTR-TOF-MS convention). All converted fluxes were overestimated by ea/p (~1 % typical, up to ~4 % hot & humid). Water vapour pressure ea is now estimated with a fallback chain: (1) meteo-file relative humidity via new function esat (Magnus formula), (2) measured H2O mixing ratio, (3) ea=0 dry-air assumption (identical to previous behaviour). The fixed standard molar-volume constant (`22.414e-3` m3 mol-1) previously used in the conversion is removed as a consequence. Bug detected by Matthias Cuntz.
+    - read_GHG (read_diag_val, LI-7200 diagnostics): 16-bit flag conversion `'000' + format(x, 'b')` gave wrong bit alignment whenever the value had fewer than 13 significant bits. Now `format(x, '016b')`. Bug detected by Matthias Cuntz.

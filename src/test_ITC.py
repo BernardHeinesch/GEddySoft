@@ -77,6 +77,6 @@ def test_ITC(w_prime, u_prime, T_prime, wT, zoL, u_star, lat):
     #     norm_sigma_u_model = 1.99
     #     norm_sigma_T_model = 0.5*(-zoL)**(-1/2)
     # else:
-    #     norm_sigma_w_model = np.NaN
-    #     norm_sigma_u_model = np.NaN
-    #     norm_sigma_T_model = np.NaN
+    #     norm_sigma_w_model = np.nan
+    #     norm_sigma_u_model = np.nan
+    #     norm_sigma_T_model = np.nan

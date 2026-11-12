@@ -82,8 +82,8 @@ def compute_time_lag(ini, w_prime, c_prime, lag_center, prescribed_lag_samples, 
         )  # lag in samples
 
         if ini['param']['LAG_DETECT_METHOD'] == 'MAX_WITH_DEFAULT':
-            if (lag_samples == lag_center - ini['param']['LAG_INNER_WINDOW_SIZE'] + 1 or
-                lag_samples == lag_center + ini['param']['LAG_INNER_WINDOW_SIZE']):
+            if (lag_samples == lag_center - ini['param']['LAG_INNER_WINDOW_SIZE'] or
+                lag_samples == lag_center + ini['param']['LAG_INNER_WINDOW_SIZE'] - 1):
                 lag_samples = lag_center
     else:
         raise ValueError(f"Unknown LAG_DETECT_METHOD: {ini['param']['LAG_DETECT_METHOD']}")

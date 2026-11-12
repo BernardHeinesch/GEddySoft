@@ -1,0 +1,537 @@
+
+--- New Processing Session ---
+
+run started at 12/11/2026 21:09:29
+
+*************** reading metadata ***************
+
+using meteo file: ..\examples\metadata\input_meteo.csv
+using clock_drift file: ..\examples\metadata\input_lag_drift_TDC.csv
+using rh_lag file: ..\examples\metadata\input_lag_rh_dependency.csv
+using lpcf file: ..\examples\metadata\input_lpfc_LUT_CF_2023_top.csv
+
+*************** processing data ***************
+
+sonic  file GHS50_2023_07_06__02_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__02_00_00.h5
+
+process time: 0:00:09.722355
+
+sonic  file GHS50_2023_07_06__03_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__03_00_37.h5
+
+process time: 0:00:12.931192
+
+sonic  file GHS50_2023_07_06__04_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__04_00_38.h5
+
+process time: 0:00:10.716709
+
+sonic  file GHS50_2023_07_06__05_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__05_00_37.h5
+
+process time: 0:00:11.770758
+
+sonic  file GHS50_2023_07_06__06_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__06_30_00.h5
+
+process time: 0:00:12.840395
+
+sonic  file GHS50_2023_07_06__07_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__07_30_38.h5
+
+process time: 0:00:12.040780
+
+sonic  file GHS50_2023_07_06__08_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__08_30_38.h5
+
+process time: 0:00:10.422155
+
+sonic  file GHS50_2023_07_06__09_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__09_30_38.h5
+
+process time: 0:00:11.494908
+
+sonic  file GHS50_2023_07_06__11_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__11_00_00.h5
+
+process time: 0:00:12.577739
+
+sonic  file GHS50_2023_07_06__12_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__12_00_38.h5
+
+process time: 0:00:10.746853
+
+sonic  file GHS50_2023_07_06__13_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__13_00_39.h5
+
+process time: 0:00:11.365466
+
+sonic  file GHS50_2023_07_06__16_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__16_00_23.h5
+
+process time: 0:00:11.346972
+
+sonic  file GHS50_2023_07_06__17_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__17_00_00.h5
+
+process time: 0:00:10.314734
+
+sonic  file GHS50_2023_07_06__18_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__18_00_33.h5
+
+process time: 0:00:08.047311
+
+sonic  file GHS50_2023_07_06__19_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__19_00_33.h5
+
+process time: 0:00:08.602828
+
+sonic  file GHS50_2023_07_06__20_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__20_00_33.h5
+
+process time: 0:00:08.974659
+
+sonic  file GHS50_2023_07_06__21_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__21_30_00.h5
+
+process time: 0:00:09.316180
+
+sonic  file GHS50_2023_07_06__22_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__22_30_33.h5
+
+process time: 0:00:08.624614
+
+sonic  file GHS50_2023_07_06__23_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_06__23_30_33.h5
+
+process time: 0:00:08.109361
+
+sonic  file GHS50_2023_07_07__00_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__00_30_33.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:09.420955
+
+sonic  file GHS50_2023_07_07__02_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__02_00_00.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:09.352709
+
+sonic  file GHS50_2023_07_07__03_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__03_00_33.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:08.371819
+
+sonic  file GHS50_2023_07_07__04_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__04_00_33.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:08.790813
+
+sonic  file GHS50_2023_07_07__05_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__05_00_33.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:08.105622
+
+sonic  file GHS50_2023_07_07__06_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__06_30_00.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:08.891147
+
+sonic  file GHS50_2023_07_07__07_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__07_30_33.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:08.704608
+
+sonic  file GHS50_2023_07_07__08_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__08_30_33.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:08.717585
+
+sonic  file GHS50_2023_07_07__09_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__09_30_33.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:08.022401
+
+sonic  file GHS50_2023_07_07__11_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__11_00_00.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:08.100052
+
+sonic  file GHS50_2023_07_07__12_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__12_00_33.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:08.603243
+
+sonic  file GHS50_2023_07_07__13_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__13_00_33.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:08.373275
+
+sonic  file GHS50_2023_07_07__14_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__14_00_33.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:07.921116
+
+sonic  file GHS50_2023_07_07__15_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__15_30_00.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:09.369309
+
+sonic  file GHS50_2023_07_07__16_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__16_30_33.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:09.682453
+
+sonic  file GHS50_2023_07_07__17_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__17_30_33.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:08.524865
+
+sonic  file GHS50_2023_07_07__18_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__18_30_32.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:07.547227
+
+sonic  file GHS50_2023_07_07__20_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__20_00_00.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:09.548327
+
+sonic  file GHS50_2023_07_07__21_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__21_00_33.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:08.910824
+
+sonic  file GHS50_2023_07_07__22_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__22_00_33.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:08.664327
+
+sonic  file GHS50_2023_07_07__23_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_07__23_00_32.h5
+
+Warning: full NaN values found in tracerdata[19]
+process time: 0:00:08.186163
+
+sonic  file GHS50_2023_07_08__00_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__00_30_00.h5
+
+process time: 0:00:10.624612
+
+sonic  file GHS50_2023_07_08__01_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__01_30_33.h5
+
+process time: 0:00:09.233316
+
+sonic  file GHS50_2023_07_08__02_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__02_30_33.h5
+
+process time: 0:00:09.453243
+
+sonic  file GHS50_2023_07_08__03_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__03_30_33.h5
+
+process time: 0:00:11.197704
+
+sonic  file GHS50_2023_07_08__05_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__05_00_00.h5
+
+process time: 0:00:09.538835
+
+sonic  file GHS50_2023_07_08__06_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__06_00_33.h5
+
+process time: 0:00:08.090474
+
+sonic  file GHS50_2023_07_08__07_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__07_00_32.h5
+
+process time: 0:00:08.900607
+
+sonic  file GHS50_2023_07_08__08_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__08_00_33.h5
+
+process time: 0:00:10.385610
+
+sonic  file GHS50_2023_07_08__09_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__09_30_00.h5
+
+process time: 0:00:08.512374
+
+sonic  file GHS50_2023_07_08__10_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__10_30_33.h5
+
+process time: 0:00:08.700086
+
+sonic  file GHS50_2023_07_08__11_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__11_30_33.h5
+
+process time: 0:00:10.004178
+
+sonic  file GHS50_2023_07_08__12_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__12_30_33.h5
+
+process time: 0:00:09.973349
+
+sonic  file GHS50_2023_07_08__14_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__14_00_00.h5
+
+process time: 0:00:10.587812
+
+sonic  file GHS50_2023_07_08__15_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__15_00_33.h5
+
+process time: 0:00:10.250951
+
+sonic  file GHS50_2023_07_08__16_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__16_00_34.h5
+
+process time: 0:00:08.452346
+
+sonic  file GHS50_2023_07_08__17_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__17_00_33.h5
+
+process time: 0:00:08.454342
+
+sonic  file GHS50_2023_07_08__18_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__18_30_00.h5
+
+process time: 0:00:10.002607
+
+sonic  file GHS50_2023_07_08__19_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__19_30_32.h5
+
+process time: 0:00:10.907925
+
+sonic  file GHS50_2023_07_08__20_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__20_30_32.h5
+
+process time: 0:00:08.965535
+
+sonic  file GHS50_2023_07_08__21_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__21_30_32.h5
+
+process time: 0:00:09.931732
+
+sonic  file GHS50_2023_07_08__23_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_08__23_00_00.h5
+
+process time: 0:00:08.258457
+
+sonic  file GHS50_2023_07_09__00_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__00_00_32.h5
+
+process time: 0:00:09.128584
+
+sonic  file GHS50_2023_07_09__01_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__01_00_32.h5
+
+process time: 0:00:08.911003
+
+sonic  file GHS50_2023_07_09__02_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__02_00_32.h5
+
+process time: 0:00:08.473068
+
+sonic  file GHS50_2023_07_09__03_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__03_30_00.h5
+
+process time: 0:00:08.746262
+
+sonic  file GHS50_2023_07_09__04_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__04_30_32.h5
+
+process time: 0:00:08.791293
+
+sonic  file GHS50_2023_07_09__05_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__05_30_32.h5
+
+process time: 0:00:10.250544
+
+sonic  file GHS50_2023_07_09__06_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__06_30_31.h5
+
+process time: 0:00:08.543420
+
+sonic  file GHS50_2023_07_09__08_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__08_00_00.h5
+
+process time: 0:00:08.528637
+
+sonic  file GHS50_2023_07_09__09_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__09_00_32.h5
+
+process time: 0:00:09.105290
+
+sonic  file GHS50_2023_07_09__10_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__10_00_32.h5
+
+process time: 0:00:09.863469
+
+sonic  file GHS50_2023_07_09__11_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__11_00_32.h5
+
+process time: 0:00:08.022196
+
+sonic  file GHS50_2023_07_09__14_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__14_30_32.h5
+
+process time: 0:00:09.636084
+
+sonic  file GHS50_2023_07_09__15_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__15_30_32.h5
+
+process time: 0:00:10.233811
+
+sonic  file GHS50_2023_07_09__17_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__17_00_00.h5
+
+process time: 0:00:08.346656
+
+sonic  file GHS50_2023_07_09__19_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__19_30_21.h5
+
+process time: 0:00:08.218926
+
+sonic  file GHS50_2023_07_09__20_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__20_30_00.h5
+
+process time: 0:00:09.623973
+
+sonic  file GHS50_2023_07_09__21_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__21_30_31.h5
+
+process time: 0:00:08.238916
+
+sonic  file GHS50_2023_07_09__22_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__22_30_31.h5
+
+process time: 0:00:08.165087
+
+sonic  file GHS50_2023_07_09__23_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_09__23_30_31.h5
+
+process time: 0:00:08.779445
+
+sonic  file GHS50_2023_07_10__01_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__01_00_30.h5
+
+process time: 0:00:09.996390
+
+sonic  file GHS50_2023_07_10__03_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__03_00_30.h5
+
+process time: 0:00:08.348289
+
+sonic  file GHS50_2023_07_10__04_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__04_00_30.h5
+
+process time: 0:00:09.248870
+
+sonic  file GHS50_2023_07_10__05_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__05_30_00.h5
+
+process time: 0:00:09.506270
+
+sonic  file GHS50_2023_07_10__06_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__06_30_31.h5
+
+process time: 0:00:08.695381
+
+sonic  file GHS50_2023_07_10__07_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__07_30_31.h5
+
+process time: 0:00:08.442787
+
+sonic  file GHS50_2023_07_10__08_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__08_30_30.h5
+
+process time: 0:00:08.389490
+
+sonic  file GHS50_2023_07_10__10_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__10_00_00.h5
+
+process time: 0:00:08.812551
+
+sonic  file GHS50_2023_07_10__11_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__11_00_31.h5
+
+process time: 0:00:08.917709
+
+sonic  file GHS50_2023_07_10__12_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__12_00_30.h5
+
+process time: 0:00:08.731253
+
+sonic  file GHS50_2023_07_10__13_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__13_00_30.h5
+
+process time: 0:00:09.186339
+
+sonic  file GHS50_2023_07_10__14_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__14_30_00.h5
+
+process time: 0:00:08.123607
+
+sonic  file GHS50_2023_07_10__15_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__15_30_30.h5
+
+process time: 0:00:08.587623
+
+sonic  file GHS50_2023_07_10__16_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__16_30_30.h5
+
+process time: 0:00:09.289174
+
+sonic  file GHS50_2023_07_10__17_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__17_30_30.h5
+
+process time: 0:00:09.464856
+
+sonic  file GHS50_2023_07_10__19_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__19_00_00.h5
+
+process time: 0:00:08.734979
+
+sonic  file GHS50_2023_07_10__20_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__20_00_30.h5
+
+process time: 0:00:07.974201
+
+sonic  file GHS50_2023_07_10__21_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__21_00_30.h5
+
+process time: 0:00:09.464256
+
+sonic  file GHS50_2023_07_10__22_00_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__22_00_30.h5
+
+process time: 0:00:09.030798
+
+sonic  file GHS50_2023_07_10__23_30_00.hdf5
+tracer file K8_BE-Vie_2023_TOF4000_2023_07_10__23_30_00.h5
+
+process time: 0:00:08.717201
+
+finished at 12/11/2026 21:25:02
+. run took 0:15:32.497622

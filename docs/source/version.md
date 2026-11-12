@@ -1,5 +1,25 @@
 # Version History
 
+## v4.2 (2026-11-12)
+
+### Improvements
+- Replaced the `multiprocessing.Pool` backend by `joblib.Parallel` in `GEddySoft_start`, with live progress reporting and worker console output forwarding.
+- Added a command-line `.ini` filepath argument to `GEddySoft_start`; when omitted, the packaged example configuration is used.
+- Added dry-air molar concentration computation through `air_molar_conc_dry` and `esat`, with fallback to meteo RH, measured H2O mole fraction, then dry-air assumption.
+- Added standalone daily HDF5-to-NetCDF concatenation utility `concat_hdf5.py`.
+- Improved NumPy/SciPy compatibility: `np.nan`, `scipy.integrate.trapezoid`, and `numpy.bytes_` are now used where required.
+
+### Corrected Mistakes
+- `compute_time_lag(MAX_WITH_DEFAULT)`: corrected edge fallback conditions to match the lag range returned by `find_covariance_peak`.
+- `xcov`: fixed lag 0 handling and negative-lag trimming so wrapped samples are not retained incorrectly.
+- `GEddySoft_main`: replaced the `wT` estimate by `np.cov`, preventing the last sample from being dropped.
+- `GEddySoft_main`: fixed sonic despiking sampling-rate argument to use `SAMPLING_RATE_FINAL` after resampling.
+- `GEddySoft_main`: fixed TRACER `conc_std` to use `ddof=1`.
+- `GEddySoft_main`: PTR-TOF-MS neutral molar mass now uses `mz - 1.00728` instead of `mz - 1`.
+- `nanlinfit`: non-finite samples are now fitted on their original indices instead of a compressed index.
+- `GEddySoft_main`: flux conversion now uses dry-air molar concentration instead of moist-air molar concentration.
+- `read_GHG`: corrected LI-7200 diagnostic conversion to 16-bit binary formatting.
+
 ## v4.1 (2026-07-16)
 
 ### Improvements

@@ -51,6 +51,8 @@ from wind_rotations import wind_rotations
 from flux_unit_conversion import flux_unit_conversion
 from tracer_imputation import build_interp_c
 from compute_time_lag import compute_time_lag
+from esat import esat
+from air_molar_conc_dry import air_molar_conc_dry
 
 # %% read inputs and prepare the process of individual days
 
@@ -160,7 +162,7 @@ def GEddySoft_main(str_day, ini, log_filename):
 
         # prepare covariance data dict to be stored to file
         cov_data = {}
-        temp = {'cov': [[np.NaN] * (2*ini['param']['LAG_OUTER_WINDOW_SIZE']+1)] * out_len}
+        temp = {'cov': [[np.nan] * (2*ini['param']['LAG_OUTER_WINDOW_SIZE']+1)] * out_len}
         cov_data['IRGA'] = dict(zip(tuple(str(x) for x in tuple(range(0, len(ini['irga']['irga_columns'])))),
                                     [deepcopy(temp) for i in range(len(ini['irga']['irga_columns']))]))  # struct containing results for each tracer
 
@@ -223,7 +225,7 @@ def GEddySoft_main(str_day, ini, log_filename):
             if (ini['run_param']['CONCENTRATION_TYPE'] == 0 and ini['irga']['irga_columns'][2] > 0):
                 diag_count = read_diag_val(sonicdata[:, 8])
                 if (diag_count.drop(columns=['AGC', 'Sync', 'Aux_input']) != 0).any(axis=1).any():
-                    sonicdata[:, 6:8] = np.NaN
+                    sonicdata[:, 6:8] = np.nan
                     print('IRGA data flagged')
 
             # subsample sonic data from SAMPLING_RATE_SONIC to SAMPLING RATE FINAL if needed
@@ -248,7 +250,7 @@ def GEddySoft_main(str_day, ini, log_filename):
                                              sonicdata[:, 3],
                                              spike_mode = ini['param']['SPIKE_MODE'],
                                              avrg_len = int(ini['param']['WINDOW_LENGTH']/60),
-                                             ac_freq = ini['param']['SAMPLING_RATE_SONIC'],
+                                             ac_freq = ini['param']['SAMPLING_RATE_FINAL'],
                                              spike_limit = ini['param']['SPIKE_DETECTION_THRESHOLD_W'],
                                              max_consec_spikes = ini['param']['MAX_CONSEC_SPIKES'],
                                              error_value = np.nan,
@@ -263,7 +265,7 @@ def GEddySoft_main(str_day, ini, log_filename):
                 sonicdata[:, 4], is_spike, _ = spike_detection_vickers97(sonicdata[:, 4], 
                                              spike_mode = ini['param']['SPIKE_MODE'],
                                              avrg_len = int(ini['param']['WINDOW_LENGTH']/60),
-                                             ac_freq = ini['param']['SAMPLING_RATE_SONIC'],
+                                             ac_freq = ini['param']['SAMPLING_RATE_FINAL'],
                                              spike_limit = ini['param']['SPIKE_DETECTION_THRESHOLD_T'],
                                              max_consec_spikes = ini['param']['MAX_CONSEC_SPIKES'],
                                              error_value = np.nan,
@@ -304,10 +306,10 @@ def GEddySoft_main(str_day, ini, log_filename):
             interp_time = sonicdata[0, 0] + np.transpose(np.arange(0, ini['param']['WINDOW_LENGTH'], 1/ini['param']['SAMPLING_RATE_FINAL']))
 
             # interpolate wind and scalar data (keep NaN and extrapolate using NaN)
-            interp_u = interp1d(sonicdata[:, 0], uvw_rot[:, 0], kind='nearest', bounds_error=False, fill_value=np.NaN)(interp_time)
-            interp_v = interp1d(sonicdata[:, 0], uvw_rot[:, 1], kind='nearest', bounds_error=False, fill_value=np.NaN)(interp_time)
-            interp_w = interp1d(sonicdata[:, 0], uvw_rot[:, 2], kind='nearest', bounds_error=False, fill_value=np.NaN)(interp_time)
-            interp_Tsonic = interp1d(sonicdata[:, 0], sonicdata[:, 4], kind='nearest', bounds_error=False, fill_value=np.NaN)(interp_time) + 273.15
+            interp_u = interp1d(sonicdata[:, 0], uvw_rot[:, 0], kind='nearest', bounds_error=False, fill_value=np.nan)(interp_time)
+            interp_v = interp1d(sonicdata[:, 0], uvw_rot[:, 1], kind='nearest', bounds_error=False, fill_value=np.nan)(interp_time)
+            interp_w = interp1d(sonicdata[:, 0], uvw_rot[:, 2], kind='nearest', bounds_error=False, fill_value=np.nan)(interp_time)
+            interp_Tsonic = interp1d(sonicdata[:, 0], sonicdata[:, 4], kind='nearest', bounds_error=False, fill_value=np.nan)(interp_time) + 273.15
 
             # check data completeness
             completeness_T = sum(np.isfinite(interp_Tsonic))/(ini['param']['WINDOW_LENGTH']*ini['param']['SAMPLING_RATE_FINAL'])
@@ -346,10 +348,11 @@ def GEddySoft_main(str_day, ini, log_filename):
             # T_sonic = T*(1 + 0.32*w), were w is the volume mixing ratio of water vapor in air
 
             if ini['run_param']['CONCENTRATION_TYPE'] == 0:
-                 interp_H2O = interp1d(sonicdata[:,0], sonicdata[:, 4], kind='nearest', bounds_error=False, fill_value=np.NaN)(interp_time)
+                 interp_H2O = interp1d(sonicdata[:,0], sonicdata[:, 4], kind='nearest', bounds_error=False, fill_value=np.nan)(interp_time)
                  completeness_H2O = sum(np.isfinite(interp_H2O))/(ini['param']['WINDOW_LENGTH']*ini['param']['SAMPLING_RATE_FINAL'])
             else:
                 completeness_H2O = 0
+                interp_H2O = np.nan
 
             if ini['run_param']['CONCENTRATION_TYPE'] == 0 and completeness_H2O >= ini['param']['COMPLETENESS_THRESHOLD']:
 
@@ -363,7 +366,9 @@ def GEddySoft_main(str_day, ini, log_filename):
                     else:
                         T_prime = interp_T - T_mean
                     std_T = np.nanstd(T_prime, ddof=1)
-                    T_prime = np.nan_to_num(T_prime, 0)
+                    if np.isnan(T_prime).any():
+                        print("Warning: NaN values detected in T_prime. Replacing with 0.")
+                        T_prime = np.nan_to_num(T_prime, nan=0)
 
             else:
 
@@ -377,7 +382,9 @@ def GEddySoft_main(str_day, ini, log_filename):
                 else:
                     T_prime = interp_T - T_mean
                 std_T = np.nanstd(T_prime, ddof=1)
-                T_prime = np.nan_to_num(T_prime, 0)
+                if np.isnan(T_prime).any():
+                    print("Warning: NaN values detected in T_prime. Replacing with 0.")
+                    T_prime = np.nan_to_num(T_prime, nan=0)
 
             # get mean atmospheric pressure
             if ini['files']['meteo_filepath'] and ini['meteo']['pressure_column']:
@@ -386,28 +393,27 @@ def GEddySoft_main(str_day, ini, log_filename):
                 p_mean = ini['param']['DEFAULT_PRESSURE']
 
             # get mean air temperature (in K, only for improved computation of air molar concentration)
-            T_meteo = np.NaN
+            T_meteo = np.nan
             if ini['files']['meteo_filepath'] and ini['meteo']['temperature_column']:
                 T_meteo = get_closest_value(df_meteofiledata.iloc[:, ini['meteo']['temperature_column']-1], results['time'][n]) + 273.15
             else:
-                T_meteo = np.NaN
+                T_meteo = np.nan
 
             # get mean air relative humidity (in %, for lag-RH dependency, if any)
             if ini['files']['meteo_filepath'] and ini['meteo']['relative_humidity_column']:
                 rh_meteo = get_closest_value(df_meteofiledata.iloc[:, ini['meteo']['relative_humidity_column']-1], results['time'][n])
             else:
-                rh_meteo = np.NaN
-
-            # calculate air molar concentration (mol m-3)
-            if not pd.isna(T_meteo):
-                air_mol_conc = 1/((T_meteo/273.15) * (1013.25/p_mean) * 22.414e-3)
-            else:
-                air_mol_conc = 1/((T_mean/273.15) * (1013.25/p_mean) * 22.414e-3)
+                rh_meteo = np.nan
+            # calculate dry air molar concentration (mol m-3)
+            chi_H2O = np.nan
+            if ini['run_param']['CONCENTRATION_TYPE'] == 0 and completeness_H2O >= ini['param']['COMPLETENESS_THRESHOLD']:
+                chi_H2O = np.nanmean(interp_H2O)*1e-3  # interp_H2O is given in permille
+            air_mol_conc = air_molar_conc_dry(T_meteo, T_mean, rh_meteo, p_mean, chi_H2O)
                 
             if (completeness_T >= ini['param']['COMPLETENESS_THRESHOLD']):
 
                 # calculate temperature flux <w'T'>
-                wT = xcov(w_prime, T_prime, [0, 0])
+                wT = np.cov(w_prime, T_prime)[0][1]
 
                 # calculate spectrum for T
                 [spec_T, spec_T_scaled, _] = cospectrum(ini, T_prime, T_prime, f, mean_wind_speed, plot=ini['run_param']['PLOT_COSPECTRUM'], filename=sonic_files_list['name'][n], spectrum_type='spec')
@@ -421,14 +427,14 @@ def GEddySoft_main(str_day, ini, log_filename):
 
             else:
 
-                wT = np.NaN
-                spec_T = [np.NaN] * ini['param']['NUM_FREQ_BINS']
-                spec_T_scaled = [np.NaN] * ini['param']['NUM_FREQ_BINS']
-                cospec_wT = [np.NaN] * ini['param']['NUM_FREQ_BINS']
-                cospec_wT_scaled = [np.NaN] * ini['param']['NUM_FREQ_BINS']
-                steady_state_wT_FW96 = np.NaN
-                steady_state_wT_M98 = np.NaN
-                steady_state_wT_D99 = np.NaN
+                wT = np.nan
+                spec_T = [np.nan] * ini['param']['NUM_FREQ_BINS']
+                spec_T_scaled = [np.nan] * ini['param']['NUM_FREQ_BINS']
+                cospec_wT = [np.nan] * ini['param']['NUM_FREQ_BINS']
+                cospec_wT_scaled = [np.nan] * ini['param']['NUM_FREQ_BINS']
+                steady_state_wT_FW96 = np.nan
+                steady_state_wT_M98 = np.nan
+                steady_state_wT_D99 = np.nan
 
             # calculate Obukhov length, L
             L = -T_mean*u_star**3/(0.4*9.81*wT)
@@ -454,13 +460,13 @@ def GEddySoft_main(str_day, ini, log_filename):
                     theta_v_prime = np.nan_to_num(theta_v_prime, 0)
                     wtheta_v = xcov(w_prime, theta_v_prime, [0, 0])
                 else:
-                    theta_v_mean = np.NaN
-                    wtheta_v = np.NaN
+                    theta_v_mean = np.nan
+                    wtheta_v = np.nan
             else:
-                theta_mean = np.NaN
-                theta_v_mean = np.NaN
-                wtheta = np.NaN
-                wtheta_v = np.NaN
+                theta_mean = np.nan
+                theta_v_mean = np.nan
+                wtheta = np.nan
+                wtheta_v = np.nan
 
             # test on developed turbulent conditions
             ITC_w, ITC_u, ITC_T = test_ITC(w_prime, u_prime, T_prime, wT, zoL, u_star, ini['param']['LATITUDE'])
@@ -597,7 +603,7 @@ def GEddySoft_main(str_day, ini, log_filename):
                     # test on instrument malfunctions from Vitale 2020
                     IPT = inst_prob_test(sonicdata[:,i+6], ini['param']['DETREND_TRACER_SIGNAL'], ini['param']['SAMPLING_RATE_FINAL'], ini['run_param']['PLOT_INST_PROB_TEST'], 'c or h')
     
-                    interp_c = interp1d(sonicdata[:,0], sonicdata[:,i+6], kind='nearest', bounds_error=False, fill_value=np.NaN)(interp_time)
+                    interp_c = interp1d(sonicdata[:,0], sonicdata[:,i+6], kind='nearest', bounds_error=False, fill_value=np.nan)(interp_time)
                     completeness_IRGA = sum(np.isfinite(interp_c))/(ini['param']['WINDOW_LENGTH']*ini['param']['SAMPLING_RATE_FINAL'])
 
                     if completeness_IRGA >= ini['param']['COMPLETENESS_THRESHOLD']:
@@ -612,7 +618,7 @@ def GEddySoft_main(str_day, ini, log_filename):
                             c_prime = nandetrend(interp_c)
                         else:
                             c_prime = interp_c - c_mean
-                        std_c = np.nanstd(c_prime, ddof=1)
+                        c_std = np.nanstd(c_prime, ddof=1)
                         c_prime = np.nan_to_num(c_prime, 0)
 
                         # define the center of the lag window, taking into account clock-drift
@@ -672,7 +678,7 @@ def GEddySoft_main(str_day, ini, log_filename):
 
                         # store results for individual IRGA tracer
                         results['IRGA'][str(i)]['conc_mean'][n] = c_mean
-                        results['IRGA'][str(i)]['conc_std'][n] = std_c
+                        results['IRGA'][str(i)]['conc_std'][n] = c_std
                         results['IRGA'][str(i)]['lagtime'][n] = lagtime_individual
                         results['IRGA'][str(i)]['lagtime_clock_drift'][n] = lag_clock_drift_samples/ini['param']['SAMPLING_RATE_FINAL']
                         results['IRGA'][str(i)]['flux'][n] = flux_individual
@@ -817,7 +823,7 @@ def GEddySoft_main(str_day, ini, log_filename):
   
                         # statistics on tracer signal and zero
                         c_mean = np.nanmean(tracerdata['conc'][:, i])
-                        c_std = np.nanstd(tracerdata['conc'][:, i])
+                        c_std = np.nanstd(tracerdata['conc'][:, i], ddof=1)
                         c_Q5 = np.nanpercentile(tracerdata['conc'][:, i], 5)
                         c_Q95 = np.nanpercentile(tracerdata['conc'][:, i], 95)
                         c_acc = np.nanmean(abs(tracerdata['conc_acc'][:, i]/tracerdata['conc'][:, i]))
@@ -925,7 +931,7 @@ def GEddySoft_main(str_day, ini, log_filename):
                         # convert tracer flux and associated variables from kinematic units to desired units
                         flux_individual, flux_noise_mean, flux_noise_std, flux_noise_rmse, random_error_FS, random_flux, random_error_noise = \
                             flux_unit_conversion(flux_individual, flux_noise_mean, flux_noise_std, flux_noise_rmse, random_error_FS, random_flux, random_error_noise, 
-                                                 'to ug m-2 s-1', air_mol_conc, tracerdata['mz'][i] - 1)
+                                                 'to ug m-2 s-1', air_mol_conc, tracerdata['mz'][i] - 1.00728)
 
                         # store results for individual tracer
                         results['TRACER'][str(i)]['conc_mean'][n] = c_mean

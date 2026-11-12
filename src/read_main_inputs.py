@@ -12,29 +12,6 @@ from reformat_date import reformat_date
 
 
 def read_tracer_file(hdf5_f, ini, idx_tracers_to_process):
-    """Read a PTR-TOF-MS tracer HDF5 file into arrays.
-
-    Parameters
-    ----------
-    hdf5_f : h5py.File
-        Open HDF5 file handle.
-    ini : dict
-        Parsed INI settings.
-    idx_tracers_to_process : array_like of int
-        Indices of tracers (m/z rows) to extract.
-
-    Returns
-    -------
-    tracerdata : dict
-        Dictionary containing time series and per-tracer metadata.
-
-    Raises
-    ------
-    ValueError
-        If ``ini['param']['TRACER_NORM'] == 1`` and required primary-ion
-        information is missing (attributes FPH1/FPH2 or m/z 21.022 and 38.033
-        within tolerance).
-    """
     tracerdata = {}
 
     # convert from UNIX time format in nanoseconds to UNIX in seconds
@@ -329,7 +306,7 @@ def read_main_inputs(filepath, filename, filetype, ini, OF, idx_tracers_to_proce
                 # append TRACER part to results dict
                 results = prepare_output(ini, out_len, hdf5_nb_tracers=len(idx_tracers_to_process), hdf5_mz_tracer=hdf5_mz_tracer[idx_tracers_to_process], results=results)
 
-                temp = {'cov': [[np.NaN] * (2 * ini['param']['LAG_OUTER_WINDOW_SIZE'] + 1)] * out_len}
+                temp = {'cov': [[np.nan] * (2 * ini['param']['LAG_OUTER_WINDOW_SIZE'] + 1)] * out_len}
                 cov_data['TRACER'] = dict(zip(map(str, range(len(idx_tracers_to_process))),
                                               [deepcopy(temp) for _ in range(len(idx_tracers_to_process))]))
 

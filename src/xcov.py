@@ -43,9 +43,13 @@ def xcov(x, y, lag):
         if l > 0:
             xs = x[l:]
             ys = yshifted[l:]
+        elif l == 0:
+            xs = x
+            ys = yshifted
         else:
-            xs = x[0:len(x)-1-l]
-            ys = yshifted[0:len(x)-1-l]
+            l_abs = abs(l)
+            xs = x[:-l_abs]
+            ys = yshifted[:-l_abs]
 
         mask = np.isfinite(xs) & np.isfinite(ys)
         n = int(mask.sum())

@@ -3,7 +3,9 @@ import numpy as np
 
 def nanlinfit(x):
     """
-    Calculate linear fit for a vector X. X may contain NaN entries.
+    Calculate linear fit for a vector X. X may contain non-finite (NaN/Inf)
+    entries: the fit is performed on the original sample indices of the
+    finite values.
 
     parameters
     ----------
@@ -19,8 +21,10 @@ def nanlinfit(x):
     University of Liege, Gembloux Agro-Bio Tech.
     """
 
-    x = np.delete(x, np.where(np.isnan(x)))
     t = np.transpose(np.arange(0, len(x)))
+    ii = np.where(np.isfinite(x))[0]
+    x = x[ii]
+    t = t[ii]
     coeff = np.polyfit(t, x, 1)
     slope = coeff[0]
     offset = coeff[1]

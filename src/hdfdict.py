@@ -3,7 +3,7 @@ import h5py
 import yaml
 from collections import UserDict
 from datetime import datetime
-from numpy import string_
+from numpy import bytes_
 from contextlib import contextmanager
 
 
@@ -151,18 +151,18 @@ def pack_dataset(hdfobject, key, value):
         if isdt:
             ds.attrs.create(
                 name=TYPEID,
-                data=string_("datetime"))
+                data=bytes_("datetime"))
     except TypeError:
         # Obviously the data was not serializable. To give it
         # a last try; serialize it to yaml
         # and save it to the hdf file:
         ds = hdfobject.create_dataset(
             name=key,
-            data=string_(yaml.safe_dump(value))
+            data=bytes_(yaml.safe_dump(value))
         )
         ds.attrs.create(
             name=TYPEID,
-            data=string_("yaml"))
+            data=bytes_("yaml"))
         # if this fails again, restructure your data!   
 
 

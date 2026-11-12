@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.integrate import trapz
+from scipy.integrate import trapezoid
 
 # %% Massman cospectrum
 
@@ -94,7 +94,7 @@ def correction_factor_lpf(u, zoL, ini, df_lpfc=False, ctrplot=0):
         TF_LPF = (1/(1+(nf/cof_all)**2))**0.5
 
         # Compute correction factor
-        cf_lpf = trapz(ncosp, nf) / trapz(TF_LPF * ncosp, nf)
+        cf_lpf = trapezoid(ncosp, nf) / trapezoid(TF_LPF * ncosp, nf)
 
         if ctrplot:
             # Create figure and subplots (now with only 2 plots)

@@ -3,6 +3,7 @@ from logBinSpectrum import logBinSpectrum
 
 from theor_cosp_Kaimal import Kaimal_cosp
 import matplotlib.pyplot as plt
+from scipy.integrate import trapezoid
 
 
 def cospectrum(ini, x, y, f, mean_wind_speed, plot=False, filename='', spectrum_type=''):
@@ -41,7 +42,7 @@ def cospectrum(ini, x, y, f, mean_wind_speed, plot=False, filename='', spectrum_
     # scale by delta_f
     cospec = cospec / (f[1]-f[0])
     # compute integral (for normalisation purposes)
-    cospec_xy_integral = np.trapz(cospec, f)
+    cospec_xy_integral = trapezoid(cospec, f)
 
     # cospectrum log-bin-averaged in regular f domain
     f_bin, cospec_xy = logBinSpectrum(f, cospec, ini['param']['NUM_FREQ_BINS'], f[1], f[-1])

@@ -70,7 +70,7 @@ def build_interp_c(tracer_time, tracer_conc, interp_time, sampling_rate_final, s
             np.squeeze(_c_up),
             kind='nearest',
             bounds_error=False,
-            fill_value=np.NaN,
+            fill_value=np.nan,
         )(interp_time)
 
     return interp1d(
@@ -78,5 +78,5 @@ def build_interp_c(tracer_time, tracer_conc, interp_time, sampling_rate_final, s
         np.squeeze(_c_raw),
         kind='nearest',
         bounds_error=False,
-        fill_value=np.NaN,
+        fill_value=np.nan,
     )(interp_time)
