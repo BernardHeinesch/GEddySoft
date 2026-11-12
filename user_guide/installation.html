@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>Installation &mdash; GEddySoft 4.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../_static/documentation_options.js?v=0cd558ae"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -50,6 +50,11 @@
 <li class="toctree-l3"><a class="reference internal" href="#documentation-dependencies">Documentation Dependencies</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#environment-setup">Environment Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#using-anaconda-recommended-for-scientific-users">Using Anaconda (Recommended for Scientific Users)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-python-venv">Using Python venv</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#installation-steps">Installation Steps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#verification">Verification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
@@ -58,7 +63,7 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -101,7 +106,7 @@
 <h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
 <section id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
-<p>GEddySoft requires Python 3.11.7 or higher and the following dependencies:</p>
+<p>GEddySoft requires Python 3.7 or higher and the following dependencies:</p>
 <section id="core-dependencies">
 <h3>Core Dependencies<a class="headerlink" href="#core-dependencies" title="Link to this heading"></a></h3>
 <p>All core dependencies are listed in requirements.txt and will be automatically installed:</p>
@@ -113,6 +118,9 @@
 <li><p>h5py: For HDF5 file operations</p></li>
 <li><p>hdfdict: For HDF5 dictionary operations</p></li>
 <li><p>diptest: For statistical tests</p></li>
+<li><p>statsmodels: For advanced statistical analysis</p></li>
+<li><p>multiprocess: For parallel processing operations</p></li>
+<li><p>tzlocal: For timezone handling</p></li>
 </ul>
 </section>
 <section id="documentation-dependencies">
@@ -130,11 +138,14 @@
 <span class="n">scipy</span><span class="o">&gt;=</span><span class="mf">1.7.0</span>
 <span class="n">matplotlib</span><span class="o">&gt;=</span><span class="mf">3.4.0</span>
 <span class="n">h5py</span><span class="o">&gt;=</span><span class="mf">3.6.0</span>
-<span class="n">hdfdict</span><span class="o">&gt;=</span><span class="mf">0.3.0</span>
 <span class="n">diptest</span><span class="o">&gt;=</span><span class="mf">0.5.0</span>
 <span class="n">statsmodels</span><span class="o">&gt;=</span><span class="mf">0.13.0</span>
 <span class="n">multiprocess</span><span class="o">&gt;=</span><span class="mf">0.70.0</span>
 <span class="n">typing</span><span class="o">-</span><span class="n">extensions</span><span class="o">&gt;=</span><span class="mf">4.0.0</span>
+<span class="n">tzlocal</span><span class="o">&gt;=</span><span class="mf">2.1.0</span>
+<span class="n">joblib</span><span class="o">&gt;=</span><span class="mf">1.4.0</span>
+<span class="n">PyYAML</span><span class="o">&gt;=</span><span class="mf">6.0</span>
+<span class="n">xarray</span><span class="o">&gt;=</span><span class="mf">2023.1.0</span>
 
 <span class="c1"># Documentation dependencies</span>
 <span class="n">sphinx</span><span class="o">&gt;=</span><span class="mf">7.0.0</span>
@@ -144,8 +155,44 @@
 </div>
 </section>
 </section>
+<section id="environment-setup">
+<h2>Environment Setup<a class="headerlink" href="#environment-setup" title="Link to this heading"></a></h2>
+<p>GEddySoft requires Python 3.7 or higher. We recommend using a dedicated Python environment to avoid conflicts with other packages. You can choose either of these approaches:</p>
+<section id="using-anaconda-recommended-for-scientific-users">
+<h3>Using Anaconda (Recommended for Scientific Users)<a class="headerlink" href="#using-anaconda-recommended-for-scientific-users" title="Link to this heading"></a></h3>
+<p>Anaconda provides a user-friendly way to manage Python environments and includes many scientific packages by default.</p>
+<ol class="arabic">
+<li><p>Install Anaconda from <a class="reference external" href="https://www.anaconda.com/download">https://www.anaconda.com/download</a></p></li>
+<li><p>Create a new environment for GEddySoft:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>geddysoft<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11<span class="w">  </span><span class="c1"># or any version &gt;=3.7</span>
+conda<span class="w"> </span>activate<span class="w"> </span>geddysoft
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="using-python-venv">
+<h3>Using Python venv<a class="headerlink" href="#using-python-venv" title="Link to this heading"></a></h3>
+<p>Python’s built-in <code class="docutils literal notranslate"><span class="pre">venv</span></code> module is a lighter alternative if you prefer not to install Anaconda.</p>
+<ol class="arabic">
+<li><p>Ensure you have Python &gt;=3.7 installed</p></li>
+<li><p>Create and activate a virtual environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># On Windows</span>
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>geddysoft-env
+.<span class="se">\g</span>eddysoft-env<span class="se">\S</span>cripts<span class="se">\a</span>ctivate
+
+<span class="c1"># On Linux/MacOS</span>
+python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>geddysoft-env
+<span class="nb">source</span><span class="w"> </span>geddysoft-env/bin/activate
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
 <section id="installation-steps">
 <h2>Installation Steps<a class="headerlink" href="#installation-steps" title="Link to this heading"></a></h2>
+<p>Once you have set up and activated your Python environment (see Environment Setup above):</p>
 <ol class="arabic">
 <li><p>Clone the repository:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/BernardHeinesch/GEddySoft.git
@@ -153,18 +200,17 @@
 </pre></div>
 </div>
 </li>
-<li><p>Create and activate a virtual environment (recommended):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
-<span class="nb">source</span><span class="w"> </span>venv/bin/activate<span class="w">  </span><span class="c1"># On Windows: venv\Scripts\activate</span>
-</pre></div>
-</div>
-</li>
 <li><p>Install required packages:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
 </pre></div>
 </div>
+<p>Watch the console output during installation to ensure there are no error messages.</p>
 </li>
-<li><p>Install GEddySoft in development mode:</p>
+<li><p>Install GEddySoft:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>.
+</pre></div>
+</div>
+<p>Note: For developers who plan to modify the source code, use the development mode instead:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </pre></div>
 </div>
@@ -176,16 +222,7 @@
 <p>To verify the installation:</p>
 <ol class="arabic">
 <li><p>Check Python version:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>--version<span class="w">  </span><span class="c1"># Should be 3.11.7 or higher</span>
-</pre></div>
-</div>
-</li>
-<li><p>Try importing key dependencies:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">hdfdict</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">diptest</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>--version<span class="w">  </span><span class="c1"># Should be 3.7 or higher</span>
 </pre></div>
 </div>
 </li>
@@ -195,7 +232,7 @@
 <h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
 <p>If you encounter any issues during installation:</p>
 <ol class="arabic simple">
-<li><p>Ensure you have Python 3.11.7 or higher</p></li>
+<li><p>Ensure you have Python 3.7 or higher</p></li>
 <li><p>Check that all required dependencies are installed</p></li>
 <li><p>Verify your system meets the minimum requirements</p></li>
 <li><p>Contact the maintainer if problems persist</p></li>

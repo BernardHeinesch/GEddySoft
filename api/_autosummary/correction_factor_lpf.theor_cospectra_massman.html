@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>correction_factor_lpf.theor_cospectra_massman &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>correction_factor_lpf.theor_cospectra_massman &mdash; GEddySoft 4.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/documentation_options.js?v=0cd558ae"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -48,7 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -74,8 +74,6 @@
 <li class="toctree-l3"><a class="reference internal" href="test_ITC.html">test_ITC</a></li>
 <li class="toctree-l3"><a class="reference internal" href="find_covariance_peak.html">find_covariance_peak</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="correction_factor_lpf.html">correction_factor_lpf</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="correction_factor_lpf.html#author">Author</a></li>
-<li class="toctree-l4"><a class="reference internal" href="correction_factor_lpf.html#created">Created</a></li>
 <li class="toctree-l4"><a class="reference internal" href="correction_factor_lpf.correction_factor_lpf.html">correction_factor_lpf.correction_factor_lpf</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">correction_factor_lpf.theor_cospectra_massman</a></li>
 <li class="toctree-l4"><a class="reference internal" href="correction_factor_lpf.html#correction_factor_lpf.theor_cospectra_massman"><code class="docutils literal notranslate"><span class="pre">theor_cospectra_massman()</span></code></a></li>
@@ -120,37 +118,22 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="correction_factor_lpf.theor_cospectra_massman">
 <span class="sig-prename descclassname"><span class="pre">correction_factor_lpf.</span></span><span class="sig-name descname"><span class="pre">theor_cospectra_massman</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zoL</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0_st</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kf0_st</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu_st</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a0_un</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kf0_un</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu_un</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/correction_factor_lpf.html#theor_cospectra_massman"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#correction_factor_lpf.theor_cospectra_massman" title="Link to this definition"></a></dt>
-<dd><p>Calculate reference cospectra using the Massman model.</p>
-<p>This function implements the Massman (2004) model for scalar flux cospectra.
-The model uses different parameters for stable and unstable conditions to
-account for the effects of atmospheric stability on turbulent transport.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>zoL</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Stability parameter (z-d)/L, where z is measurement height,
-d is displacement height, and L is Obukhov length [-]</p></li>
-<li><p><strong>nf</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – Natural frequency array [Hz]</p></li>
-<li><p><strong>kf</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – Normalized frequency array, f*(z-d)/U, where U is wind speed [-]</p></li>
-<li><p><strong>a0_st</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Amplitude parameter for stable conditions [-]</p></li>
-<li><p><strong>kf0_st</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Peak frequency parameter for stable conditions [-]</p></li>
-<li><p><strong>mu_st</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Shape parameter for stable conditions [-]</p></li>
-<li><p><strong>a0_un</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Amplitude parameter for unstable conditions [-]</p></li>
-<li><p><strong>kf0_un</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Peak frequency parameter for unstable conditions [-]</p></li>
-<li><p><strong>mu_un</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Shape parameter for unstable conditions [-]</p></li>
-</ul>
+<dd><p>Calculate reference cospectra using the Massman model.
+Based on Massman et al. Handbook of Meteorology, 2004, Eq 4.2.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>zoL (float): Stability parameter (-)
+nf (ndarray): Natural frequency array (Hz)
+kf (ndarray): Normalized frequency array (-)
+a0_st (float): Stability correction parameter
+kf0_st (float): Frequency correction parameter for stable conditions
+mu_st (float): Correction factor for stable conditions
+a0_un (float): Unstable correction parameter
+kf0_un (float): Frequency correction parameter for unstable conditions
+mu_un (float): Correction factor for unstable conditions</p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Normalized cospectrum values for each input frequency</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+<dt>Returns:</dt><dd><p>ndarray: Calculated normalised cospectrum</p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>The model follows Eq. 4.2 from Massman (2004) with the form:
-Co(f) = a0 * (kf/kf0) / (1 + (kf/kf0)^(2μ))^(7/6μ) / f</p>
-<p>Different parameters are used for stable (zoL &gt; 0) and unstable
-(zoL ≤ 0) conditions to better match observed cospectra.</p>
 </dd></dl>
 
 </section>

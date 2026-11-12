@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Running on Example Dataset &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>Example Dataset &mdash; GEddySoft 4.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../_static/documentation_options.js?v=0cd558ae"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -48,7 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="performance.html">Performance</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Running on Example Dataset</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example Dataset</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#available-data-files">Available Data Files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#processing-examples">Processing Examples</a></li>
 </ul>
@@ -81,7 +81,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Running on Example Dataset</li>
+      <li class="breadcrumb-item active">Example Dataset</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/user_guide/running_example.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -91,15 +91,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section class="tex2jax_ignore mathjax_ignore" id="running-on-example-dataset">
-<h1>Running on Example Dataset<a class="headerlink" href="#running-on-example-dataset" title="Link to this heading"></a></h1>
-<p>A test dataset is provided with GEddySoft, containing 3 days of measurements from the Vielsalm forest ICOS station (BE-Vie) collected in 2023. The dataset includes:</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="example-dataset">
+<h1>Example Dataset<a class="headerlink" href="#example-dataset" title="Link to this heading"></a></h1>
+<p>A test dataset is provided with GEddySoft, containing 5 days of measurements from the Vielsalm forest ICOS station (BE-Vie) collected in 2023. The dataset can be downloaded from <a class="reference external" href="https://doi.org/10.18758/iypn6fnm">https://doi.org/10.18758/iypn6fnm</a> and includes:</p>
 <section id="available-data-files">
 <h2>Available Data Files<a class="headerlink" href="#available-data-files" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>Sonic anemometer data: <code class="docutils literal notranslate"><span class="pre">GHS50_yyyy_mm_dd__HH_MM_SS.hdf5</span></code></p></li>
-<li><p>PTR-TOF-MS measurements: <code class="docutils literal notranslate"><span class="pre">K8_BE-Vie_yyyy_TOF4000_yyyy_mm_dd_HH_MM_SS.h5</span></code></p></li>
-<li><p>GHG data from SmartFlux: <code class="docutils literal notranslate"><span class="pre">yyyy-mm-ddTHHMMSS_OTV.ghg</span></code></p></li>
+<li><p>Sonic anemometer data: <code class="docutils literal notranslate"><span class="pre">GHS50_yyyy_mm_dd__HH_MM_SS.hdf5</span></code>, 277 Mb</p></li>
+<li><p>PTR-TOF-MS measurements: <code class="docutils literal notranslate"><span class="pre">K8_BE-Vie_yyyy_TOF4000_yyyy_mm_dd_HH_MM_SS.h5</span></code>, 1100 Mb</p></li>
+<li><p>GHG data from SmartFlux: <code class="docutils literal notranslate"><span class="pre">yyyy-mm-ddTHHMMSS_OTV.ghg</span></code>, 709 Mb</p></li>
 </ul>
 </section>
 <section id="processing-examples">
@@ -109,13 +109,15 @@
 <li><p><strong>BVOC Flux Processing</strong></p>
 <ul class="simple">
 <li><p>Use the configuration file: <code class="docutils literal notranslate"><span class="pre">GEddySoft_parameters_VOC_top.ini</span></code></p></li>
-<li><p>This will process the PTR-TOF-MS data (<code class="docutils literal notranslate"><span class="pre">K8_BE-Vie_*.h5</span></code>) and sonic data (<code class="docutils literal notranslate"><span class="pre">GHS50_*.hdf5</span></code>) for BVOC flux calculations</p></li>
+<li><p>This will process the PTR-TOF-MS data (<code class="docutils literal notranslate"><span class="pre">K8_BE-Vie_*.h5</span></code> containing signals for 20 masses) and sonic data (<code class="docutils literal notranslate"><span class="pre">GHS50_*.hdf5</span></code>) for BVOC flux calculations</p></li>
+<li><p>Typical running time: 14 minutes (on a i7 processor, without the multiprocessing option activated in the ini)</p></li>
 </ul>
 </li>
 <li><p><strong>CO2/H2O Flux Processing</strong></p>
 <ul class="simple">
-<li><p>Use the configuration file: <code class="docutils literal notranslate"><span class="pre">GEddySoft_parameters_IRGA</span></code></p></li>
+<li><p>Use the configuration file: <code class="docutils literal notranslate"><span class="pre">GEddySoft_parameters_IRGA.ini</span></code></p></li>
 <li><p>This will process the SmartFlux GHG data (<code class="docutils literal notranslate"><span class="pre">*_OTV.ghg</span></code>) for CO2 and H2O flux calculations</p></li>
+<li><p>Typical running time: 9 minutes (on a i7 processor, without the multiprocessing option activated in the ini)</p></li>
 </ul>
 </li>
 </ol>

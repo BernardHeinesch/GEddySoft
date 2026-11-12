@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>get_list_input_files &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>get_list_input_files &mdash; GEddySoft 4.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../_static/documentation_options.js?v=3b2dd2c4"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -45,7 +45,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -85,77 +85,29 @@
            <div itemprop="articleBody">
              
   <h1>Source code for get_list_input_files</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Module for locating and listing input files.</span>
-
-<span class="sd">This module provides functionality to locate and list sonic anemometer</span>
-<span class="sd">and tracer gas analyzer data files based on configuration settings.</span>
-<span class="sd">It supports:</span>
-
-<span class="sd">- Multiple input directories</span>
-<span class="sd">- Various file formats (HDF5, GHG, SLT)</span>
-<span class="sd">- Date-based file filtering</span>
-<span class="sd">- Recursive subdirectory scanning for tracer files</span>
-
-<span class="sd">Author</span>
-<span class="sd">------</span>
-<span class="sd">B. Heinesch</span>
-<span class="sd">University of Liege, Gembloux Agro-Bio Tech</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">list_files_datestring</span><span class="w"> </span><span class="kn">import</span> <span class="n">list_files_datestring</span>
 
 
 <div class="viewcode-block" id="get_list_input_files">
 <a class="viewcode-back" href="../api/_autosummary/get_list_input_files.get_list_input_files.html#get_list_input_files.get_list_input_files">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_list_input_files</span><span class="p">(</span><span class="n">ini</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Locate sonic anemometer and tracer gas analyzer data files.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to identify input raw files</span>
 
-<span class="sd">    This function scans specified directories for input data files from</span>
-<span class="sd">    sonic anemometers and tracer gas analyzers, filtering by file type,</span>
-<span class="sd">    prefix, and date range.</span>
+<span class="sd">        parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ini: dictionnary with all initialisation information</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    ini : dict</span>
-<span class="sd">        Configuration dictionary containing:</span>
-<span class="sd">        - files : dict</span>
-<span class="sd">            File search parameters including:</span>
-<span class="sd">            - sonic_files_folders : list</span>
-<span class="sd">                Paths to search for sonic data</span>
-<span class="sd">            - sonic_files_prefix : str</span>
-<span class="sd">                Prefix for sonic filenames</span>
-<span class="sd">            - tracer_files_folders : list</span>
-<span class="sd">                Paths to search for tracer data</span>
-<span class="sd">            - tracer_files_prefix : str</span>
-<span class="sd">                Prefix for tracer filenames</span>
-<span class="sd">            - tracer_files_suffix : str</span>
-<span class="sd">                Suffix for tracer filenames</span>
-<span class="sd">            - tracer_files_date_format : str</span>
-<span class="sd">                Date format in tracer filenames</span>
-<span class="sd">            - date_files_selection : str</span>
-<span class="sd">                Date range for file filtering</span>
-<span class="sd">        - sonic : dict</span>
-<span class="sd">            Sonic configuration including:</span>
-<span class="sd">            - sonic_files_type : str</span>
-<span class="sd">                Type of sonic files (&#39;hdf5&#39;, &#39;ghg&#39;, &#39;slt&#39;)</span>
+<span class="sd">        returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sonic_files_list: list, sonic files that were find in the folder given in the ini and in its subfolders</span>
+<span class="sd">        tracer_files_list: list, tracer files that were find in the folder given in the ini and in its subfolders</span>
 
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    tuple</span>
-<span class="sd">        Two-element tuple containing:</span>
-<span class="sd">        - sonic_files_list : dict</span>
-<span class="sd">            Dictionary of sonic files with keys:</span>
-<span class="sd">            - name : list</span>
-<span class="sd">                Filenames</span>
-<span class="sd">            - path : list</span>
-<span class="sd">                Full paths to files</span>
-<span class="sd">            - prefix : list</span>
-<span class="sd">                File prefixes</span>
-<span class="sd">            - date : list</span>
-<span class="sd">                File dates</span>
-<span class="sd">        - tracer_files_list : dict</span>
-<span class="sd">            Dictionary of tracer files with same structure</span>
+<span class="sd">        comments</span>
+<span class="sd">        --------</span>
+<span class="sd">        Written by B. Heinesch.</span>
+<span class="sd">        University of Liege, Gembloux Agro-Bio Tech.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># get list of sonic input files in the given folder</span>
@@ -171,9 +123,9 @@
                                          <span class="n">ini</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">][</span><span class="s1">&#39;sonic_files_prefix&#39;</span><span class="p">],</span> <span class="s1">&#39;.ghg&#39;</span><span class="p">,</span> <span class="s1">&#39;yyyy-mm-ddTHHMMSS&#39;</span><span class="p">,</span>
                                          <span class="n">ini</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">][</span><span class="s1">&#39;date_files_selection&#39;</span><span class="p">],</span>
                                          <span class="n">sub_dir</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">ini</span><span class="p">[</span><span class="s1">&#39;sonic&#39;</span><span class="p">][</span><span class="s1">&#39;sonic_files_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;slt&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">ini</span><span class="p">[</span><span class="s1">&#39;sonic&#39;</span><span class="p">][</span><span class="s1">&#39;sonic_files_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;csv&#39;</span><span class="p">:</span>
             <span class="n">temp</span> <span class="o">=</span> <span class="n">list_files_datestring</span><span class="p">(</span><span class="n">ini</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">][</span><span class="s1">&#39;sonic_files_folders&#39;</span><span class="p">][</span><span class="n">n</span><span class="p">],</span>
-                                         <span class="n">ini</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">][</span><span class="s1">&#39;sonic_files_prefix&#39;</span><span class="p">],</span> <span class="s1">&#39;.slt&#39;</span><span class="p">,</span> <span class="s1">&#39;xxx&#39;</span><span class="p">,</span>
+                                         <span class="n">ini</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">][</span><span class="s1">&#39;sonic_files_prefix&#39;</span><span class="p">],</span> <span class="s1">&#39;.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;yyyymmddHHMM&#39;</span><span class="p">,</span>
                                          <span class="n">ini</span><span class="p">[</span><span class="s1">&#39;files&#39;</span><span class="p">][</span><span class="s1">&#39;date_files_selection&#39;</span><span class="p">],</span>
                                          <span class="n">sub_dir</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 

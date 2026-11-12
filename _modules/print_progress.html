@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>print_progress &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>print_progress &mdash; GEddySoft 4.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../_static/documentation_options.js?v=3b2dd2c4"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -45,7 +45,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -92,6 +92,8 @@
 <span class="sd">@author: Ariane Faures</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
 <div class="viewcode-block" id="print_progress">
 <a class="viewcode-back" href="../api/_autosummary/print_progress.print_progress.html#print_progress.print_progress">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">print_progress</span><span class="p">(</span><span class="n">processed_</span><span class="p">,</span> <span class="n">total_to_process</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">flush_</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">end_</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">,</span>
@@ -119,6 +121,7 @@
     <span class="n">percent_processed</span> <span class="o">=</span> <span class="n">processed_</span> <span class="o">/</span> <span class="n">total_to_process</span> <span class="o">*</span> <span class="mi">100</span>
     <span class="n">left</span> <span class="o">=</span> <span class="n">width</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">percent_processed</span><span class="p">)</span> <span class="o">//</span> <span class="mi">100</span>
     <span class="n">right</span> <span class="o">=</span> <span class="n">width</span> <span class="o">-</span> <span class="n">left</span>
+
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">text</span> <span class="o">+</span> <span class="s1">&#39;: [&#39;</span><span class="p">,</span>
           <span class="s1">&#39;#&#39;</span> <span class="o">*</span> <span class="n">left</span><span class="p">,</span> <span class="s1">&#39; &#39;</span> <span class="o">*</span> <span class="n">right</span><span class="p">,</span> <span class="s1">&#39;]&#39;</span><span class="p">,</span>
           <span class="sa">f</span><span class="s1">&#39; </span><span class="si">{</span><span class="n">percent_processed</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1">%&#39;</span><span class="p">,</span>

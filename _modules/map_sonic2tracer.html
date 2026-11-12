@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>map_sonic2tracer &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>map_sonic2tracer &mdash; GEddySoft 4.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../_static/documentation_options.js?v=3b2dd2c4"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -45,7 +45,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -85,41 +85,13 @@
            <div itemprop="articleBody">
              
   <h1>Source code for map_sonic2tracer</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Module for synchronizing sonic anemometer and tracer gas analyzer files.</span>
-
-<span class="sd">This module provides functionality to match sonic anemometer and tracer</span>
-<span class="sd">gas analyzer files based on their timestamps, ensuring that flux</span>
-<span class="sd">calculations only proceed when both measurements are available.</span>
-<span class="sd">It handles:</span>
-
-<span class="sd">- Parsing of standardized filename formats</span>
-<span class="sd">- Half-hourly period matching</span>
-<span class="sd">- Filtering of unpaired measurements</span>
-
-<span class="sd">Author</span>
-<span class="sd">------</span>
-<span class="sd">B. Heinesch</span>
-<span class="sd">University of Liege, Gembloux Agro-Bio Tech</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
 
 
 <div class="viewcode-block" id="parse_datetime_sonic">
 <a class="viewcode-back" href="../api/_autosummary/map_sonic2tracer.parse_datetime_sonic.html#map_sonic2tracer.parse_datetime_sonic">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">parse_datetime_sonic</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse datetime from sonic anemometer filename.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    filename : str</span>
-<span class="sd">        Filename in format &#39;GHS50_YYYY_MM_DD__HH_MM_SS.hdf5&#39;</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    datetime</span>
-<span class="sd">        Parsed datetime object</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Parse e.g. GHS50_2023_06_10__02_30_00.hdf5</span>
     <span class="n">parts</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;__&#39;</span><span class="p">)</span>  <span class="c1"># Split by double underscore</span>
     <span class="n">date_str</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Remove GHS50_ prefix and get date</span>
     <span class="n">time_str</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.hdf5&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># Get time part</span>
@@ -130,18 +102,7 @@
 <div class="viewcode-block" id="parse_datetime_tracer">
 <a class="viewcode-back" href="../api/_autosummary/map_sonic2tracer.parse_datetime_tracer.html#map_sonic2tracer.parse_datetime_tracer">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">parse_datetime_tracer</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse datetime from tracer gas analyzer filename.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    filename : str</span>
-<span class="sd">        Filename in format &#39;K2_BE-Vie_YYYY_TOF4000_YYYY_MM_DD__HH_MM_SS.h5&#39;</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    datetime</span>
-<span class="sd">        Parsed datetime object</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Parse e.g. K2_BE-Vie_2023_TOF4000_2023_06_10__02_30_35.h5</span>
     <span class="n">parts</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;__&#39;</span><span class="p">)</span>  <span class="c1"># Split by double underscore</span>
     <span class="n">date_str</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span>  <span class="c1"># Get last 3 parts of first section (year, month, day)</span>
     <span class="n">date_str</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">date_str</span><span class="p">)</span>  <span class="c1"># Rejoin with underscores</span>
@@ -153,43 +114,23 @@
 <div class="viewcode-block" id="map_sonic2tracer">
 <a class="viewcode-back" href="../api/_autosummary/map_sonic2tracer.map_sonic2tracer.html#map_sonic2tracer.map_sonic2tracer">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">map_sonic2tracer</span><span class="p">(</span><span class="n">all_sonic_files_list</span><span class="p">,</span> <span class="n">all_tracer_files_list</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter sonic files to keep only those with matching tracer files.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    removes half-hours for which a sonic file is present but not a tracer file</span>
 
-<span class="sd">    This function examines sonic anemometer files and keeps only those</span>
-<span class="sd">    that have corresponding tracer gas analyzer files within the same</span>
-<span class="sd">    half-hour period. This ensures data synchronization for flux</span>
-<span class="sd">    calculations.</span>
-
-<span class="sd">    Parameters</span>
+<span class="sd">    parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    all_sonic_files_list : dict</span>
-<span class="sd">        Dictionary of sonic files containing:</span>
-<span class="sd">        - name : list</span>
-<span class="sd">            Filenames</span>
-<span class="sd">        - path : list</span>
-<span class="sd">            Full paths to files</span>
-<span class="sd">        - prefix : list</span>
-<span class="sd">            File prefixes</span>
-<span class="sd">        - date : list</span>
-<span class="sd">            File dates</span>
-<span class="sd">    all_tracer_files_list : dict</span>
-<span class="sd">        Dictionary of tracer files with same structure</span>
+<span class="sd">    all_sonic_files_list: list, sonic files that were find in the folder given in the ini and in its subfolders</span>
+<span class="sd">    all_tracer_files_list: list, tracer files that were find in the folder given in the ini and in its subfolders</span>
 
-<span class="sd">    Returns</span>
+<span class="sd">    returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    dict</span>
-<span class="sd">        Filtered sonic files dictionary containing only entries</span>
-<span class="sd">        with matching tracer files. Maintains same structure as</span>
-<span class="sd">        input dictionary.</span>
+<span class="sd">    filtered_sonic: the filtered all_sonic_files_list</span>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    The matching process:</span>
-<span class="sd">    1. For sonic files at MM=00, looks for tracer files between MM=00-29</span>
-<span class="sd">    2. For sonic files at MM=30, looks for tracer files between MM=30-59</span>
-<span class="sd">    3. Files must match exactly in year, month, day, and hour</span>
+<span class="sd">    comments</span>
+<span class="sd">    --------</span>
+<span class="sd">    Written by B. Heinesch.</span>
+<span class="sd">    University of Liege, Gembloux Agro-Bio Tech.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="c1"># Convert tracer filenames to datetime objects</span>
     <span class="n">tracer_times</span> <span class="o">=</span> <span class="p">[</span><span class="n">parse_datetime_tracer</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">all_tracer_files_list</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]</span>
 

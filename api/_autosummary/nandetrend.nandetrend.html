@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>nandetrend.nandetrend &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>nandetrend.nandetrend &mdash; GEddySoft 4.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/documentation_options.js?v=0cd558ae"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -48,7 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -72,7 +72,6 @@
 <li class="toctree-l3"><a class="reference internal" href="logBinSpectrum.html">logBinSpectrum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="map_sonic2tracer.html">map_sonic2tracer</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="nandetrend.html">nandetrend</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="nandetrend.html#author">Author</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">nandetrend.nandetrend</a></li>
 <li class="toctree-l4"><a class="reference internal" href="nandetrend.html#nandetrend.nandetrend"><code class="docutils literal notranslate"><span class="pre">nandetrend()</span></code></a></li>
 </ul>
@@ -121,37 +120,22 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="nandetrend.nandetrend">
 <span class="sig-prename descclassname"><span class="pre">nandetrend.</span></span><span class="sig-name descname"><span class="pre">nandetrend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/nandetrend.html#nandetrend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nandetrend.nandetrend" title="Link to this definition"></a></dt>
-<dd><p>Remove linear trend from array while handling NaN values.</p>
-<p>This function removes linear trends from data arrays that may
-contain NaN values. It uses a robust fitting method when NaNs
-are present, and falls back to scipy.signal.detrend for
-NaN-free data.</p>
+<dd><p>remove linear trend from a vector that may contain NaN</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>x</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>) – 1-dimensional numpy array to detrend. May contain NaN values.</p>
+<dd class="field-odd"><p><strong>x</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">1</span> <span class="pre">dim</span> <span class="pre">np</span> <span class="pre">array</span></code>)</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Array of same shape as input with linear trend removed.
-NaN values in input remain NaN in output.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code></p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">the</span> <span class="pre">x</span> <span class="pre">array</span> <span class="pre">with</span> <span class="pre">linear</span> <span class="pre">trend</span> <span class="pre">removed</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">comments</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">--------</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Written</span> <span class="pre">by</span> <span class="pre">B.</span> <span class="pre">Heinesch.</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">University</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">Liege</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Gembloux</span> <span class="pre">Agro-Bio</span> <span class="pre">Tech.</span></code></p></li>
+</ul>
+</p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>The detrending process:
-1. Check for presence of NaN values
-2. If NaNs present:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>Fit linear trend using nanlinfit</p></li>
-<li><p>Subtract trend from data</p></li>
-</ul>
-</div></blockquote>
-<ol class="arabic simple" start="3">
-<li><p>If no NaNs:
-- Use scipy.signal.detrend</p></li>
-</ol>
 </dd></dl>
 
 </section>

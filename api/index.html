@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>API Reference &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>API Reference &mdash; GEddySoft 4.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../_static/documentation_options.js?v=0cd558ae"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -48,7 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -131,10 +131,10 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/GEddySoft_main.html#module-GEddySoft_main" title="GEddySoft_main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GEddySoft_main</span></code></a></p></td>
-<td><p>GEddySoft: A Python Package for Eddy Covariance Processing</p></td>
+<td><p>GEddySoft_main.py This file is part of the GEddySoft eddy covariance software package developed at the University of Liège, Belgium</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/GEddySoft_start.html#module-GEddySoft_start" title="GEddySoft_start"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GEddySoft_start</span></code></a></p></td>
-<td><p>Main entry point for running GEddySoft eddy covariance processing software.</p></td>
+<td><p>Starting routine to run GEddySoft.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/flux_uncertainties.html#module-flux_uncertainties" title="flux_uncertainties"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flux_uncertainties</span></code></a></p></td>
 <td><p></p></td>
@@ -143,10 +143,14 @@
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/flux_unit_conversion.html#module-flux_unit_conversion" title="flux_unit_conversion"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flux_unit_conversion</span></code></a></p></td>
-<td><p>Module for converting eddy covariance flux units.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/spike_detection_vickers97.html#module-spike_detection_vickers97" title="spike_detection_vickers97"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spike_detection_vickers97</span></code></a></p></td>
-<td><p></p></td>
+<td><p>spike_detection_vickers_97.py
+
+Started form a python conversion of the EDDYPRO Fortran spike detection algorithm,
+based on Vickers and Mahrt (1997) spike detection method.
+Subsequently modified by Bernard Heinesch and Jonathan Bitton</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/test_steady_state_FW96.html#module-test_steady_state_FW96" title="test_steady_state_FW96"><code class="xref py py-obj docutils literal notranslate"><span class="pre">test_steady_state_FW96</span></code></a></p></td>
 <td><p></p></td>
@@ -161,10 +165,10 @@
 <td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/find_covariance_peak.html#module-find_covariance_peak" title="find_covariance_peak"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_covariance_peak</span></code></a></p></td>
-<td><p>Module for determining time lags between correlated atmospheric signals.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/correction_factor_lpf.html#module-correction_factor_lpf" title="correction_factor_lpf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">correction_factor_lpf</span></code></a></p></td>
-<td><p>Module for computing low-pass filtering correction factors in eddy covariance.</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -174,34 +178,34 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/add_attributes.html#module-add_attributes" title="add_attributes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_attributes</span></code></a></p></td>
-<td><p>Module for adding standardized metadata to GEddySoft HDF5 output files.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/clean_results.html#module-clean_results" title="clean_results"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clean_results</span></code></a></p></td>
-<td><p>Module for cleaning and filtering eddy covariance results data.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/compute_wind_direction.html#module-compute_wind_direction" title="compute_wind_direction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compute_wind_direction</span></code></a></p></td>
-<td><p>Module for computing wind direction from sonic anemometer measurements.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/get_closest_value.html#module-get_closest_value" title="get_closest_value"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_closest_value</span></code></a></p></td>
-<td><p>Module for robust time series value interpolation.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/get_ini.html#module-get_ini" title="get_ini"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_ini</span></code></a></p></td>
-<td><p>Module for intelligent INI file parsing with automatic type conversion.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/get_list_input_files.html#module-get_list_input_files" title="get_list_input_files"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_list_input_files</span></code></a></p></td>
-<td><p>Module for locating and listing input files.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/logBinSpectrum.html#module-logBinSpectrum" title="logBinSpectrum"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logBinSpectrum</span></code></a></p></td>
-<td><p>Module for logarithmic binning of spectral data.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/map_sonic2tracer.html#module-map_sonic2tracer" title="map_sonic2tracer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">map_sonic2tracer</span></code></a></p></td>
-<td><p>Module for synchronizing sonic anemometer and tracer gas analyzer files.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/nandetrend.html#module-nandetrend" title="nandetrend"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nandetrend</span></code></a></p></td>
-<td><p>Module for detrending data arrays containing NaN values.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/nanlinfit.html#module-nanlinfit" title="nanlinfit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">nanlinfit</span></code></a></p></td>
-<td><p>Module for linear regression with NaN handling.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/prepare_output.html#module-prepare_output" title="prepare_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_output</span></code></a></p></td>
 <td><p></p></td>
@@ -210,7 +214,7 @@
 <td><p>Created on Wed Jun  1 14:00:54 2022</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/read_GHG.html#module-read_GHG" title="read_GHG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_GHG</span></code></a></p></td>
-<td><p>Functions for reading and processing LI-COR GHG high-frequency data files.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/read_main_inputs.html#module-read_main_inputs" title="read_main_inputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_main_inputs</span></code></a></p></td>
 <td><p></p></td>

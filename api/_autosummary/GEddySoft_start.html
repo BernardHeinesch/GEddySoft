@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GEddySoft_start &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>GEddySoft_start &mdash; GEddySoft 4.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/documentation_options.js?v=0cd558ae"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -48,7 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -64,7 +64,6 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#core-modules">Core Modules</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="GEddySoft_main.html">GEddySoft_main</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">GEddySoft_start</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#author">Author</a></li>
 <li class="toctree-l4"><a class="reference internal" href="GEddySoft_start.run_pool.html">GEddySoft_start.run_pool</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#GEddySoft_start.run_pool"><code class="docutils literal notranslate"><span class="pre">run_pool()</span></code></a></li>
 </ul>
@@ -113,72 +112,21 @@
              
   <section id="module-GEddySoft_start">
 <span id="geddysoft-start"></span><h1>GEddySoft_start<a class="headerlink" href="#module-GEddySoft_start" title="Link to this heading"></a></h1>
-<p>Main entry point for running GEddySoft eddy covariance processing software.</p>
-<p>This module serves as the primary entry point for GEddySoft, handling:</p>
-<ol class="arabic simple">
-<li><p>Configuration loading from INI files</p></li>
-<li><p>Input file discovery and mapping</p></li>
-<li><p>Processing mode selection:
-- Single-process mode for testing/debugging
-- Multi-process mode for production runs (one process per day)</p></li>
-<li><p>Execution monitoring and logging</p></li>
-<li><p>Error handling and automatic retry for failed days</p></li>
-</ol>
-<p>The module implements a robust parallel processing strategy with:
-- Automatic CPU core detection
-- stdout redirection for clean logging
-- Progress tracking and reporting
-- Automatic retry of failed processing days</p>
-<dl class="simple">
-<dt>Typical usage:</dt><dd><p>python GEddySoft_start.py</p>
-</dd>
-</dl>
-<section id="author">
-<h2>Author<a class="headerlink" href="#author" title="Link to this heading"></a></h2>
-<p>B. Heinesch
-University of Liege, Gembloux Agro-Bio Tech</p>
-</section>
+<p>Starting routine to run GEddySoft.
+Reads the ini file and allows to run the code either in non-multiprocess mode
+or in multi-process mode (one process per day of input data)</p>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="GEddySoft_start.run_pool.html#GEddySoft_start.run_pool" title="GEddySoft_start.run_pool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_pool</span></code></a></p></td>
-<td><p>Execute parallel processing of multiple days using a multiprocessing pool.</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="GEddySoft_start.run_pool">
 <span class="sig-prename descclassname"><span class="pre">GEddySoft_start.</span></span><span class="sig-name descname"><span class="pre">run_pool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">days_to_process</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log_filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/GEddySoft_start.html#run_pool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#GEddySoft_start.run_pool" title="Link to this definition"></a></dt>
-<dd><p>Execute parallel processing of multiple days using a multiprocessing pool.</p>
-<p>This function manages a pool of worker processes to handle eddy covariance
-data processing for multiple days simultaneously. It includes robust error
-handling and logging capabilities.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>days_to_process</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – List of days to process in YYYY_MM_DD format</p></li>
-<li><p><strong>log_filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Path to the log file for recording processing status and errors</p></li>
-</ul>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>The function implements several key features:
-1. Stdout redirection to prevent cluttered output
-2. Exception handling with proper resource cleanup
-3. Automatic process pool management
-4. Logging of both successful and failed processing</p>
-<section id="global-variables">
-<h2>Global Variables<a class="headerlink" href="#global-variables" title="Link to this heading"></a></h2>
-<dl class="simple">
-<dt>cpu<span class="classifier">int</span></dt><dd><p>Number of CPU cores to use (set in __main__)</p>
-</dd>
-<dt>ini<span class="classifier">dict</span></dt><dd><p>Configuration parameters (set in __main__)</p>
-</dd>
-<dt>OF<span class="classifier">file object</span></dt><dd><p>Open log file handle (set in __main__)</p>
-</dd>
-</dl>
-</section>
-</dd></dl>
+<dd></dd></dl>
 
 </section>
 

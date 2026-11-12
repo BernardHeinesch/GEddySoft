@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>logBinSpectrum.logBinSpectrum &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>logBinSpectrum.logBinSpectrum &mdash; GEddySoft 4.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/documentation_options.js?v=0cd558ae"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -48,7 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -70,7 +70,6 @@
 <li class="toctree-l3"><a class="reference internal" href="get_ini.html">get_ini</a></li>
 <li class="toctree-l3"><a class="reference internal" href="get_list_input_files.html">get_list_input_files</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="logBinSpectrum.html">logBinSpectrum</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="logBinSpectrum.html#author">Author</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">logBinSpectrum.logBinSpectrum</a></li>
 <li class="toctree-l4"><a class="reference internal" href="logBinSpectrum.html#logBinSpectrum.logBinSpectrum"><code class="docutils literal notranslate"><span class="pre">logBinSpectrum()</span></code></a></li>
 </ul>
@@ -121,61 +120,29 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="logBinSpectrum.logBinSpectrum">
 <span class="sig-prename descclassname"><span class="pre">logBinSpectrum.</span></span><span class="sig-name descname"><span class="pre">logBinSpectrum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">N</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_min</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_max</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/logBinSpectrum.html#logBinSpectrum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#logBinSpectrum.logBinSpectrum" title="Link to this definition"></a></dt>
-<dd><p>Perform logarithmic binning of spectral data.</p>
-<p>This function bins spectral data using logarithmically spaced
-frequency intervals. The zero frequency component is handled
-separately in the first bin.</p>
+<dd><p>log-bin average y(f), from InnFlux code</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>f</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Frequency array [Hz]
-Must be monotonically increasing
-First element should be 0 Hz</p></li>
-<li><p><strong>y</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Spectral values array
-Must be same length as f</p></li>
-<li><p><strong>N</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Number of logarithmic bins
-Must be &gt; 1</p></li>
-<li><p><strong>f_min</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Minimum frequency for binning [Hz]
-Must be &gt; 0</p></li>
-<li><p><strong>f_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>) – Maximum frequency for binning [Hz]
-Must be &gt; f_min</p></li>
+<li><p><strong>f</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">arr</span></code> of <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">frequency</span> <span class="pre">axis</span> <span class="pre">[s-1]</span></code>)</p></li>
+<li><p><strong>y</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">arr</span></code> of <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference internal" href="cospectrum.html#module-cospectrum" title="cospectrum"><code class="xref py py-class docutils literal notranslate"><span class="pre">cospectrum</span></code></a>)</p></li>
+<li><p><strong>N</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">number</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">bins</span></code>)</p></li>
+<li><p><strong>f_min</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">lower</span> <span class="pre">frequency</span></code> to <code class="xref py py-class docutils literal notranslate"><span class="pre">be</span> <span class="pre">considered</span></code>)</p></li>
+<li><p><strong>f_max</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">highest</span> <span class="pre">frequency</span></code> to <code class="xref py py-class docutils literal notranslate"><span class="pre">be</span> <span class="pre">considered</span></code>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><p>[f_out, y_out] where:
-f_out : numpy.ndarray</p>
-<blockquote>
-<div><p>Logarithmically binned frequencies [Hz]
-Length = N
-f_out[0] = 0 for zero frequency</p>
-</div></blockquote>
-<dl class="simple">
-<dt>y_out<span class="classifier">numpy.ndarray</span></dt><dd><p>Binned spectral values
-Length = N
-y_out[0] = y[0] for zero frequency</p>
-</dd>
-</dl>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>f_out</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">arr</span></code> of <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">log-binned</span> <span class="pre">frequency</span></code>)</p></li>
+<li><p><strong>y_out</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy</span> <span class="pre">arr</span></code> of <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">log-binned</span> <span class="pre">(co)spectrum</span></code>)</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">comments</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">--------</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Written</span> <span class="pre">by</span> <span class="pre">B.</span> <span class="pre">Heinesch</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">2</span> <span class="pre">November</span></code>, <code class="docutils literal notranslate"><span class="pre">2022.</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">University</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">Liege</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Gembloux</span> <span class="pre">Agro-Bio</span> <span class="pre">Tech.</span></code></p></li>
+</ul>
 </p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></p>
-</dd>
 </dl>
-<p class="rubric">Notes</p>
-<ol class="arabic simple">
-<li><p>Bin edges are calculated as:
-exp(linspace(log(f_min), log(f_max), N))</p></li>
-<li><p>Bin centers are geometric means of edges</p></li>
-<li><p>Values within each bin are arithmetically averaged</p></li>
-<li><p>Warnings are suppressed during computation</p></li>
-<li><p>NaN is used for empty bins</p></li>
-</ol>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">f</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f_binned</span><span class="p">,</span> <span class="n">y_binned</span> <span class="o">=</span> <span class="n">logBinSpectrum</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </section>

@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>get_closest_value.get_closest_value &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>get_closest_value.get_closest_value &mdash; GEddySoft 4.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/documentation_options.js?v=0cd558ae"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -48,7 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -67,7 +67,6 @@
 <li class="toctree-l3"><a class="reference internal" href="clean_results.html">clean_results</a></li>
 <li class="toctree-l3"><a class="reference internal" href="compute_wind_direction.html">compute_wind_direction</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="get_closest_value.html">get_closest_value</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="get_closest_value.html#author">Author</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">get_closest_value.get_closest_value</a></li>
 <li class="toctree-l4"><a class="reference internal" href="get_closest_value.html#get_closest_value.get_closest_value"><code class="docutils literal notranslate"><span class="pre">get_closest_value()</span></code></a></li>
 </ul>
@@ -121,46 +120,26 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="get_closest_value.get_closest_value">
 <span class="sig-prename descclassname"><span class="pre">get_closest_value.</span></span><span class="sig-name descname"><span class="pre">get_closest_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_timestamp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/get_closest_value.html#get_closest_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#get_closest_value.get_closest_value" title="Link to this definition"></a></dt>
-<dd><p>Find closest value to target timestamp with robust handling.</p>
-<p>This function searches a time series for the value closest to a
-target timestamp. If an exact match is not available or contains
-NaN, it progressively expands a window around the target time
-until valid values are found, then returns their median.</p>
+<dd><p>find the value in df that is the closest as the target timestamp</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>df</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – DataFrame with:
-- datetime index
-- Single column of values to interpolate
-- May contain NaN values</p></li>
-<li><p><strong>target_timestamp</strong> (<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a>) – Target timestamp to find closest value for</p></li>
+<li><p><strong>df</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">df</span> <span class="pre">with</span> <span class="pre">timestamp</span> <span class="pre">as</span> <span class="pre">datetime</span> <span class="pre">index</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">var</span> <span class="pre">values</span> <span class="pre">as</span> <span class="pre">only</span> <span class="pre">column</span></code>)</p></li>
+<li><p><strong>target_timestamp</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">the</span> <span class="pre">target</span> <span class="pre">timestamp</span></code>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Either:
-- Exact value if timestamp match found and not NaN
-- Median of closest valid values using adaptive window</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>value</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">the</span> <span class="pre">var</span> <span class="pre">value</span> <span class="pre">at</span> <span class="pre">target</span> <span class="pre">timestamp</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">if</span> <span class="pre">no</span> <span class="pre">value</span> <span class="pre">at</span> <span class="pre">that</span> <span class="pre">timestamp,</span></code>) – the median of the xth closest values, x starting with ten and increased
+by steps of ten until values are found</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Comments</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">--------</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Written</span> <span class="pre">by</span> <span class="pre">B.</span> <span class="pre">Heinesch</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">April</span></code>, <code class="docutils literal notranslate"><span class="pre">2025.</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">University</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">Liege</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Gembloux</span> <span class="pre">Agro-Bio</span> <span class="pre">Tech.</span></code></p></li>
+</ul>
+</p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>The search process:
-1. Try exact timestamp match first
-2. If no match or value is NaN:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>Start with window of 10 closest timestamps</p></li>
-<li><p>Expand window by 10 until valid values found</p></li>
-<li><p>Return median of valid values in window</p></li>
-</ul>
-</div></blockquote>
-<ol class="arabic simple" start="3">
-<li><p>Window expansion continues until either:
-- Valid values found
-- Entire series searched</p></li>
-</ol>
 </dd></dl>
 
 </section>

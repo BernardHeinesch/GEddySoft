@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>clean_results.clean_results &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>clean_results.clean_results &mdash; GEddySoft 4.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/documentation_options.js?v=0cd558ae"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -48,7 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -65,7 +65,6 @@
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#utility-functions">Utility Functions</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="add_attributes.html">add_attributes</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="clean_results.html">clean_results</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="clean_results.html#author">Author</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">clean_results.clean_results</a></li>
 <li class="toctree-l4"><a class="reference internal" href="clean_results.remove_entries_based_on_indices.html">clean_results.remove_entries_based_on_indices</a></li>
 <li class="toctree-l4"><a class="reference internal" href="clean_results.html#clean_results.remove_entries_based_on_indices"><code class="docutils literal notranslate"><span class="pre">remove_entries_based_on_indices()</span></code></a></li>
@@ -123,61 +122,23 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="clean_results.clean_results">
 <span class="sig-prename descclassname"><span class="pre">clean_results.</span></span><span class="sig-name descname"><span class="pre">clean_results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/clean_results.html#clean_results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clean_results.clean_results" title="Link to this definition"></a></dt>
-<dd><p>Clean eddy covariance results by removing entries with invalid sonic data.</p>
-<p>This function removes data entries where sonic anemometer measurements
-were invalid or missing (indicated by NaN values in wind speed). The
-removal is synchronized across all variables to maintain data consistency.</p>
+<dd><p>Function to remove from results all unuseful lines, i.e. all lines for which no eligible sonic data where available
+(e.g. incomplete sonic files). The identification of an unuseful lines is made on Nan values in the wsh list in MET.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>results</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – <p>GEddySoft results dictionary containing:
-- time : list</p>
-<blockquote>
-<div><p>Timestamps for each measurement period</p>
-</div></blockquote>
-<ul>
-<li><dl>
-<dt>MET<span class="classifier">dict</span></dt><dd><p>Meteorological measurements including:
-- wsh : list</p>
-<blockquote>
-<div><p>Wind speed measurements (used to identify invalid periods)</p>
-</div></blockquote>
-<ul class="simple">
-<li><dl class="simple">
-<dt>qaqc<span class="classifier">dict</span></dt><dd><p>Quality control flags</p>
+<dd class="field-odd"><p><strong>results</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">final</span> <span class="pre">dictionnary</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">GEddySoft</span></code>)</p>
 </dd>
-</dl>
-</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>TRACER<span class="classifier">dict, optional</span></dt><dd><p>Tracer gas measurements and associated QC</p>
-</dd>
-</dl>
-</li>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>results</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">final</span> <span class="pre">dictionnary</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">GEddySoft</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">with</span> <span class="pre">unuseful</span> <span class="pre">entries</span> <span class="pre">eliminated</span></code>)</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">comments</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">--------</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Written</span> <span class="pre">by</span> <span class="pre">B.</span> <span class="pre">Heinesch.</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">University</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">Liege</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Gembloux</span> <span class="pre">Agro-Bio</span> <span class="pre">Tech.</span></code></p></li>
 </ul>
 </p>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Cleaned results dictionary with invalid entries removed</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></p>
-</dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>The cleaning process:
-1. Identifies invalid periods using NaN values in wind speed
-2. Removes corresponding entries from all variables
-3. Preserves structure and metadata
-4. Handles QC flags separately to maintain integrity</p>
-<p>The function assumes that NaN values in wind speed (wsh)
-indicate periods where sonic data was invalid or missing,
-typically due to:
-- Incomplete data files
-- Instrument malfunctions
-- Communication errors</p>
 </dd></dl>
 
 </section>

@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>nandetrend &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>nandetrend &mdash; GEddySoft 4.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../_static/documentation_options.js?v=3b2dd2c4"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -45,7 +45,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -85,22 +85,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for nandetrend</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Module for detrending data arrays containing NaN values.</span>
-
-<span class="sd">This module provides functionality to remove linear trends from</span>
-<span class="sd">data arrays while properly handling NaN values. It supports:</span>
-
-<span class="sd">- Automatic detection of NaN values</span>
-<span class="sd">- Linear trend removal using robust fitting</span>
-<span class="sd">- Fallback to scipy.signal.detrend for NaN-free data</span>
-
-<span class="sd">Author</span>
-<span class="sd">------</span>
-<span class="sd">B. Heinesch</span>
-<span class="sd">University of Liege, Gembloux Agro-Bio Tech</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">nanlinfit</span><span class="w"> </span><span class="kn">import</span> <span class="n">nanlinfit</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal</span>
 
@@ -108,33 +93,21 @@
 <div class="viewcode-block" id="nandetrend">
 <a class="viewcode-back" href="../api/_autosummary/nandetrend.nandetrend.html#nandetrend.nandetrend">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">nandetrend</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove linear trend from array while handling NaN values.</span>
-
-<span class="sd">    This function removes linear trends from data arrays that may</span>
-<span class="sd">    contain NaN values. It uses a robust fitting method when NaNs</span>
-<span class="sd">    are present, and falls back to scipy.signal.detrend for</span>
-<span class="sd">    NaN-free data.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    remove linear trend from a vector that may contain NaN</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    x : ndarray</span>
-<span class="sd">        1-dimensional numpy array to detrend. May contain NaN values.</span>
+<span class="sd">    x : 1 dim np array</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    ndarray</span>
-<span class="sd">        Array of same shape as input with linear trend removed.</span>
-<span class="sd">        NaN values in input remain NaN in output.</span>
+<span class="sd">    the x array with linear trend removed</span>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    The detrending process:</span>
-<span class="sd">    1. Check for presence of NaN values</span>
-<span class="sd">    2. If NaNs present:</span>
-<span class="sd">       - Fit linear trend using nanlinfit</span>
-<span class="sd">       - Subtract trend from data</span>
-<span class="sd">    3. If no NaNs:</span>
-<span class="sd">       - Use scipy.signal.detrend</span>
+<span class="sd">    comments</span>
+<span class="sd">    --------</span>
+<span class="sd">    Written by B. Heinesch.</span>
+<span class="sd">    University of Liege, Gembloux Agro-Bio Tech.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">nanidx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>

@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>find_covariance_peak &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>find_covariance_peak &mdash; GEddySoft 4.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../_static/documentation_options.js?v=3b2dd2c4"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -45,7 +45,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -85,21 +85,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for find_covariance_peak</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Module for determining time lags between correlated atmospheric signals.</span>
-
-<span class="sd">This module provides functionality to estimate time lags between two signals by</span>
-<span class="sd">analyzing their cross-covariance function.</span>
-
-<span class="sd">The implementation uses smoothed cross-covariance analysis with configurable</span>
-<span class="sd">window sizes and filtering to handle noisy signals robustly.</span>
-
-<span class="sd">Author</span>
-<span class="sd">------</span>
-<span class="sd">B. Heinesch</span>
-<span class="sd">University of Liege, Gembloux Agro-Bio Tech</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">filtfilt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 
@@ -107,78 +93,31 @@
 <div class="viewcode-block" id="find_covariance_peak">
 <a class="viewcode-back" href="../api/_autosummary/find_covariance_peak.find_covariance_peak.html#find_covariance_peak.find_covariance_peak">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">find_covariance_peak</span><span class="p">(</span><span class="n">covariance</span><span class="p">,</span> <span class="n">outer_window_size</span><span class="p">,</span> <span class="n">inner_window_size</span><span class="p">,</span> <span class="n">window_center</span><span class="p">,</span> <span class="n">filter_length</span><span class="p">,</span> <span class="n">positive_peak_only</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Estimate time lag between two signals using cross-covariance analysis.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For two shifted (anti)correlated signals, s1 and s2,</span>
+<span class="sd">    this fuction estimates the lag of s2 with respect to s1 by finding the</span>
+<span class="sd">    maximum/minimum of the (smoothed) crosscovariance xcov(s1, s2)</span>
 
-<span class="sd">    For two time-shifted signals that are either positively or negatively</span>
-<span class="sd">    correlated, this function estimates their relative time lag by finding</span>
-<span class="sd">    the maximum/minimum of their smoothed cross-covariance function within</span>
-<span class="sd">    a specified search window.</span>
-
-<span class="sd">    Parameters</span>
+<span class="sd">    parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    covariance : array_like</span>
-<span class="sd">        Cross-covariance function between the two signals</span>
-<span class="sd">    outer_window_size : int</span>
-<span class="sd">        Size (±samples) of the outer window used for visualization.</span>
-<span class="sd">        The total window size will be 2*outer_window_size + 1.</span>
-<span class="sd">    inner_window_size : int</span>
-<span class="sd">        Size (±samples) of the inner window used for lag search.</span>
-<span class="sd">        The peak will be searched within window_center ± inner_window_size.</span>
-<span class="sd">    window_center : int</span>
-<span class="sd">        Expected lag in samples around which to center the search windows</span>
-<span class="sd">    filter_length : int</span>
-<span class="sd">        Length of the Hamming window used for smoothing the covariance</span>
-<span class="sd">        function before peak detection. Set to 1 for no filtering.</span>
-<span class="sd">    positive_peak_only : bool</span>
-<span class="sd">        If True, only search for positive peaks (maximum).</span>
-<span class="sd">        If False, determine peak sign based on mean covariance.</span>
-<span class="sd">    plot : bool, optional</span>
-<span class="sd">        If True, generate diagnostic plots showing the covariance</span>
-<span class="sd">        function and detected peak</span>
-<span class="sd">    filename : str, optional</span>
-<span class="sd">        Name of the file being processed, used in plot titles</span>
+<span class="sd">    covariance: np, covariance function</span>
+<span class="sd">    outer_window_size: samples, size (+/-) of the outer window (for lag plotting only)</span>
+<span class="sd">    inner_window_size: samples, size (+/-) of the inner window (for lag search)</span>
+<span class="sd">    window_center: samples, lag of the outer window center</span>
+<span class="sd">    filter_length: samples smoothing length of filter applied prior to finding covariance peak</span>
+<span class="sd">    positive_peak_only: boolean, True if only the positive peak in the cov function has to be searched for</span>
 
-<span class="sd">    Returns</span>
+<span class="sd">    returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    int</span>
-<span class="sd">        Estimated lag in samples between the two signals</span>
+<span class="sd">    lag_samples: lag in samples</span>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    The function implements the following steps:</span>
-<span class="sd">    1. Optional smoothing using a Hamming window and filtfilt</span>
-<span class="sd">    2. Peak detection within the inner search window</span>
-<span class="sd">    3. Sign handling:</span>
-<span class="sd">       - If positive_peak_only=True: always find maximum</span>
-<span class="sd">       - If positive_peak_only=False: find maximum for positive</span>
-<span class="sd">         correlation, minimum for negative correlation</span>
-
-<span class="sd">    The smoothing helps reduce false peak detection in noisy data.</span>
-<span class="sd">    The filter_length parameter should be chosen carefully:</span>
-<span class="sd">    - Too small: susceptible to noise</span>
-<span class="sd">    - Too large: may cause errors in filtfilt and lose true peaks</span>
-
-<span class="sd">    This implementation differs from some others (e.g., InnFlux)</span>
-<span class="sd">    by not using derivative-based methods, which can be unreliable</span>
-<span class="sd">    with low signal-to-noise ratio data.</span>
-
-<span class="sd">    Examples</span>
+<span class="sd">    Comments</span>
 <span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; # Generate sample data with known lag</span>
-<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
-<span class="sd">    &gt;&gt;&gt; x = np.random.randn(1000)</span>
-<span class="sd">    &gt;&gt;&gt; y = np.roll(x, 5)  # Create copy of x shifted by 5 samples</span>
-<span class="sd">    &gt;&gt;&gt; xcov = np.correlate(x, y, mode=&#39;full&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; lag = find_covariance_peak(</span>
-<span class="sd">    ...     xcov, 50, 20, 0, 5, True, plot=True</span>
-<span class="sd">    ... )</span>
-<span class="sd">    &gt;&gt;&gt; print(f&#39;Detected lag: {lag} samples&#39;)</span>
+<span class="sd">    - if filter_lenght is too high, an error will occur in the filtfilt function</span>
+<span class="sd">    - does not follow the strategy of InnFlux (with derivatives), which was found to be inadequate with low SNR</span>
 
-<span class="sd">    See Also</span>
-<span class="sd">    --------</span>
-<span class="sd">    scipy.signal.filtfilt : Zero-phase filtering used for smoothing</span>
-<span class="sd">    numpy.correlate : Correlation calculation</span>
-<span class="sd">    xcov : Cross-covariance calculation</span>
+<span class="sd">    Written by B. Heinesch.</span>
+<span class="sd">    University of Liege, Gembloux Agro-Bio Tech.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">positive_peak_only</span><span class="p">:</span>

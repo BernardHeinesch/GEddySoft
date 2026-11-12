@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>spike_detection_vickers97.spike_detection_vickers97 &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>spike_detection_vickers97.spike_detection_vickers97 &mdash; GEddySoft 4.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/documentation_options.js?v=0cd558ae"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -48,7 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -68,6 +68,7 @@
 <li class="toctree-l3"><a class="reference internal" href="cospectrum.html">cospectrum</a></li>
 <li class="toctree-l3"><a class="reference internal" href="flux_unit_conversion.html">flux_unit_conversion</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="spike_detection_vickers97.html">spike_detection_vickers97</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="spike_detection_vickers97.html#spike-detection-vickers-97-py">spike_detection_vickers_97.py</a></li>
 <li class="toctree-l4"><a class="reference internal" href="spike_detection_vickers97.linear_interpolate_spikes.html">spike_detection_vickers97.linear_interpolate_spikes</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">spike_detection_vickers97.spike_detection_vickers97</a></li>
 <li class="toctree-l4"><a class="reference internal" href="spike_detection_vickers97.html#spike_detection_vickers97.linear_interpolate_spikes"><code class="docutils literal notranslate"><span class="pre">linear_interpolate_spikes()</span></code></a></li>
@@ -117,98 +118,56 @@
 <h1>spike_detection_vickers97.spike_detection_vickers97<a class="headerlink" href="#spike-detection-vickers97-spike-detection-vickers97" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="spike_detection_vickers97.spike_detection_vickers97">
-<span class="sig-prename descclassname"><span class="pre">spike_detection_vickers97.</span></span><span class="sig-name descname"><span class="pre">spike_detection_vickers97</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">spike_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_pass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avrg_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ac_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spike_limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_consec_spikes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctrplot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.13)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/spike_detection_vickers97.html#spike_detection_vickers97"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spike_detection_vickers97.spike_detection_vickers97" title="Link to this definition"></a></dt>
-<dd><p>Detect and remove spikes in high-frequency eddy covariance data.</p>
-<p>This function implements the Vickers and Mahrt (1997) despiking algorithm for
-eddy covariance data. It uses an iterative moving window approach to identify
-outliers based on local statistics. The algorithm can either flag spikes or
-both flag and remove them through linear interpolation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – 1D input data array containing high-frequency measurements
-(e.g., wind components, scalar concentrations)</p></li>
-<li><p><strong>spike_mode</strong> (<code class="docutils literal notranslate"><span class="pre">{1,</span> <span class="pre">2}</span></code>, <em>optional</em>) – Operation mode:
-- 1: Only detect spikes
-- 2: Detect and remove spikes via linear interpolation
-Default is 1</p></li>
-<li><p><strong>max_pass</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <em>optional</em>) – Maximum number of iterations for spike detection.
-Each pass may use progressively larger thresholds.
-Default is 10</p></li>
-<li><p><strong>avrg_len</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <em>optional</em>) – Averaging period length in minutes.
-Used to determine the window size for local statistics.
-Default is 30</p></li>
-<li><p><strong>ac_freq</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <em>optional</em>) – Data acquisition frequency in Hz.
-Used to calculate the number of samples in each window.
-Default is 10</p></li>
-<li><p><strong>spike_limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <em>optional</em>) – Initial threshold for spike detection in standard deviations.
-Points exceeding mean ± (spike_limit × std) are flagged.
-Default is 3.5</p></li>
-<li><p><strong>max_consec_spikes</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <em>optional</em>) – Maximum number of consecutive points that can be flagged as spikes.
-Longer sequences are not considered spikes.
-Default is 3</p></li>
-<li><p><strong>ctrplot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <em>optional</em>) – If True, generates diagnostic plots showing:
-- Original data with detected spikes
-- Cleaned data with interpolated values
-Default is False</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>data_out</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – If spike_mode=1: Copy of input with spikes still present
-If spike_mode=2: Data with spikes replaced by linear interpolation</p></li>
-<li><p><strong>is_spike</strong> (<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Boolean array same length as input, True where spikes were detected</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>The algorithm follows these steps:
-1. Divides data into overlapping windows
-2. Calculates local mean and standard deviation
-3. Flags points exceeding threshold as potential spikes
-4. Checks for consecutive outliers
-5. Optionally interpolates across spike locations
-6. Repeats with adjusted threshold if spikes found</p>
-<p>The window advancement step is currently set to 100 samples, which
-differs from both the original VM97 paper (1 sample) and the EddyPro
-manual recommendation (half window size).</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
+<span class="sig-prename descclassname"><span class="pre">spike_detection_vickers97.</span></span><span class="sig-name descname"><span class="pre">spike_detection_vickers97</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">spike_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_pass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avrg_len</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">30</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ac_freq</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spike_limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_consec_spikes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="(in Python v3.15)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">series_label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctrplot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Tuple" title="(in Python v3.15)"><span class="pre">Tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.5)"><span class="pre">ndarray</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/spike_detection_vickers97.html#spike_detection_vickers97"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#spike_detection_vickers97.spike_detection_vickers97" title="Link to this definition"></a></dt>
+<dd><p>Detects and counts spikes, and replaces them by linear interpolation if requested.
+Hard-flags file for too many spikes.
+Started form a python conversion of the EDDYPRO Fortran spike detection algorithm,
+based on Vickers and Mahrt (1997) spike detection method.
+Subsequently modified by Bernard Heinesch and Jonathan Bitton</p>
+<section id="parameters">
+<h2>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
 <dl class="simple">
-<dt><a class="reference internal" href="spike_detection_vickers97.linear_interpolate_spikes.html#spike_detection_vickers97.linear_interpolate_spikes" title="spike_detection_vickers97.linear_interpolate_spikes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linear_interpolate_spikes</span></code></a></dt><dd><p>Function used to replace detected spikes</p>
+<dt>data<span class="classifier">np.ndarray</span></dt><dd><p>1D input data array</p>
+</dd>
+<dt>spike_mode<span class="classifier">int</span></dt><dd><p>If 1: detect and flag spikes only (no interpolation; detected spikes are masked as NaN in the
+working signal for subsequent passes). If 2: detect, flag and remove spikes by linear
+interpolation.</p>
+</dd>
+<dt>max_pass: int</dt><dd><p>maximum number of passes for spikes detection</p>
+</dd>
+<dt>avrg_len: int</dt><dd><p>lenght of data, in minutes</p>
+</dd>
+<dt>ac_freq: float</dt><dd><p>Frequency (Hz)</p>
+</dd>
+<dt>spike_limit<span class="classifier">float</span></dt><dd><p>Standard deviation multiplier for spike detection</p>
+</dd>
+<dt>max_consec_spikes<span class="classifier">int</span></dt><dd><p>Maximum number of consecutive points that can be considered spikes</p>
+</dd>
+<dt>series_label<span class="classifier">str</span></dt><dd><p>Optional label used only for diagnostic plots (ctrplot=True) to indicate which time series is
+being processed.</p>
+</dd>
+<dt>ctrplot<span class="classifier">bool</span></dt><dd><p>Whether to generate and save diagnostic plots</p>
 </dd>
 </dl>
-</div>
-<p class="rubric">References</p>
-<aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id1" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
-<p>Vickers, D. and Mahrt, L. (1997). Quality control and flux sampling
-problems for tower and aircraft data. Journal of Atmospheric and
-Oceanic Technology, 14(3), 512-526.</p>
-</aside>
-<aside class="footnote brackets" id="id2" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></span>
-<p>LI-COR Biosciences (2019). EddyPro Software Instruction Manual,
-Version 7.0.4.</p>
-</aside>
-</aside>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate sample data with artificial spikes</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">18000</span><span class="p">)</span>  <span class="c1"># 30 min at 10 Hz</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="p">[</span><span class="mi">1000</span><span class="p">:</span><span class="mi">1002</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># Add artificial spikes</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cleaned</span><span class="p">,</span> <span class="n">spikes</span> <span class="o">=</span> <span class="n">spike_detection_vickers97</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">data</span><span class="p">,</span> <span class="n">spike_mode</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ctrplot</span><span class="o">=</span><span class="kc">True</span>
-<span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Found </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">spikes</span><span class="p">)</span><span class="si">}</span><span class="s1"> spikes&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<section id="author">
-<h2>Author<a class="headerlink" href="#author" title="Link to this heading"></a></h2>
-<p>Written by Bernard Heinesch
-University of Liege, Gembloux Agro-Bio Tech</p>
+</section>
+<section id="returns">
+<h2>Returns:<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>Tuple[np.ndarray, np.ndarray, int]</dt><dd><ul class="simple">
+<li><p>Modified data array with spikes removed (and interpolated if requested)</p></li>
+<li><p>Boolean array indicating individual spike points (spike locations). The number of
+individual spike points is given by sum(is_spike).</p></li>
+<li><p>Number of spike events detected (an event is a contiguous sequence of consecutive spike
+points, i.e. a run of outliers with length &lt;= max_consec_spikes).</p></li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="comments">
+<h2>Comments:<a class="headerlink" href="#comments" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>check step (EDDYPRO manual says half the window size. May speed up the routine).</p></li>
+</ul>
 </section>
 </dd></dl>
 

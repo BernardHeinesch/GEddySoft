@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>get_ini.get_ini &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>get_ini.get_ini &mdash; GEddySoft 4.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/documentation_options.js?v=0cd558ae"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -48,7 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -68,7 +68,6 @@
 <li class="toctree-l3"><a class="reference internal" href="compute_wind_direction.html">compute_wind_direction</a></li>
 <li class="toctree-l3"><a class="reference internal" href="get_closest_value.html">get_closest_value</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="get_ini.html">get_ini</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="get_ini.html#author">Author</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">get_ini.get_ini</a></li>
 <li class="toctree-l4"><a class="reference internal" href="get_ini.MyConfigParser.html">get_ini.MyConfigParser</a></li>
 <li class="toctree-l4"><a class="reference internal" href="get_ini.html#get_ini.MyConfigParser"><code class="docutils literal notranslate"><span class="pre">MyConfigParser</span></code></a></li>
@@ -123,28 +122,23 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="get_ini.get_ini">
 <span class="sig-prename descclassname"><span class="pre">get_ini.</span></span><span class="sig-name descname"><span class="pre">get_ini</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/get_ini.html#get_ini"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#get_ini.get_ini" title="Link to this definition"></a></dt>
-<dd><p>Read and parse an INI file with automatic type conversion.</p>
-<p>This function reads an INI configuration file and returns a parser
-that automatically converts values to appropriate Python types.
-It uses MyConfigParser to handle type inference, making it ideal
-for scientific applications with complex configuration needs.</p>
+<dd><p>read the ini file using configparser, but end with a dictionary
+with the right data types, not all strings</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Path to the INI configuration file</p>
+<dd class="field-odd"><p><strong>filename</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">the</span> <span class="pre">finename</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">the</span> <span class="pre">ini</span> <span class="pre">file</span></code>)</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Configured parser instance with loaded and type-converted values</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="get_ini.MyConfigParser.html#get_ini.MyConfigParser" title="get_ini.MyConfigParser"><code class="xref py py-class docutils literal notranslate"><span class="pre">MyConfigParser</span></code></a></p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>ini</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dictionnary</span> <span class="pre">with</span> <span class="pre">all</span> <span class="pre">initialisation</span> <span class="pre">information</span></code>)</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">comments</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">--------</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Written</span> <span class="pre">by</span> <span class="pre">B.</span> <span class="pre">Heinesch.</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">University</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">Liege</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Gembloux</span> <span class="pre">Agro-Bio</span> <span class="pre">Tech.</span></code></p></li>
+</ul>
+</p>
 </dd>
 </dl>
-<p class="rubric">Notes</p>
-<p>The function supports all standard INI file features plus:
-- Section-based organization
-- Key-value pairs with automatic type conversion
-- Complex data structures (lists, dicts, etc.)
-- Fallback to string values when conversion fails</p>
 </dd></dl>
 
 </section>

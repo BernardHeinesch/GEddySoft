@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>add_attributes.add_attributes &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>add_attributes.add_attributes &mdash; GEddySoft 4.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/documentation_options.js?v=0cd558ae"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -48,7 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -64,7 +64,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../index.html#core-modules">Core Modules</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#utility-functions">Utility Functions</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="add_attributes.html">add_attributes</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="add_attributes.html#author">Author</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">add_attributes.add_attributes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="add_attributes.html#add_attributes.add_attributes"><code class="docutils literal notranslate"><span class="pre">add_attributes()</span></code></a></li>
 </ul>
@@ -120,55 +119,31 @@
 <h1>add_attributes.add_attributes<a class="headerlink" href="#add-attributes-add-attributes" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="add_attributes.add_attributes">
-<span class="sig-prename descclassname"><span class="pre">add_attributes.</span></span><span class="sig-name descname"><span class="pre">add_attributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_irga_data_day</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_irga</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_tracer_data_day</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tracerdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/add_attributes.html#add_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#add_attributes.add_attributes" title="Link to this definition"></a></dt>
-<dd><p>Add standardized metadata attributes to HDF5 output files.</p>
-<p>This function adds descriptive attributes to each dataset in the HDF5
-output file, including variable descriptions and physical units. It
-handles metadata for different data types:</p>
-<ul class="simple">
-<li><p>Basic file information (creation time, frequencies)</p></li>
-<li><p>Meteorological variables (wind, temperature, pressure)</p></li>
-<li><p>IRGA measurements (if present)</p></li>
-<li><p>Tracer measurements (if present)</p></li>
-<li><p>Quality control metrics</p></li>
-<li><p>Processing parameters</p></li>
-</ul>
+<span class="sig-prename descclassname"><span class="pre">add_attributes.</span></span><span class="sig-name descname"><span class="pre">add_attributes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_irga_data_day</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_irga</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UTC_OFFSET</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_tracer_data_day</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tracerdata</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/add_attributes.html#add_attributes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#add_attributes.add_attributes" title="Link to this definition"></a></dt>
+<dd><p>add attributes “name” and “units” to the hdf5 results output file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filepath</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Directory path containing the HDF5 output file</p></li>
-<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Name of the HDF5 output file</p></li>
-<li><p><strong>process_irga_data_day</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Flag indicating whether IRGA data was processed</p></li>
-<li><p><strong>n_irga</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Number of concentration variables from IRGA</p></li>
-<li><p><strong>process_tracer_data_day</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <em>optional</em>) – Flag indicating whether tracer data was processed</p></li>
-<li><p><strong>tracerdata</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, <em>optional</em>) – If dict, contains tracer-specific metadata</p></li>
+<li><p><strong>filepath</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hdf5</span> <span class="pre">results</span> <span class="pre">output</span> <span class="pre">directory</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>)</p></li>
+<li><p><strong>filename</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">hdf5</span> <span class="pre">results</span> <span class="pre">output</span> <span class="pre">file</span> <span class="pre">name</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">string</span></code>)</p></li>
+<li><p><strong>process_irga_data_day</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">flag</span> <span class="pre">for</span> <span class="pre">irga</span> <span class="pre">presence</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">boolean</span></code>)</p></li>
+<li><p><strong>n_irga</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">number</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">concentration</span> <span class="pre">variables</span> <span class="pre">for</span> <span class="pre">irga</span></code>, <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>)</p></li>
+<li><p><strong>UTC_OFFSET</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">UTC_OFFSET</span> <span class="pre">that</span> <span class="pre">has</span> <span class="pre">been</span> <span class="pre">applied</span></code> to <code class="xref py py-class docutils literal notranslate"><span class="pre">output</span> <span class="pre">time</span></code>, <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>)</p></li>
+<li><p><strong>process_tracer_data_day</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">flag</span> <span class="pre">for</span> <span class="pre">tracer</span> <span class="pre">presence</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">boolean</span></code>)</p></li>
+<li><p><strong>tracerdata</strong></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Function modifies the HDF5 file in place</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>The function adds two key attributes to each dataset:
-- ‘description’: Human-readable description of the variable
-- ‘units’: Physical units in standard notation</p>
-<p>For quality control flags, additional metadata about test
-thresholds and criteria is included.</p>
-<p>The metadata structure follows the hierarchy:
-- Root level: Basic file information
-- /MET: Meteorological measurements
-- /IRGA: Gas analyzer data (if present)
-- /TRACER: Tracer measurements (if present)</p>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">h5py.File</span></code></dt><dd><p>HDF5 file handling in Python</p>
+<dd class="field-even"><p><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">comments</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">--------</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Written</span> <span class="pre">by</span> <span class="pre">B.</span> <span class="pre">Heinesch.</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">University</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">Liege</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Gembloux</span> <span class="pre">Agro-Bio</span> <span class="pre">Tech.</span></code></p></li>
+</ul>
+</p>
 </dd>
 </dl>
-</div>
 </dd></dl>
 
 </section>

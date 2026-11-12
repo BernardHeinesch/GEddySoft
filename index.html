@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to GEddySoft Documentation &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>Welcome to GEddySoft Documentation &mdash; GEddySoft 4.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="_static/documentation_options.js?v=0cd558ae"></script>
       <script src="_static/doctools.js?v=9a2dae69"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -47,7 +47,7 @@
 <li class="toctree-l1"><a class="reference internal" href="user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -88,11 +88,11 @@
              
   <section class="tex2jax_ignore mathjax_ignore" id="welcome-to-geddysoft-documentation">
 <h1>Welcome to GEddySoft Documentation<a class="headerlink" href="#welcome-to-geddysoft-documentation" title="Link to this heading"></a></h1>
-<p>GEddySoft (Gembloux Eddy-covariance Software) is a Python package for computing turbulent fluxes from IRGA or PTR-TOF-MS measurements.</p>
-<p>The package is approximately 5.8 GB in size, with the vast majority (5.7 GB) consisting of example datasets provided in the <code class="docutils literal notranslate"><span class="pre">examples</span></code> directory. These example files are high-frequency eddy covariance measurements that can be used to test and validate the software’s functionality.</p>
+<p>GEddySoft (<strong>G</strong>embloux <strong>Eddy</strong>-covariance <strong>Soft</strong>ware) is a Python package for computing turbulent fluxes from IRGA or PTR-TOF-MS measurements.</p>
+<p>The package is provided with an example dataset (see the ‘Quick Start’ and ‘Example Dataset’ sections). These example files are high-frequency eddy covariance measurements that can be used to test and validate the software’s functionality.</p>
 <p>Initially inspired by InnFLUX (a MATLAB-based eddy covariance software from the University of Innsbruck, v1.1.0 2021-02-23, https://git.uibk.ac.at/acinn/apc/innflux), GEddySoft began as a Python translation of the original code and has since been enhanced with:</p>
 <ul class="simple">
-<li><p>more flexible input file formats and content handling</p></li>
+<li><p>more flexible input file content handling</p></li>
 <li><p>improved quality control (e.g. spike detection and replacement, instrumental problem tests)</p></li>
 <li><p>two additional stationarity tests (Mauder and Dutour)</p></li>
 <li><p>an additional flux uncertainty assessments (Lenschow metric)</p></li>
@@ -108,6 +108,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="user_guide/installation.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="user_guide/installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user_guide/installation.html#environment-setup">Environment Setup</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_guide/installation.html#installation-steps">Installation Steps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_guide/installation.html#verification">Verification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_guide/installation.html#troubleshooting">Troubleshooting</a></li>
@@ -127,7 +128,7 @@
 <li class="toctree-l2"><a class="reference internal" href="user_guide/performance.html#processing-times">Processing Times</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="user_guide/running_example.html">Running on Example Dataset</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/running_example.html">Example Dataset</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="user_guide/running_example.html#available-data-files">Available Data Files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="user_guide/running_example.html#processing-examples">Processing Examples</a></li>
 </ul>
@@ -138,6 +139,10 @@
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="version.html">Version History</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="version.html#v4-2-2026-11-12">v4.2 (2026-11-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version.html#v4-1-2026-07-16">v4.1 (2026-07-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version.html#v4-0-2-2025-08-16">v4.0.2 (2025-08-16)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version.html#v4-0-1-2025-08-16">v4.0.1 (2025-08-16)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="version.html#v4-0-2025-06-27">v4.0 (2025-06-27)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="version.html#v3-1-2025-05-16">v3.1 (2025-05-16)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="version.html#v2-0-2022-06">v2.0 (2022-06)</a></li>

@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>get_list_input_files.get_list_input_files &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>get_list_input_files.get_list_input_files &mdash; GEddySoft 4.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/documentation_options.js?v=0cd558ae"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -48,7 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -69,7 +69,6 @@
 <li class="toctree-l3"><a class="reference internal" href="get_closest_value.html">get_closest_value</a></li>
 <li class="toctree-l3"><a class="reference internal" href="get_ini.html">get_ini</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="get_list_input_files.html">get_list_input_files</a><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="get_list_input_files.html#author">Author</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">get_list_input_files.get_list_input_files</a></li>
 <li class="toctree-l4"><a class="reference internal" href="get_list_input_files.html#get_list_input_files.get_list_input_files"><code class="docutils literal notranslate"><span class="pre">get_list_input_files()</span></code></a></li>
 </ul>
@@ -121,104 +120,21 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="get_list_input_files.get_list_input_files">
 <span class="sig-prename descclassname"><span class="pre">get_list_input_files.</span></span><span class="sig-name descname"><span class="pre">get_list_input_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ini</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/get_list_input_files.html#get_list_input_files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#get_list_input_files.get_list_input_files" title="Link to this definition"></a></dt>
-<dd><p>Locate sonic anemometer and tracer gas analyzer data files.</p>
-<p>This function scans specified directories for input data files from
-sonic anemometers and tracer gas analyzers, filtering by file type,
-prefix, and date range.</p>
+<dd><p>Function to identify input raw files</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ini</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – <p>Configuration dictionary containing:
-- files : dict</p>
-<blockquote>
-<div><p>File search parameters including:
-- sonic_files_folders : list</p>
-<blockquote>
-<div><p>Paths to search for sonic data</p>
-</div></blockquote>
-<ul class="simple">
-<li><dl class="simple">
-<dt>sonic_files_prefix<span class="classifier">str</span></dt><dd><p>Prefix for sonic filenames</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>tracer_files_folders<span class="classifier">list</span></dt><dd><p>Paths to search for tracer data</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>tracer_files_prefix<span class="classifier">str</span></dt><dd><p>Prefix for tracer filenames</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>tracer_files_suffix<span class="classifier">str</span></dt><dd><p>Suffix for tracer filenames</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>tracer_files_date_format<span class="classifier">str</span></dt><dd><p>Date format in tracer filenames</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>date_files_selection<span class="classifier">str</span></dt><dd><p>Date range for file filtering</p>
-</dd>
-</dl>
-</li>
-</ul>
-</div></blockquote>
-<ul>
-<li><dl>
-<dt>sonic<span class="classifier">dict</span></dt><dd><p>Sonic configuration including:
-- sonic_files_type : str</p>
-<blockquote>
-<div><p>Type of sonic files (‘hdf5’, ‘ghg’, ‘slt’)</p>
-</div></blockquote>
-</dd>
-</dl>
-</li>
-</ul>
-</p>
+<dd class="field-odd"><p><strong>ini</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dictionnary</span> <span class="pre">with</span> <span class="pre">all</span> <span class="pre">initialisation</span> <span class="pre">information</span></code>)</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><p>Two-element tuple containing:
-- sonic_files_list : dict</p>
-<blockquote>
-<div><p>Dictionary of sonic files with keys:
-- name : list</p>
-<blockquote>
-<div><p>Filenames</p>
-</div></blockquote>
-<ul class="simple">
-<li><dl class="simple">
-<dt>path<span class="classifier">list</span></dt><dd><p>Full paths to files</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>prefix<span class="classifier">list</span></dt><dd><p>File prefixes</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>date<span class="classifier">list</span></dt><dd><p>File dates</p>
-</dd>
-</dl>
-</li>
-</ul>
-</div></blockquote>
-<ul class="simple">
-<li><dl class="simple">
-<dt>tracer_files_list<span class="classifier">dict</span></dt><dd><p>Dictionary of tracer files with same structure</p>
-</dd>
-</dl>
-</li>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>sonic_files_list</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">sonic</span> <span class="pre">files</span> <span class="pre">that</span> <span class="pre">were</span> <span class="pre">find</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">folder</span> <span class="pre">given</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">ini</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">in</span> <span class="pre">its</span> <span class="pre">subfolders</span></code>)</p></li>
+<li><p><strong>tracer_files_list</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">tracer</span> <span class="pre">files</span> <span class="pre">that</span> <span class="pre">were</span> <span class="pre">find</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">folder</span> <span class="pre">given</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">ini</span></code> and <code class="xref py py-class docutils literal notranslate"><span class="pre">in</span> <span class="pre">its</span> <span class="pre">subfolders</span></code>)</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">comments</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">--------</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Written</span> <span class="pre">by</span> <span class="pre">B.</span> <span class="pre">Heinesch.</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">University</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">Liege</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Gembloux</span> <span class="pre">Agro-Bio</span> <span class="pre">Tech.</span></code></p></li>
 </ul>
 </p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

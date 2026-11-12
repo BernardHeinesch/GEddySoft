@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>find_covariance_peak &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>find_covariance_peak &mdash; GEddySoft 4.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/documentation_options.js?v=0cd558ae"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -48,7 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -73,7 +73,6 @@
 <li class="toctree-l3"><a class="reference internal" href="test_steady_state_D99.html">test_steady_state_D99</a></li>
 <li class="toctree-l3"><a class="reference internal" href="test_ITC.html">test_ITC</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">find_covariance_peak</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#author">Author</a></li>
 <li class="toctree-l4"><a class="reference internal" href="find_covariance_peak.find_covariance_peak.html">find_covariance_peak.find_covariance_peak</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#find_covariance_peak.find_covariance_peak"><code class="docutils literal notranslate"><span class="pre">find_covariance_peak()</span></code></a></li>
 </ul>
@@ -113,99 +112,44 @@
              
   <section id="module-find_covariance_peak">
 <span id="find-covariance-peak"></span><h1>find_covariance_peak<a class="headerlink" href="#module-find_covariance_peak" title="Link to this heading"></a></h1>
-<p>Module for determining time lags between correlated atmospheric signals.</p>
-<p>This module provides functionality to estimate time lags between two signals by
-analyzing their cross-covariance function.</p>
-<p>The implementation uses smoothed cross-covariance analysis with configurable
-window sizes and filtering to handle noisy signals robustly.</p>
-<section id="author">
-<h2>Author<a class="headerlink" href="#author" title="Link to this heading"></a></h2>
-<p>B. Heinesch
-University of Liege, Gembloux Agro-Bio Tech</p>
-</section>
 <p class="rubric">Functions</p>
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="find_covariance_peak.find_covariance_peak.html#find_covariance_peak.find_covariance_peak" title="find_covariance_peak.find_covariance_peak"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_covariance_peak</span></code></a></p></td>
-<td><p>Estimate time lag between two signals using cross-covariance analysis.</p></td>
+<td><p>For two shifted (anti)correlated signals, s1 and s2, this fuction estimates the lag of s2 with respect to s1 by finding the maximum/minimum of the (smoothed) crosscovariance xcov(s1, s2)</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="find_covariance_peak.find_covariance_peak">
 <span class="sig-prename descclassname"><span class="pre">find_covariance_peak.</span></span><span class="sig-name descname"><span class="pre">find_covariance_peak</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">covariance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outer_window_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inner_window_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window_center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_length</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positive_peak_only</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/find_covariance_peak.html#find_covariance_peak"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#find_covariance_peak.find_covariance_peak" title="Link to this definition"></a></dt>
-<dd><p>Estimate time lag between two signals using cross-covariance analysis.</p>
-<p>For two time-shifted signals that are either positively or negatively
-correlated, this function estimates their relative time lag by finding
-the maximum/minimum of their smoothed cross-covariance function within
-a specified search window.</p>
+<dd><p>For two shifted (anti)correlated signals, s1 and s2,
+this fuction estimates the lag of s2 with respect to s1 by finding the
+maximum/minimum of the (smoothed) crosscovariance xcov(s1, s2)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>covariance</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">array_like</span></code>) – Cross-covariance function between the two signals</p></li>
-<li><p><strong>outer_window_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Size (±samples) of the outer window used for visualization.
-The total window size will be 2*outer_window_size + 1.</p></li>
-<li><p><strong>inner_window_size</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Size (±samples) of the inner window used for lag search.
-The peak will be searched within window_center ± inner_window_size.</p></li>
-<li><p><strong>window_center</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Expected lag in samples around which to center the search windows</p></li>
-<li><p><strong>filter_length</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Length of the Hamming window used for smoothing the covariance
-function before peak detection. Set to 1 for no filtering.</p></li>
-<li><p><strong>positive_peak_only</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – If True, only search for positive peaks (maximum).
-If False, determine peak sign based on mean covariance.</p></li>
-<li><p><strong>plot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <em>optional</em>) – If True, generate diagnostic plots showing the covariance
-function and detected peak</p></li>
-<li><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <em>optional</em>) – Name of the file being processed, used in plot titles</p></li>
+<li><p><strong>covariance</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">np</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">covariance</span> <span class="pre">function</span></code>)</p></li>
+<li><p><strong>outer_window_size</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">samples</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">size</span> <span class="pre">(+/-)</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">the</span> <span class="pre">outer</span> <span class="pre">window</span> <span class="pre">(for</span> <span class="pre">lag</span> <span class="pre">plotting</span> <span class="pre">only)</span></code>)</p></li>
+<li><p><strong>inner_window_size</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">samples</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">size</span> <span class="pre">(+/-)</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">the</span> <span class="pre">inner</span> <span class="pre">window</span> <span class="pre">(for</span> <span class="pre">lag</span> <span class="pre">search)</span></code>)</p></li>
+<li><p><strong>window_center</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">samples</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">lag</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">the</span> <span class="pre">outer</span> <span class="pre">window</span> <span class="pre">center</span></code>)</p></li>
+<li><p><strong>filter_length</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">samples</span> <span class="pre">smoothing</span> <span class="pre">length</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">filter</span> <span class="pre">applied</span> <span class="pre">prior</span></code> to <code class="xref py py-class docutils literal notranslate"><span class="pre">finding</span> <span class="pre">covariance</span> <span class="pre">peak</span></code>)</p></li>
+<li><p><strong>positive_peak_only</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">boolean</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">True</span> <span class="pre">if</span> <span class="pre">only</span> <span class="pre">the</span> <span class="pre">positive</span> <span class="pre">peak</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">cov</span> <span class="pre">function</span> <span class="pre">has</span></code> to <code class="xref py py-class docutils literal notranslate"><span class="pre">be</span> <span class="pre">searched</span> <span class="pre">for</span></code>)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Estimated lag in samples between the two signals</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></p>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>The function implements the following steps:
-1. Optional smoothing using a Hamming window and filtfilt
-2. Peak detection within the inner search window
-3. Sign handling:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>If positive_peak_only=True: always find maximum</p></li>
-<li><p>If positive_peak_only=False: find maximum for positive
-correlation, minimum for negative correlation</p></li>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>lag_samples</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">lag</span> <span class="pre">in</span> <span class="pre">samples</span></code>)</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Comments</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">--------</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">-</span> <span class="pre">if</span> <span class="pre">filter_lenght</span> <span class="pre">is</span> <span class="pre">too</span> <span class="pre">high</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">an</span> <span class="pre">error</span> <span class="pre">will</span> <span class="pre">occur</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">filtfilt</span> <span class="pre">function</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">-</span> <span class="pre">does</span> <span class="pre">not</span> <span class="pre">follow</span> <span class="pre">the</span> <span class="pre">strategy</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">InnFlux</span> <span class="pre">(with</span> <span class="pre">derivatives)</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">which</span> <span class="pre">was</span> <span class="pre">found</span></code> to <code class="xref py py-class docutils literal notranslate"><span class="pre">be</span> <span class="pre">inadequate</span> <span class="pre">with</span> <span class="pre">low</span> <span class="pre">SNR</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">Written</span> <span class="pre">by</span> <span class="pre">B.</span> <span class="pre">Heinesch.</span></code></p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">University</span></code> of <code class="xref py py-class docutils literal notranslate"><span class="pre">Liege</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Gembloux</span> <span class="pre">Agro-Bio</span> <span class="pre">Tech.</span></code></p></li>
 </ul>
-</div></blockquote>
-<p>The smoothing helps reduce false peak detection in noisy data.
-The filter_length parameter should be chosen carefully:
-- Too small: susceptible to noise
-- Too large: may cause errors in filtfilt and lose true peaks</p>
-<p>This implementation differs from some others (e.g., InnFlux)
-by not using derivative-based methods, which can be unreliable
-with low signal-to-noise ratio data.</p>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Generate sample data with known lag</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>  <span class="c1"># Create copy of x shifted by 5 samples</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">xcov</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">correlate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">lag</span> <span class="o">=</span> <span class="n">find_covariance_peak</span><span class="p">(</span>
-<span class="gp">... </span>    <span class="n">xcov</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">plot</span><span class="o">=</span><span class="kc">True</span>
-<span class="gp">... </span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Detected lag: </span><span class="si">{</span><span class="n">lag</span><span class="si">}</span><span class="s1"> samples&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<dl class="simple">
-<dt><a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.filtfilt.html#scipy.signal.filtfilt" title="(in SciPy v1.16.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">scipy.signal.filtfilt</span></code></a></dt><dd><p>Zero-phase filtering used for smoothing</p>
-</dd>
-<dt><a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.correlate.html#numpy.correlate" title="(in NumPy v2.3)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy.correlate</span></code></a></dt><dd><p>Correlation calculation</p>
-</dd>
-<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">xcov</span></code></dt><dd><p>Cross-covariance calculation</p>
+</p>
 </dd>
 </dl>
-</div>
 </dd></dl>
 
 </section>

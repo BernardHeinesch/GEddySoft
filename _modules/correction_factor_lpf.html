@@ -5,14 +5,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>correction_factor_lpf &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>correction_factor_lpf &mdash; GEddySoft 4.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../_static/documentation_options.js?v=0cd558ae"></script>
       <script src="../_static/doctools.js?v=9a2dae69"></script>
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
@@ -45,7 +45,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -85,38 +85,9 @@
            <div itemprop="articleBody">
              
   <h1>Source code for correction_factor_lpf</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Module for computing low-pass filtering correction factors in eddy covariance.</span>
-
-<span class="sd">This module provides functions to calculate correction factors for high-frequency</span>
-<span class="sd">losses in eddy covariance measurements. It implements two methods:</span>
-
-<span class="sd">1. Theoretical approach using Massman (2004) cospectra and a transfer function</span>
-<span class="sd">   based on a half-power cutoff frequency.</span>
-<span class="sd">2. Empirical approach using pre-calculated correction factors as a function of</span>
-<span class="sd">   wind speed and atmospheric stability.</span>
-
-<span class="sd">References</span>
-<span class="sd">----------</span>
-<span class="sd">.. [1] Massman, W. J. (2004). Concerning the measurement of atmospheric trace</span>
-<span class="sd">       gas fluxes with open- and closed-path eddy covariance systems: The WPL</span>
-<span class="sd">       terms and spectral attenuation. In Handbook of Micrometeorology (pp. 133-160).</span>
-<span class="sd">.. [2] Peltola, O., et al. (2021). Insights into updating algorithms for spectral</span>
-<span class="sd">       corrections in eddy covariance flux measurements. Atmospheric Measurement</span>
-<span class="sd">       Techniques, 14(8), 5071-5088.</span>
-
-<span class="sd">Author</span>
-<span class="sd">------</span>
-<span class="sd">B. Heinesch</span>
-<span class="sd">University of Liege, Gembloux Agro-Bio Tech</span>
-
-<span class="sd">Created</span>
-<span class="sd">-------</span>
-<span class="sd">2025-02-20</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.integrate</span><span class="w"> </span><span class="kn">import</span> <span class="n">trapz</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.integrate</span><span class="w"> </span><span class="kn">import</span> <span class="n">trapezoid</span>
 
 <span class="c1"># %% Massman cospectrum</span>
 
@@ -125,46 +96,23 @@
 <a class="viewcode-back" href="../api/_autosummary/correction_factor_lpf.theor_cospectra_massman.html#correction_factor_lpf.theor_cospectra_massman">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">theor_cospectra_massman</span><span class="p">(</span><span class="n">zoL</span><span class="p">,</span> <span class="n">nf</span><span class="p">,</span> <span class="n">kf</span><span class="p">,</span> <span class="n">a0_st</span><span class="p">,</span> <span class="n">kf0_st</span><span class="p">,</span> <span class="n">mu_st</span><span class="p">,</span>
                             <span class="n">a0_un</span><span class="p">,</span> <span class="n">kf0_un</span><span class="p">,</span> <span class="n">mu_un</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate reference cospectra using the Massman model.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate reference cospectra using the Massman model.</span>
+<span class="sd">    Based on Massman et al. Handbook of Meteorology, 2004, Eq 4.2.</span>
 
-<span class="sd">    This function implements the Massman (2004) model for scalar flux cospectra.</span>
-<span class="sd">    The model uses different parameters for stable and unstable conditions to</span>
-<span class="sd">    account for the effects of atmospheric stability on turbulent transport.</span>
+<span class="sd">    Args:</span>
+<span class="sd">        zoL (float): Stability parameter (-)</span>
+<span class="sd">        nf (ndarray): Natural frequency array (Hz)</span>
+<span class="sd">        kf (ndarray): Normalized frequency array (-)</span>
+<span class="sd">        a0_st (float): Stability correction parameter</span>
+<span class="sd">        kf0_st (float): Frequency correction parameter for stable conditions</span>
+<span class="sd">        mu_st (float): Correction factor for stable conditions</span>
+<span class="sd">        a0_un (float): Unstable correction parameter</span>
+<span class="sd">        kf0_un (float): Frequency correction parameter for unstable conditions</span>
+<span class="sd">        mu_un (float): Correction factor for unstable conditions</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    zoL : float</span>
-<span class="sd">        Stability parameter (z-d)/L, where z is measurement height,</span>
-<span class="sd">        d is displacement height, and L is Obukhov length [-]</span>
-<span class="sd">    nf : ndarray</span>
-<span class="sd">        Natural frequency array [Hz]</span>
-<span class="sd">    kf : ndarray</span>
-<span class="sd">        Normalized frequency array, f*(z-d)/U, where U is wind speed [-]</span>
-<span class="sd">    a0_st : float</span>
-<span class="sd">        Amplitude parameter for stable conditions [-]</span>
-<span class="sd">    kf0_st : float</span>
-<span class="sd">        Peak frequency parameter for stable conditions [-]</span>
-<span class="sd">    mu_st : float</span>
-<span class="sd">        Shape parameter for stable conditions [-]</span>
-<span class="sd">    a0_un : float</span>
-<span class="sd">        Amplitude parameter for unstable conditions [-]</span>
-<span class="sd">    kf0_un : float</span>
-<span class="sd">        Peak frequency parameter for unstable conditions [-]</span>
-<span class="sd">    mu_un : float</span>
-<span class="sd">        Shape parameter for unstable conditions [-]</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    ndarray</span>
-<span class="sd">        Normalized cospectrum values for each input frequency</span>
-
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    The model follows Eq. 4.2 from Massman (2004) with the form:</span>
-<span class="sd">    Co(f) = a0 * (kf/kf0) / (1 + (kf/kf0)^(2μ))^(7/6μ) / f</span>
-
-<span class="sd">    Different parameters are used for stable (zoL &gt; 0) and unstable</span>
-<span class="sd">    (zoL ≤ 0) conditions to better match observed cospectra.</span>
+<span class="sd">    Returns:</span>
+<span class="sd">        ndarray: Calculated normalised cospectrum</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Initialize cospectra array</span>
     <span class="n">cosp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">nf</span><span class="p">)</span>
@@ -185,69 +133,25 @@
 <div class="viewcode-block" id="correction_factor_lpf">
 <a class="viewcode-back" href="../api/_autosummary/correction_factor_lpf.correction_factor_lpf.html#correction_factor_lpf.correction_factor_lpf">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">correction_factor_lpf</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">zoL</span><span class="p">,</span> <span class="n">ini</span><span class="p">,</span> <span class="n">df_lpfc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ctrplot</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate correction factors for high-frequency flux losses.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes high-frequency loss correction factor based either on</span>
+<span class="sd">    - a half-power cut-off frequency and the Massman modeled cospectrum (ini[&#39;param&#39;][&#39;LPFC&#39;]=1)</span>
+<span class="sd">    - a correction factor vs wind speed relation per stability class (ini[&#39;param&#39;][&#39;LPFC&#39;]=2)</span>
 
-<span class="sd">    This function implements two methods to correct for high-frequency losses</span>
-<span class="sd">    in eddy covariance measurements:</span>
-
-<span class="sd">    1. Theoretical approach (ini[&#39;param&#39;][&#39;LPFC&#39;]=1):</span>
-<span class="sd">       Uses Massman model cospectra and a transfer function based on</span>
-<span class="sd">       half-power cutoff frequency.</span>
-
-<span class="sd">    2. Empirical approach (ini[&#39;param&#39;][&#39;LPFC&#39;]=2):</span>
-<span class="sd">       Uses pre-calculated correction factors based on wind speed</span>
-<span class="sd">       and atmospheric stability class.</span>
-
-<span class="sd">    Parameters</span>
+<span class="sd">    parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    u : array_like</span>
-<span class="sd">        Wind speed [m s⁻¹]</span>
-<span class="sd">    zoL : array_like</span>
-<span class="sd">        Stability parameter (z-d)/L [-]</span>
-<span class="sd">    ini : dict</span>
-<span class="sd">        Configuration dictionary containing:</span>
-<span class="sd">        - param.LPFC : int</span>
-<span class="sd">            Method selection (1 or 2)</span>
-<span class="sd">        - param.SAMPLING_RATE_TRACER : float</span>
-<span class="sd">            Sampling frequency [Hz]</span>
-<span class="sd">        - param.SENSOR_HEIGHT : float</span>
-<span class="sd">            Measurement height [m]</span>
-<span class="sd">    df_lpfc : pandas.DataFrame, optional</span>
-<span class="sd">        Lookup table for correction factors containing columns:</span>
-<span class="sd">        - stability_class : str</span>
-<span class="sd">            &#39;stable&#39;, &#39;unstable&#39;, or &#39;all&#39;</span>
-<span class="sd">        - name : str</span>
-<span class="sd">            Parameter name (&#39;cof&#39;, &#39;A0&#39;, &#39;kf0&#39;, &#39;mu&#39;)</span>
-<span class="sd">        - value : float</span>
-<span class="sd">            Parameter value</span>
-<span class="sd">        - ws_max : float</span>
-<span class="sd">            Maximum wind speed for empirical method</span>
-<span class="sd">        - CF_L : float</span>
-<span class="sd">            Correction factor for empirical method</span>
-<span class="sd">    ctrplot : bool, optional</span>
-<span class="sd">        If True, generate diagnostic plots for method 1</span>
+<span class="sd">    u: numpy arr of float, wind speed [s-1]</span>
+<span class="sd">    zoL: numpy arr of float, stability parameter [-]</span>
+<span class="sd">    ini: dict, the ini file content</span>
+<span class="sd">    df_lpfc: dataframe, correction factor vs windspeed array</span>
+<span class="sd">    ctrplot (bool): If True, generate plots for the method 1 (COF + Massman)</span>
 
-<span class="sd">    Returns</span>
+<span class="sd">    returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    float or array_like</span>
-<span class="sd">        Correction factor(s) for low-pass filtering losses</span>
+<span class="sd">    cf_lpf: numpy arr of float, correction factor for low-pass filtering</span>
 
-<span class="sd">    Notes</span>
-<span class="sd">    -----</span>
-<span class="sd">    For method 1, the correction factor is calculated as:</span>
-<span class="sd">    CF = ∫(Co(f)df) / ∫(TF(f)·Co(f)df)</span>
-<span class="sd">    where Co(f) is the Massman model cospectrum and TF(f) is</span>
-<span class="sd">    a Lorentzian transfer function.</span>
-
-<span class="sd">    For method 2, the correction factor is interpolated from</span>
-<span class="sd">    a lookup table based on wind speed and stability class.</span>
-
-<span class="sd">    See Also</span>
+<span class="sd">    comments</span>
 <span class="sd">    --------</span>
-<span class="sd">    theor_cospectra_massman : Massman model implementation</span>
-
-<span class="sd">    Author</span>
-<span class="sd">    ------</span>
 <span class="sd">    Written by B. Heinesch, 20 February, 2025.</span>
 <span class="sd">    University of Liege, Gembloux Agro-Bio Tech.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -282,7 +186,7 @@
         <span class="n">TF_LPF</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="p">(</span><span class="n">nf</span><span class="o">/</span><span class="n">cof_all</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span><span class="o">**</span><span class="mf">0.5</span>
 
         <span class="c1"># Compute correction factor</span>
-        <span class="n">cf_lpf</span> <span class="o">=</span> <span class="n">trapz</span><span class="p">(</span><span class="n">ncosp</span><span class="p">,</span> <span class="n">nf</span><span class="p">)</span> <span class="o">/</span> <span class="n">trapz</span><span class="p">(</span><span class="n">TF_LPF</span> <span class="o">*</span> <span class="n">ncosp</span><span class="p">,</span> <span class="n">nf</span><span class="p">)</span>
+        <span class="n">cf_lpf</span> <span class="o">=</span> <span class="n">trapezoid</span><span class="p">(</span><span class="n">ncosp</span><span class="p">,</span> <span class="n">nf</span><span class="p">)</span> <span class="o">/</span> <span class="n">trapezoid</span><span class="p">(</span><span class="n">TF_LPF</span> <span class="o">*</span> <span class="n">ncosp</span><span class="p">,</span> <span class="n">nf</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">ctrplot</span><span class="p">:</span>
             <span class="c1"># Create figure and subplots (now with only 2 plots)</span>

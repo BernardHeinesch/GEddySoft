@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>read_GHG.read_diag_val &mdash; GEddySoft 4.0.0 documentation</title>
+  <title>read_GHG.read_diag_val &mdash; GEddySoft 4.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
 
   
       <script src="../../_static/jquery.js?v=5d32c60e"></script>
       <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=3304f9e4"></script>
+      <script src="../../_static/documentation_options.js?v=0cd558ae"></script>
       <script src="../../_static/doctools.js?v=9a2dae69"></script>
       <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -48,7 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/quickstart.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../user_guide/performance.html">Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Running on Example Dataset</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../user_guide/running_example.html">Example Dataset</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Project Info</span></p>
 <ul>
@@ -122,43 +122,17 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="read_GHG.read_diag_val">
 <span class="sig-prename descclassname"><span class="pre">read_GHG.</span></span><span class="sig-name descname"><span class="pre">read_diag_val</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/read_GHG.html#read_diag_val"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#read_GHG.read_diag_val" title="Link to this definition"></a></dt>
-<dd><p>Process LI-7200 gas analyzer diagnostic values.</p>
-<p>This function processes diagnostic values from a LI-7200 gas analyzer,
-converting binary diagnostic flags into meaningful status indicators.
-Each diagnostic value is a binary number where specific bits indicate
-the status of different analyzer components.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.Series.html#pandas.Series" title="(in pandas v2.3.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Series</span></code></a> or <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="(in NumPy v2.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code></a>) – Series or array of diagnostic values from the analyzer</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><p>DataFrame containing diagnostic information for each component:</p>
+<dd><p>Read diagnostic value and flag the malfunctioning instrument part
+Inputs:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>pandas dataframe with variable names in column name</p></li>
+</ul>
+</div></blockquote>
 <dl class="simple">
-<dt>AGC<span class="classifier">float</span></dt><dd><p>Mean AGC value (Automatic Gain Control, scaled by 6.67)</p>
-</dd>
-<dt>Sync<span class="classifier">int</span></dt><dd><p>Count of synchronization issues</p>
-</dd>
-<dt>PLL<span class="classifier">int</span></dt><dd><p>Count of Phase-Locked Loop issues</p>
-</dd>
-<dt>Detector<span class="classifier">int</span></dt><dd><p>Count of detector issues</p>
-</dd>
-<dt>Chopper<span class="classifier">int</span></dt><dd><p>Count of chopper wheel issues</p>
-</dd>
-<dt>DeltaPressure<span class="classifier">int</span></dt><dd><p>Count of pressure differential issues</p>
-</dd>
-<dt>Aux_input<span class="classifier">int</span></dt><dd><p>Count of auxiliary input issues</p>
-</dd>
-<dt>Tinlet<span class="classifier">int</span></dt><dd><p>Count of inlet temperature issues</p>
-</dd>
-<dt>Toutlet<span class="classifier">int</span></dt><dd><p>Count of outlet temperature issues</p>
-</dd>
-<dt>Head detect<span class="classifier">int</span></dt><dd><p>Count of head detection issues</p>
-</dd>
-</dl>
-</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.3.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a></p>
+<dt>Outputs:</dt><dd><ul class="simple">
+<li><p>Diagnostic value translated into flag for each instrument part</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
