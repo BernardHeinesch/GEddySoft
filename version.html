@@ -133,6 +133,7 @@
 <li><p>Added dry-air molar concentration computation through <code class="docutils literal notranslate"><span class="pre">air_molar_conc_dry</span></code> and <code class="docutils literal notranslate"><span class="pre">esat</span></code>, with fallback to meteo RH, measured H2O mole fraction, then dry-air assumption.</p></li>
 <li><p>Added standalone daily HDF5-to-NetCDF concatenation utility <code class="docutils literal notranslate"><span class="pre">concat_hdf5.py</span></code>.</p></li>
 <li><p>Improved NumPy/SciPy compatibility: <code class="docutils literal notranslate"><span class="pre">np.nan</span></code>, <code class="docutils literal notranslate"><span class="pre">scipy.integrate.trapezoid</span></code>, and <code class="docutils literal notranslate"><span class="pre">numpy.bytes_</span></code> are now used where required.</p></li>
+<li><p>Replaced Windows-only backslash path separators by forward slashes across the code and INI files, improving Windows, macOS, and Linux compatibility.</p></li>
 </ul>
 </section>
 <section id="corrected-mistakes">
@@ -147,6 +148,7 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">nanlinfit</span></code>: non-finite samples are now fitted on their original indices instead of a compressed index.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">GEddySoft_main</span></code>: flux conversion now uses dry-air molar concentration instead of moist-air molar concentration.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">read_GHG</span></code>: corrected LI-7200 diagnostic conversion to 16-bit binary formatting.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GEddySoft_main</span></code>: fixed an <code class="docutils literal notranslate"><span class="pre">IndexError</span></code> when every sonic file of a day was skipped; the day is now logged and skipped without writing output.</p></li>
 </ul>
 </section>
 </section>
