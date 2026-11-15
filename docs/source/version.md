@@ -8,6 +8,7 @@
 - Added dry-air molar concentration computation through `air_molar_conc_dry` and `esat`, with fallback to meteo RH, measured H2O mole fraction, then dry-air assumption.
 - Added standalone daily HDF5-to-NetCDF concatenation utility `concat_hdf5.py`.
 - Improved NumPy/SciPy compatibility: `np.nan`, `scipy.integrate.trapezoid`, and `numpy.bytes_` are now used where required.
+- Replaced Windows-only backslash path separators by forward slashes across the code and INI files, improving Windows, macOS, and Linux compatibility.
 
 ### Corrected Mistakes
 - `compute_time_lag(MAX_WITH_DEFAULT)`: corrected edge fallback conditions to match the lag range returned by `find_covariance_peak`.
@@ -19,6 +20,7 @@
 - `nanlinfit`: non-finite samples are now fitted on their original indices instead of a compressed index.
 - `GEddySoft_main`: flux conversion now uses dry-air molar concentration instead of moist-air molar concentration.
 - `read_GHG`: corrected LI-7200 diagnostic conversion to 16-bit binary formatting.
+- `GEddySoft_main`: fixed an `IndexError` when every sonic file of a day was skipped; the day is now logged and skipped without writing output.
 
 ## v4.1 (2026-07-16)
 

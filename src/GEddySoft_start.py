@@ -46,7 +46,7 @@ if __name__ == '__main__':
     parser.add_argument('ini', nargs='?',
                         default=os.path.normpath(os.path.join(
                             os.path.dirname(__file__), '..', 'examples', 'metadata',
-                            'GEddySoft_parameters_VOC_top.ini')),
+                            'GEddySoft_parameters_IRGA.ini')),
                         help='path to the GEddySoft parameter (.ini) file')
     ini_filename = parser.parse_args().ini
     if not os.path.isfile(ini_filename):
@@ -62,8 +62,8 @@ if __name__ == '__main__':
 
     # Open logfile in write mode, and close it afterwards
     # start_timestamp = proc_start_time.strftime("%Y%m%d_%H%M%S")
-    # log_filename = f"{ini['files']['log_filepath']}\\logfile_{start_timestamp}.csv"
-    log_filename = f"{ini['files']['log_filepath']}\\logfile.csv"
+    # log_filename = f"{ini['files']['log_filepath']}/logfile_{start_timestamp}.csv"
+    log_filename = f"{ini['files']['log_filepath']}/logfile.csv"
     OF = open(log_filename, 'w')
     OF.write('\n--- New Processing Session ---\n\n')
     OF.write('run started at ' + proc_start_time.strftime("%d/%m/%Y %H:%M:%S") + '\n' + '\n')
@@ -95,7 +95,7 @@ if __name__ == '__main__':
 
         unique_days = [date.replace('-', '_') for date in unique_days]
 
-        cpu = os.cpu_count() or 1
+        cpu = os.cpu_count()
         print(f'running in multithread mode (joblib backend) with {cpu} CPUs\n')
         OF.write(f'running in multithread mode (joblib backend) with {cpu} CPUs\n')
 

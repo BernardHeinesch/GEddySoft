@@ -25,7 +25,7 @@ def add_attributes(filepath, filename, process_irga_data_day, n_irga, UTC_OFFSET
     University of Liege, Gembloux Agro-Bio Tech.
     """
 
-    with h5py.File(filepath + '\\' + filename, 'r+') as hdf5_f:
+    with h5py.File(filepath + '/' + filename, 'r+') as hdf5_f:
 
         hdf5_f['file_creation_time'].attrs['description'] = 'file_creation_time'; hdf5_f['file_creation_time'].attrs['units'] = 'local computer time'
         hdf5_f['freq'].attrs['description'] = 'frequency axis of co-spectra'; hdf5_f['freq'].attrs['units'] = 's-1'

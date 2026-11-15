@@ -6,7 +6,6 @@ matplotlib>=3.4.0
 h5py>=3.6.0
 diptest>=0.5.0
 statsmodels>=0.13.0
-multiprocess>=0.70.0
 typing-extensions>=4.0.0
 tzlocal>=2.1.0
 joblib>=1.4.0

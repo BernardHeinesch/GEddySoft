@@ -165,9 +165,10 @@ Once the user wants to contribute to the main branch, please create a merge requ
     - GEddySoft_start (parallel processing): replaced the multiprocessing.Pool backend by joblib.Parallel (loky backend), which provides simpler code, live progress report, worker stdout/stderr forwarding to the console, and more robust worker management. joblib is now a required dependency.
     - GEddySoft_main (T_prime): add warning when NaN values are detected in T_prime before replacing by 0.
     - compatibility: replaced np.NaN by np.nan across the code, integration routine naming: replaced trapz by scipy.integrate.trapezoid, replaced numpy.string_ by numpy.bytes_ in hdfdict, suggestions by Kim Hoang.
+    - compatibility: replaced Windows-only backslash path separators by forward slashes throughout the code and the ini files — works on Windows, Mac and Linux. Last remaining np.trapz replaced by scipy.integrate.trapezoid (cospectrum_v4_0). Suggestions by Matthias Cuntz.
 
     New functionalities:
-    - GEddySoft_start: can now be launched from command line with an optional ini filepath argument (argparse). If no argument is provided, the example ini path in this repository is used.
+    - GEddySoft_start: can now be launched from command line with an optional ini filepath argument (argparse). If no argument is provided, the IRGA example ini path in this repository is used.
     - Added standalone daily HDF5-to-NetCDF concatenation utility (concat_hdf5.py).
 
     Corrected mistakes:
@@ -180,3 +181,4 @@ Once the user wants to contribute to the main branch, please create a merge requ
     - nanlinfit: non-finite (NaN/Inf) samples were deleted before building the fit x-axis (`t = 0..N_valid-1`), so the slope was computed per valid sample instead of per real sample index — overestimating dT_dt/dc_dt when multiplied by the sampling rate, and inconsistent with nandetrend which evaluates the fit on the original indices. Now the fit is performed on the original sample indices (isfinite mask). Bug detected by Matthias Cuntz.
     - GEddySoft_main (air_mol_conc): flux unit conversion used the moist-air molar concentration p/(R*T) instead of the dry-air concentration (p-ea)/(R*T) — appropriate for dry-air mole fractions (QCL/PTR-TOF-MS convention). All converted fluxes were overestimated by ea/p (~1 % typical, up to ~4 % hot & humid). Water vapour pressure ea is now estimated with a fallback chain: (1) meteo-file relative humidity via new function esat (Magnus formula), (2) measured H2O mixing ratio, (3) ea=0 dry-air assumption (identical to previous behaviour). The fixed standard molar-volume constant (`22.414e-3` m3 mol-1) previously used in the conversion is removed as a consequence. Bug detected by Matthias Cuntz.
     - read_GHG (read_diag_val, LI-7200 diagnostics): 16-bit flag conversion `'000' + format(x, 'b')` gave wrong bit alignment whenever the value had fewer than 13 significant bits. Now `format(x, '016b')`. Bug detected by Matthias Cuntz.
+    - GEddySoft_main: IndexError crash (`results['time'][0]`) when every sonic file of a day was skipped (all-invalid data, e.g. -999). The day is now logged and skipped instead of crashing the run.

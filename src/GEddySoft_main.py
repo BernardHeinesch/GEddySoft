@@ -404,6 +404,7 @@ def GEddySoft_main(str_day, ini, log_filename):
                 rh_meteo = get_closest_value(df_meteofiledata.iloc[:, ini['meteo']['relative_humidity_column']-1], results['time'][n])
             else:
                 rh_meteo = np.nan
+
             # calculate dry air molar concentration (mol m-3)
             chi_H2O = np.nan
             if ini['run_param']['CONCENTRATION_TYPE'] == 0 and completeness_H2O >= ini['param']['COMPLETENESS_THRESHOLD']:
@@ -985,6 +986,13 @@ def GEddySoft_main(str_day, ini, log_filename):
         # %% clean results for unprocessed sonic files
         clean_results(results)
 
+        # if no valid sonic data was found for the whole day (all files skipped),
+        # there is nothing to write - log and skip to the next day
+        if not results['time']:
+            print(f'no valid sonic data for day {str_day}, output skipped')
+            OF.write(f'no valid sonic data for day {str_day}, output skipped\n')
+            continue
+
 # %% output data
 
         # save covariance functions to file
@@ -992,10 +1000,10 @@ def GEddySoft_main(str_day, ini, log_filename):
         if ini['run_param']['WRITE_COV_OUTPUTS']:
             ts = results['time'][0]
             cov_filename = ini['files']['output_files_prefix'] + 'cov_%d%02d%02d.hdf5' % (ts.year, ts.month, ts.day)
-            hdfdict.dump(cov_data, ini['files']['output_folder'] + '\\cov\\' + cov_filename, mode='w')
+            hdfdict.dump(cov_data, ini['files']['output_folder'] + '/cov/' + cov_filename, mode='w')
 
             # add attributes
-            with h5py.File(ini['files']['output_folder'] + '\\cov\\' + cov_filename, 'r+') as hdf5_f:
+            with h5py.File(ini['files']['output_folder'] + '/cov/' + cov_filename, 'r+') as hdf5_f:
                 if ini['run_param']['CONCENTRATION_TYPE'] == 0:
                     # loop on tracers
                     for i in range(len(hdf5_f["IRGA"])):
@@ -1011,7 +1019,7 @@ def GEddySoft_main(str_day, ini, log_filename):
         ts = results['time'][0]
         res_filename = ini['files']['output_files_prefix'] + '%d%02d%02d.hdf5' % (ts.year, ts.month, ts.day)
         results['time'] = [date_obj.strftime('%Y-%m-%d %H-%M-%S') for date_obj in results['time']]
-        hdfdict.dump(results, ini['files']['output_folder']+'\\' + res_filename, mode='w')
+        hdfdict.dump(results, ini['files']['output_folder']+'/' + res_filename, mode='w')
 
         # add attributes "name" and "units"
         if  'TRACER' in results:  # TRACER part has been created in the result dict (tracer data for that day)

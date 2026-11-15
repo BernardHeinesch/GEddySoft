@@ -55,7 +55,7 @@ def concat_hdf5_new(config):
             print('Not read file: ' + files['name'][i] + ' - File too short')
             continue
         print('Read file: ' + files['name'][i])
-        filepath = files['path'][i] + '\\' + files['name'][i]
+        filepath = files['path'][i] + '/' + files['name'][i]
         
         with h5py.File(filepath, mode='r') as results:
     
@@ -304,8 +304,8 @@ def concat_hdf5_new(config):
                 print('Not read cov file: ' + files_cov['name'][i] + ' - File too short')
                 continue
             print('Read cov file: ' + files_cov['name'][i])
-            filepath_cov = files_cov['path'][i] + '\\' + files_cov['name'][i]
-            filepath_tracer = files['path'][i] + '\\' + files['name'][i]
+            filepath_cov = files_cov['path'][i] + '/' + files_cov['name'][i]
+            filepath_tracer = files['path'][i] + '/' + files['name'][i]
             
             # Open both cov and tracer files (the second one for time information)
             with h5py.File(filepath_cov, 'r') as results_cov, h5py.File(filepath_tracer, 'r') as results_tracer:
@@ -403,7 +403,7 @@ def concat_hdf5_new(config):
     # Output csv if requested
     if config['USER_OPTIONS']['output_csv'] == 'True':
         csv_folder = config['FILES_PATHS']['concat_results_output_folder']\
-            + '\\csv_'+ eval(config['USER_OPTIONS']['date_files_selection'])[0][0:10]\
+            + '/csv_'+ eval(config['USER_OPTIONS']['date_files_selection'])[0][0:10]\
                 + '_'+eval(config['USER_OPTIONS']['date_files_selection'])[1][5:10]
         # Verify if the csv folder exists
         if not os.path.exists(csv_folder):
@@ -709,7 +709,7 @@ def concat_hdf5_old(config):
         sys.exit()
     
     # Load IONICON product ions table
-    os.chdir(os.getcwd()+'\clustering')
+    os.chdir(os.getcwd()+'/clustering')
     df_IONICON = pd.read_csv(config['FILES_NAMES']['IONICON_file_name'], sep='\s+',
                              names=['mz', 'value', 'chemform', 'comment'])  # list('ABCD')
     df_IONICON['chemform'] = df_IONICON['chemform'] +\
@@ -795,7 +795,7 @@ def concat_hdf5_old(config):
         print('results file ' + results_files_list['name'][d])  # + '\n'
         # Load file only if file_size > 1000 Ko
         file_size_TRACER = os.path.getsize(config['FILES_PATHS']['GEddySoft_results_output_folder']
-                                    + '\\' + results_files_list['name'][d])/1000.
+                                    + '/' + results_files_list['name'][d])/1000.
         if config['USER_OPTIONS']['results_type'] == 'all':
             # file_size_TRACER_min = 10000
             file_size_TRACER_min = 5000
@@ -803,16 +803,16 @@ def concat_hdf5_old(config):
             file_size_TRACER_min = 500
         if file_size_TRACER > file_size_TRACER_min: 
             results = h5py.File(config['FILES_PATHS']['GEddySoft_results_output_folder']
-                                + '\\' + results_files_list['name'][d], mode='r')
+                                + '/' + results_files_list['name'][d], mode='r')
         else:
             print('too small')
             continue
         if config['USER_OPTIONS']['concat_cov'] == 'True':    
             file_size_COV = os.path.getsize(config['FILES_PATHS']['GEddySoft_cov_output_folder']
-                                    + '\\' + cov_files_list['name'][d])/1000.
+                                    + '/' + cov_files_list['name'][d])/1000.
             if file_size_COV > 500:
                 cov = h5py.File(config['FILES_PATHS']['GEddySoft_cov_output_folder']
-                                    + '\\' + cov_files_list['name'][d], mode='r')
+                                    + '/' + cov_files_list['name'][d], mode='r')
             else:
                 print('too small')
                 continue
@@ -1156,7 +1156,7 @@ def concat_hdf5_old(config):
     # Output csv if requested
     if config['USER_OPTIONS']['output_csv'] == 'True':
         csv_folder = config['FILES_PATHS']['concat_results_output_folder']\
-            + '\\csv_'+ eval(config['USER_OPTIONS']['date_files_selection'])[0][0:10]\
+            + '/csv_'+ eval(config['USER_OPTIONS']['date_files_selection'])[0][0:10]\
                 + '_'+eval(config['USER_OPTIONS']['date_files_selection'])[1][5:10]\
                     + '_'+ config['USER_OPTIONS']['concat_option']
         # Verify if the csv folder exists

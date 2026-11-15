@@ -474,7 +474,7 @@ if __name__ == '__main__':
 
     # Optional external MET CSV file (will be merged on the 'time' coordinate)
     # Set include_external_met_csv = False to disable.
-    external_met_csv = r'D:\OneDrive - Universite de Liege\Documents\Science\Programmation\Projets Python\be-vie_tof_ec_analysis\L2_O3_files\BE-Lon_L2_2201-2605.csv'
+    external_met_csv = 'D:/OneDrive - Universite de Liege/Documents/Science/Programmation/Projets Python/be-vie_tof_ec_analysis/L2_O3_files/BE-Lon_L2_2201-2605.csv'
     include_external_met_csv = False
 
     # Optional time window selection (applied to both HDF5 data and external MET)

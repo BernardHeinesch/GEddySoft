@@ -218,8 +218,8 @@ if config['ANALYSIS_OPTIONS']['basic_QC'] == 'True':
     print('Quality check')
     print('-----------------------------------------------------------------------------')
     # Create a new folder to store results
-    if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'\\QC'):
-        os.makedirs(config['FILES_PATHS']['output_results_folder']+'\\QC')
+    if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'/QC'):
+        os.makedirs(config['FILES_PATHS']['output_results_folder']+'/QC')
     # =============================================================================
     # Timelag
     # =============================================================================
@@ -244,7 +244,7 @@ if config['ANALYSIS_OPTIONS']['cov_func'] == 'True':
     print('-----------------------------------------------------------------------------')
     print('Covariance functions')
     print('-----------------------------------------------------------------------------')
-    output_folder = config['FILES_PATHS']['output_results_folder']+'\\Cov_functions'
+    output_folder = config['FILES_PATHS']['output_results_folder']+'/Cov_functions'
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
@@ -288,7 +288,7 @@ if config['ANALYSIS_OPTIONS']['create_multiplot'] == 'True':
     print('-----------------------------------------------------------------------------')
     print('Fluxes multiplot')
     print('-----------------------------------------------------------------------------')
-    output_folder = config['FILES_PATHS']['output_results_folder']+'\\All_mz_multiplot'
+    output_folder = config['FILES_PATHS']['output_results_folder']+'/All_mz_multiplot'
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
     
@@ -302,8 +302,8 @@ if config['ANALYSIS_OPTIONS']['apply_sign_mz'] == 'True':
     print('Selection of significant m/z')
     print('-----------------------------------------------------------------------------')
     # Create a new folder to store results
-    if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'\\Significant'):
-        os.makedirs(config['FILES_PATHS']['output_results_folder']+'\\Significant')
+    if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'/Significant'):
+        os.makedirs(config['FILES_PATHS']['output_results_folder']+'/Significant')
     if config['ANALYSIS_OPTIONS']['signif_strat'] == 'Langford_LOD':
         significant = strat_Langford_LOD(ds, config,
                                          view_flux_LODs=False,
@@ -352,8 +352,8 @@ if config['ANALYSIS_OPTIONS']['apply_sign_mz'] == 'True'\
         print('Flux correlogram')
         print('-----------------------------------------------------------------------------')
         # Create a new folder to store results
-        if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'\\Flux_correlogram'):
-            os.makedirs(config['FILES_PATHS']['output_results_folder']+'\\Flux_correlogram')
+        if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'/Flux_correlogram'):
+            os.makedirs(config['FILES_PATHS']['output_results_folder']+'/Flux_correlogram')
         flux_correlogram(ds_sign, config)
 # =============================================================================
 # %% Budget bar plot
@@ -436,8 +436,8 @@ if config['ANALYSIS_OPTIONS']['budget_bar_plot'] == 'True':
     print('-----------------------------------------------------------------------------')
     print('Emission and deposition bar plot budget')
     print('-----------------------------------------------------------------------------')
-    if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'\\Budget'):
-        os.makedirs(config['FILES_PATHS']['output_results_folder']+'\\Budget')
+    if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'/Budget'):
+        os.makedirs(config['FILES_PATHS']['output_results_folder']+'/Budget')
     plt.close('all')
     for start, end in zip(tstart_analysis, tend_analysis):
         budget = budget_bar_plot(ds_cal, 'OH_reactivity', start, end, config,
@@ -518,8 +518,8 @@ if config['ANALYSIS_OPTIONS']['budget_stacked_plot'] == 'True':
     print('-----------------------------------------------------------------------------')
     print('Emission and deposition stacked plot budget')
     print('-----------------------------------------------------------------------------')
-    if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'\\Budget'):
-        os.makedirs(config['FILES_PATHS']['output_results_folder']+'\\Budget')
+    if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'/Budget'):
+        os.makedirs(config['FILES_PATHS']['output_results_folder']+'/Budget')
 
     list_budget_hour = budget_stacked_plot(ds=ds_cal,
                         var_plot='flux_cal_ug',
@@ -530,7 +530,7 @@ if config['ANALYSIS_OPTIONS']['budget_stacked_plot'] == 'True':
                         only_sign=None,
                         share_y=False,
                         save_fig=True,
-                        directory=config['FILES_PATHS']['output_results_folder']+'\\Budget')
+                        directory=config['FILES_PATHS']['output_results_folder']+'/Budget')
 
 # =============================================================================
 # %% Stacked bar plot (for poster)
@@ -736,8 +736,8 @@ if config['ANALYSIS_OPTIONS']['plot_pie'] == 'True':
     print('-----------------------------------------------------------------------------')
     print('Pie chart')
     print('-----------------------------------------------------------------------------')
-    if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'\\Pie_plot'):
-        os.makedirs(config['FILES_PATHS']['output_results_folder']+'\\Pie_plot')
+    if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'/Pie_plot'):
+        os.makedirs(config['FILES_PATHS']['output_results_folder']+'/Pie_plot')
     
     list_budget = pie_plot(ds=ds_cal,
                            mz_list=ds_cal.mz.to_pandas().to_list(),
@@ -746,7 +746,7 @@ if config['ANALYSIS_OPTIONS']['plot_pie'] == 'True':
                            tend_list=tend_analysis,
                            range_plot='both',
                            save_fig=True,
-                           directory=config['FILES_PATHS']['output_results_folder']+'\\Pie_plot')
+                           directory=config['FILES_PATHS']['output_results_folder']+'/Pie_plot')
 
 # =============================================================================
 # %% Diel multiplot over a period
@@ -758,8 +758,8 @@ if config['ANALYSIS_OPTIONS']['apply_calib'] == 'True' and\
         print('Diel multiplot creation')
         print('-----------------------------------------------------------------------------')
         # Create a new folder to store results
-        if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'\\Diel_plots'+'\\Multiplot'):
-            os.makedirs(config['FILES_PATHS']['output_results_folder']+'\\Diel_plots'+'\\Multiplot')
+        if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'/Diel_plots'+'/Multiplot'):
+            os.makedirs(config['FILES_PATHS']['output_results_folder']+'/Diel_plots'+'/Multiplot')
 
         # tstart_analysis = [tstart_1, tstart_2, tstart_3, tstart_4, tstart_5, tstart_6]
         # tend_analysis = [tend_1, tend_2, tend_3, tend_4, tend_5, tend_6]
@@ -784,7 +784,7 @@ if config['ANALYSIS_OPTIONS']['apply_calib'] == 'True' and\
                 figclose=True,
                 figwidth=min(15, ds.mz.size*4/3),
                 figsave=True,
-                output_folder=config['FILES_PATHS']['output_results_folder']+'\\Diel_plots'+'\\Multiplot')
+                output_folder=config['FILES_PATHS']['output_results_folder']+'/Diel_plots'+'/Multiplot')
 
 # =============================================================================
 # %% Diel plot per period
@@ -796,8 +796,8 @@ if config['ANALYSIS_OPTIONS']['apply_calib'] == 'True' and\
         print('Diel plot creation')
         print('-----------------------------------------------------------------------------')
         # Create a new folder to store results
-        if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'\\Diel_plots'+'\\Plot'):
-            os.makedirs(config['FILES_PATHS']['output_results_folder']+'\\Diel_plots'+'\\Plot')
+        if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'/Diel_plots'+'/Plot'):
+            os.makedirs(config['FILES_PATHS']['output_results_folder']+'/Diel_plots'+'/Plot')
         list_incr = [14]
         plt.style.use('seaborn-whitegrid')
         # list_mz_all = ds.mz.values.tolist()
@@ -861,8 +861,8 @@ if config['ANALYSIS_OPTIONS']['apply_calib'] == 'True' and\
         # all_mz_lists = [list_mz_budbreak, list_mz_methanol, list_mz_deposition, list_mz_other]
         # all_mz_names = ['list_mz_budbreak', 'list_mz_methanol', 'list_mz_deposition', 'list_mz_other']
         # for list_mz, folder_subname in zip(all_mz_lists, all_mz_names):
-        #     if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'\\Diel_plots'+'\\Plot'+'\\'+folder_subname):
-        #         os.makedirs(config['FILES_PATHS']['output_results_folder']+'\\Diel_plots'+'\\Plot'+'\\'+folder_subname)
+        #     if not os.path.exists(config['FILES_PATHS']['output_results_folder']+'/Diel_plots'+'/Plot'+'/'+folder_subname):
+        #         os.makedirs(config['FILES_PATHS']['output_results_folder']+'/Diel_plots'+'/Plot'+'/'+folder_subname)
         #     for i in list_incr:
         #         plot_ds_diel_period(ds, config,
         #                               tstart1='2023-04-24',
@@ -875,7 +875,7 @@ if config['ANALYSIS_OPTIONS']['apply_calib'] == 'True' and\
         #                               mz_list=list_mz,
         #                               incr=i,
         #                               figsave=True,
-        #                               output_folder=config['FILES_PATHS']['output_results_folder']+'\\Diel_plots'+'\\Plot'+'\\'+folder_subname)
+        #                               output_folder=config['FILES_PATHS']['output_results_folder']+'/Diel_plots'+'/Plot'+'/'+folder_subname)
         for i in list_incr:
             # plot_ds_diel_period(ds_cal, config,
             #                     tstart1='2023-04-22',
@@ -888,7 +888,7 @@ if config['ANALYSIS_OPTIONS']['apply_calib'] == 'True' and\
             #                     mz_list=list_mz_poster,
             #                     incr=i,
             #                     figsave=True,
-            #                     output_folder=config['FILES_PATHS']['output_results_folder']+'\\Diel_plots'+'\\Plot')
+            #                     output_folder=config['FILES_PATHS']['output_results_folder']+'/Diel_plots'+'/Plot')
             plot_ds_diel_period(ds_cal, config,
                                 tstart1='2023-04-22',
                                 tlast='2023-11-30',
@@ -907,7 +907,7 @@ if config['ANALYSIS_OPTIONS']['apply_calib'] == 'True' and\
                                 incr=i,
                                 title=False,
                                 figsave=True,
-                                output_folder=config['FILES_PATHS']['output_results_folder']+'\\Diel_plots'+'\\Plot')
+                                output_folder=config['FILES_PATHS']['output_results_folder']+'/Diel_plots'+'/Plot')
 
 
 
@@ -922,7 +922,7 @@ if config['ANALYSIS_OPTIONS']['apply_calib'] == 'True' and\
 #                     mz_list=[[33.03]],
 #                     incr=7,
 #                     figsave=False,
-#                     output_folder=config['FILES_PATHS']['output_results_folder']+'\\Diel_plots'+'\\Plot')
+#                     output_folder=config['FILES_PATHS']['output_results_folder']+'/Diel_plots'+'/Plot')
 
 # =============================================================================
 # %% Clock plot
